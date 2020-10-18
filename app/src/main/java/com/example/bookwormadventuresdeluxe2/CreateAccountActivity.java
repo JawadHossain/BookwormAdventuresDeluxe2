@@ -14,6 +14,7 @@ public class CreateAccountActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        setTitle("Bookworm Adventure Deluxe 2");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
 
@@ -23,7 +24,7 @@ public class CreateAccountActivity extends AppCompatActivity
         {
             public void onClick(View v)
             {
-                /* Override login to open Create Account Activity */
+                /* Override to open My Books Activity */
                 Intent myBooksIntent = new Intent(CreateAccountActivity.this, MyBooksActivity.class);
                 CreateAccountActivity.this.startActivity(myBooksIntent);
             }
