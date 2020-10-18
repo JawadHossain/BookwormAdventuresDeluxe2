@@ -6,4 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".MyBooksActivity">
 
+    <!--    TODO: this is probably not the right way to do this :)-->
+    <fragment android:name="com.example.bookwormadventuresdeluxe2.MyProfile"
+        android:id="@+id/mainfrag"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <!--    TODO: add navbar-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>
