@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyBooksFragment"
-    android:background="@android:color/holo_green_dark">
+    android:background="@android:color/holo_green_dark"
+    tools:context=".MyBooksFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
@@ -12,5 +12,20 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="Hello from My Books fragment" />
+
+    <!-- Add Book Button   -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/add_book_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/fab_content_desc"
+        app:backgroundTint="@color/colorPrimary"
+        app:borderWidth="0dp"
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:tint="@android:color/white" />
 
 </FrameLayout>
