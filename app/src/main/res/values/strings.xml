@@ -11,4 +11,9 @@
     <string name="edit_contact">Edit Contact Info</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
+    <string name="navbar_text_label_1">My Books</string>
+    <string name="navbar_text_label_2">Search</string>
+    <string name="navbar_text_label_3">Requests</string>
+    <string name="navbar_text_label_4">Profile</string>
+    <string name="fab_content_desc">Add Book</string>
 </resources>
