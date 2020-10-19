@@ -67,6 +67,7 @@
             android:backgroundTint="@color/colorPrimary"
             android:text="@string/edit_contact"
             android:textAllCaps="false"
+            android:textColor="@color/colorBackground"
             android:textSize="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
