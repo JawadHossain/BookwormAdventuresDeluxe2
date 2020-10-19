@@ -14,7 +14,7 @@ public class ViewLocationActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        setTitle("Bookworm Adventure Deluxe 2");
+        setTitle("View Location");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_location);
 
