@@ -13,13 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-// TODO : Move logic which changes any editText to NavbarItemSelected Listner in MyBooksActivity.Java
+
+// Todo: Rename Class to ProfileFragment or rename other fragments
 
 /**
- * Deprecated
  * A simple {@link Fragment} subclass.
- * Use the {@link MyProfile#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class MyProfile extends Fragment implements View.OnClickListener
 {
@@ -29,27 +27,6 @@ public class MyProfile extends Fragment implements View.OnClickListener
     public MyProfile()
     {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment MyProfile.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MyProfile newInstance()
-    {
-        MyProfile fragment = new MyProfile();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
     }
 
     @Override

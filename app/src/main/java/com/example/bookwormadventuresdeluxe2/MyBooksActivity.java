@@ -17,7 +17,7 @@ public class MyBooksActivity extends AppCompatActivity implements BottomNavigati
     MyBooksFragment myBooksFragment = new MyBooksFragment();
     SearchFragment searchFragment = new SearchFragment();
     RequestsFragment requestsFragment = new RequestsFragment();
-    ProfileFragment profileFragment = new ProfileFragment();
+    MyProfile profileFragment = new MyProfile();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -32,7 +32,7 @@ public class MyBooksActivity extends AppCompatActivity implements BottomNavigati
 
     }
 
-
+    // Todo : Fix Profile Avatar visibility issue
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
