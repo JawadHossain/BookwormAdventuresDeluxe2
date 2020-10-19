@@ -6,5 +6,9 @@
     <string name="requested">Requested</string>
     <string name="accepted">Accepted</string>
     <string name="borrowed">Borrowed</string>
-
+    <string name="email">Email:</string>
+    <string name="phone">Phone Number:</string>
+    <string name="edit_contact">Edit Contact Info</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
 </resources>
