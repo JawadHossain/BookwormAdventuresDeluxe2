@@ -1,16 +1,40 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_blue_bright"
-    tools:context=".RequestsFragment">
+    android:background="@color/colorBackground"
+    tools:context=".MyProfile">
 
-    <!-- TODO: Update Requests fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/requests"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Hello from Requests Fragment" />
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/toggle_btn"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:textAllCaps="false"
+            android:textSize="24dp"
+            android:text="@string/borrow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/current"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/current"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:textAlignment="center"
+            android:textSize="24dp"
+            android:text="@string/my_requests"
+            app:layout_constraintBottom_toBottomOf="@+id/toggle_btn"
+            app:layout_constraintEnd_toStartOf="@+id/toggle_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/toggle_btn"
+            android:gravity="center" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
