@@ -16,4 +16,6 @@
     <string name="navbar_text_label_3">Requests</string>
     <string name="navbar_text_label_4">Profile</string>
     <string name="fab_content_desc">Add Book</string>
+    <string name="set_location">Set Pickup Location</string>
+    <string name="scan_isbn">Scan ISBN</string>
 </resources>

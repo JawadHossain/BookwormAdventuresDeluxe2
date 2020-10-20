@@ -18,6 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".SetLocationActivity" />
+        <activity android:name=".ViewLocationActivity" />
     </application>
 
 </manifest>
