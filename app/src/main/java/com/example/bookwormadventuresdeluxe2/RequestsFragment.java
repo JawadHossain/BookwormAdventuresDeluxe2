@@ -1,5 +1,6 @@
 package com.example.bookwormadventuresdeluxe2;
 
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -39,7 +40,11 @@ public class RequestsFragment extends Fragment implements View.OnClickListener
         toggle = view.findViewById(R.id.toggle_btn);
         borrow = false;
 
+        GradientDrawable shape =  new GradientDrawable();
+        toggle.setBackground(shape);
         toggle.setOnClickListener(this);
+
+        //TODO: add booklist
 
         return view;
     }
@@ -50,6 +55,7 @@ public class RequestsFragment extends Fragment implements View.OnClickListener
         ConstraintLayout layout = this.view.findViewById(R.id.requests);
         ConstraintSet cons = new ConstraintSet();
         cons.clone(layout);
+        //TODO: swap/update booklist
 
         if(borrow) { // currently in borrow
             current.setText(getResources().getString(R.string.my_requests));

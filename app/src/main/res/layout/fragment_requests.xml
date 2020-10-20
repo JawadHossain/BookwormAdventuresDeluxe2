@@ -16,9 +16,9 @@
             android:layout_width="0dp"
             android:layout_height="70dp"
             android:backgroundTint="@color/colorPrimary"
+            android:text="@string/borrow"
             android:textAllCaps="false"
             android:textSize="24dp"
-            android:text="@string/borrow"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/current"
             app:layout_constraintTop_toTopOf="parent" />
@@ -35,6 +35,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/toggle_btn"
             android:gravity="center" />
+
+<!--        Todo: add book list-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
