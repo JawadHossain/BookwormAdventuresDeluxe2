@@ -49,8 +49,7 @@ public class IsbnScanActivity extends AppCompatActivity implements View.OnClickL
         {
             case android.R.id.home:
                 Intent intent = new Intent();
-                intent.putExtra("isbn", "4206669");
-                setResult(1, intent); // You can also send result without any data using setResult(int resultCode)
+                setResult(RESULT_CANCELED, intent);
                 finish();
                 break;
             default:
