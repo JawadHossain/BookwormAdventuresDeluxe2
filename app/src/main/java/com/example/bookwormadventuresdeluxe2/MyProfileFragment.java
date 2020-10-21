@@ -17,12 +17,12 @@ import android.widget.EditText;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyProfile extends Fragment implements View.OnClickListener
+public class MyProfileFragment extends Fragment implements View.OnClickListener
 {
     Button edit;
     View view;
 
-    public MyProfile()
+    public MyProfileFragment()
     {
         // Required empty public constructor
     }
