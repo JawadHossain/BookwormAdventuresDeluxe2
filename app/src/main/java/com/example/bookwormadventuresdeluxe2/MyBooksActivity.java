@@ -9,6 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.os.Bundle;
+import android.view.MenuItem;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MyBooksActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener
@@ -18,7 +21,7 @@ public class MyBooksActivity extends AppCompatActivity implements BottomNavigati
     MyBooksFragment myBooksFragment = new MyBooksFragment();
     SearchFragment searchFragment = new SearchFragment();
     RequestsFragment requestsFragment = new RequestsFragment();
-    MyProfile profileFragment = new MyProfile();
+    MyProfileFragment profileFragment = new MyProfileFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
