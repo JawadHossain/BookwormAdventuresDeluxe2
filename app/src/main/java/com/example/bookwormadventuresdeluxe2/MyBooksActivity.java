@@ -59,6 +59,9 @@ public class MyBooksActivity extends AppCompatActivity implements BottomNavigati
                 replaceFragment(profileFragment);
                 setTitle("Profile");
                 break;
+            default:
+                /* We would not expect any other id */
+                throw new IllegalArgumentException();
         }
 
         /* return true to select Menu item */

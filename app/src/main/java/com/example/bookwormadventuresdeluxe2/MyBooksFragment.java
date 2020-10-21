@@ -1,13 +1,17 @@
 package com.example.bookwormadventuresdeluxe2;
 
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
+
 import java.util.ArrayList;
 
 /**
@@ -38,7 +42,8 @@ public class MyBooksFragment extends Fragment
 
     // https://stackoverflow.com/questions/6495898/findviewbyid-in-fragment#:~:text=Use%20getView%20%28%29%20or%20the%20View%20parameter%20from,method%29.%20With%20this%20you%20can%20call%20findViewById%20%28%29.
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState)
+    {
         myBooksRecyclerView = (RecyclerView) view.findViewById(R.id.my_books_recycler_view);
         myBooksRecyclerView.setHasFixedSize(true);
 

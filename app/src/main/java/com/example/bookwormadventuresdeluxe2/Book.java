@@ -2,7 +2,8 @@ package com.example.bookwormadventuresdeluxe2;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
 
-public class Book {
+public class Book
+{
     // Basic attributes for now, rest added as needed
     private String title;
     private String author;
@@ -10,50 +11,61 @@ public class Book {
     private String description;
     private Status status;
 
-    public Book(String title, String author, String isbn, Status status) {
+    public Book(String title, String author, String isbn, Status status)
+    {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
         this.status = status;
     }
 
-    public String getTitle() {
+    public String getTitle()
+    {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(String title)
+    {
         this.title = title;
     }
 
-    public String getAuthor() {
+    public String getAuthor()
+    {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(String author)
+    {
         this.author = author;
     }
 
-    public String getIsbn() {
+    public String getIsbn()
+    {
         return isbn;
     }
 
-    public void setIsbn(String isbn) {
+    public void setIsbn(String isbn)
+    {
         this.isbn = isbn;
     }
 
-    public String getDescription() {
+    public String getDescription()
+    {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(String description)
+    {
         this.description = description;
     }
 
-    public Status getStatus() {
+    public Status getStatus()
+    {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(Status status)
+    {
         this.status = status;
     }
 }
