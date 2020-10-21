@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextConfirmPassword"
+        android:id="@+id/confirm_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -27,11 +27,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword2"
+        app:layout_constraintTop_toBottomOf="@+id/create_password"
         app:layout_goneMarginLeft="10dp" />
 
     <EditText
-        android:id="@+id/editTextPassword2"
+        android:id="@+id/create_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -41,11 +41,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPhone"
+        app:layout_constraintTop_toBottomOf="@+id/create_phone_number"
         app:layout_goneMarginLeft="10dp" />
 
     <Button
-        android:id="@+id/createAccountButton2"
+        android:id="@+id/create_acount_button_confirm"
         android:layout_width="210dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -54,10 +54,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/confirm_password" />
 
     <EditText
-        android:id="@+id/editTextUsername2"
+        android:id="@+id/create_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="188dp"
@@ -71,7 +71,7 @@
         app:layout_goneMarginLeft="10dp" />
 
     <EditText
-        android:id="@+id/editTextEmail"
+        android:id="@+id/create_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -81,11 +81,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextUsername2"
+        app:layout_constraintTop_toBottomOf="@+id/create_username"
         app:layout_goneMarginLeft="10dp" />
 
     <EditText
-        android:id="@+id/editTextPhone"
+        android:id="@+id/create_phone_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -95,6 +95,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
+        app:layout_constraintTop_toBottomOf="@+id/create_email"
         app:layout_goneMarginLeft="10dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
