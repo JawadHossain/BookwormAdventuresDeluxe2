@@ -19,6 +19,7 @@
         android:layout_marginRight="24dp"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/fab_content_desc"
+        android:onClick="addBook"
         app:backgroundTint="@color/colorPrimary"
         app:borderWidth="0dp"
         app:srcCompat="@android:drawable/ic_input_add"

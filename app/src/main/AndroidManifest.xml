@@ -10,6 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".CreateAccountActivity"></activity>
+        <activity android:name=".IsbnScanActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MyBooksActivity" />
+        </activity>
         <activity android:name=".MyBooksActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
