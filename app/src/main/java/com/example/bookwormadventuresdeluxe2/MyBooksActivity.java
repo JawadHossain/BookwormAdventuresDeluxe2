@@ -1,12 +1,13 @@
 package com.example.bookwormadventuresdeluxe2;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -17,12 +18,11 @@ public class MyBooksActivity extends AppCompatActivity implements BottomNavigati
     MyBooksFragment myBooksFragment = new MyBooksFragment();
     SearchFragment searchFragment = new SearchFragment();
     RequestsFragment requestsFragment = new RequestsFragment();
-    MyProfile profileFragment = new MyProfile();
+    MyProfileFragment profileFragment = new MyProfileFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        setTitle("My Books");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_books);
 
@@ -59,10 +59,19 @@ public class MyBooksActivity extends AppCompatActivity implements BottomNavigati
                 replaceFragment(profileFragment);
                 setTitle("Profile");
                 break;
+            default:
+                /* We would not expect any other id */
+                throw new IllegalArgumentException();
         }
 
         /* return true to select Menu item */
         return true;
+    }
+
+    public void addBook(View view)
+    {
+        Intent intent = new Intent(getBaseContext(), IsbnScanActivity.class);
+        startActivityForResult(intent, IsbnScanActivity.LAUNCH_SCAN_ISBN);
     }
 
     public void replaceFragment(Fragment fragment)

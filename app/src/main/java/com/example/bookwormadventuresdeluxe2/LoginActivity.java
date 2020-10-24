@@ -21,15 +21,15 @@ public class LoginActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        setTitle("Bookworm Adventure Deluxe 2");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setTheme(R.style.AppTheme);
 
-        editTextUsername = (EditText) findViewById(R.id.editTextUsername);
-        editTextPassword = (EditText) findViewById(R.id.editTextPassword);
-        loginButton = (Button) findViewById(R.id.loginButton);
-        createAccountButton = (Button) findViewById(R.id.createAccountButton);
-        visibilityButton = (ImageButton) findViewById(R.id.visibilityButtton);
+        editTextUsername = (EditText) findViewById(R.id.login_username);
+        editTextPassword = (EditText) findViewById(R.id.login_password);
+        loginButton = (Button) findViewById(R.id.login_button);
+        createAccountButton = (Button) findViewById(R.id.create_account_button);
+        visibilityButton = (ImageButton) findViewById(R.id.visibility_button);
 
         /* Set the password to hidden by default */
         editTextPassword.setTransformationMethod(new PasswordTransformationMethod());

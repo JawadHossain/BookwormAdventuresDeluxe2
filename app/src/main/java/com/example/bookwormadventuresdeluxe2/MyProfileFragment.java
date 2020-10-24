@@ -1,7 +1,6 @@
 package com.example.bookwormadventuresdeluxe2;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,19 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 // Todo: Rename Class to ProfileFragment or rename other fragments
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyProfile extends Fragment implements View.OnClickListener
+public class MyProfileFragment extends Fragment implements View.OnClickListener
 {
     Button edit;
     View view;
 
-    public MyProfile()
+    public MyProfileFragment()
     {
         // Required empty public constructor
     }
@@ -41,7 +39,7 @@ public class MyProfile extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onClick(View view) //https://stackoverflow.com/questions/12876624/multiple-edittext-objects-in-alertdialog
+    public void onClick(View view)
     {
         final View editInfo = LayoutInflater.from(this.getContext()).inflate(R.layout.edit_profile, null);
 

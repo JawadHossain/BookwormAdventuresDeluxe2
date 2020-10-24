@@ -7,7 +7,7 @@
     tools:context=".LoginActivity">
 
     <EditText
-        android:id="@+id/editTextUsername"
+        android:id="@+id/login_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="232dp"
@@ -21,7 +21,7 @@
         app:layout_goneMarginLeft="10dp" />
 
     <EditText
-        android:id="@+id/editTextPassword"
+        android:id="@+id/login_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -31,10 +31,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextUsername" />
+        app:layout_constraintTop_toBottomOf="@+id/login_username" />
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/login_button"
         android:layout_width="210dp"
         android:layout_height="43dp"
         android:layout_marginTop="12dp"
@@ -43,10 +43,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/login_password" />
 
     <Button
-        android:id="@+id/createAccountButton"
+        android:id="@+id/create_account_button"
         android:layout_width="210dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -55,10 +55,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
+        app:layout_constraintTop_toBottomOf="@+id/login_button" />
 
     <TextView
-        android:id="@+id/resetPasswordText"
+        android:id="@+id/reset_password_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -66,7 +66,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createAccountButton" />
+        app:layout_constraintTop_toBottomOf="@+id/create_account_button" />
 
     <TextView
         android:id="@+id/TODOAppImage"
@@ -79,15 +79,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/visibilityButtton"
+        android:id="@+id/visibility_button"
         android:layout_width="43dp"
         android:layout_height="38dp"
         android:backgroundTint="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextPassword"
-        app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
+        app:layout_constraintBottom_toBottomOf="@+id/login_password"
+        app:layout_constraintEnd_toEndOf="@+id/login_password"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextPassword"
-        app:layout_constraintTop_toTopOf="@+id/editTextPassword"
+        app:layout_constraintStart_toStartOf="@+id/login_password"
+        app:layout_constraintTop_toTopOf="@+id/login_password"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/ic_visibility_off_24px" />
 

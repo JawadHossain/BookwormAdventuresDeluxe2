@@ -14,11 +14,10 @@ public class CreateAccountActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        setTitle("Bookworm Adventure Deluxe 2");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
 
-        createAccountButton = (Button) findViewById(R.id.createAccountButton2);
+        createAccountButton = (Button) findViewById(R.id.create_acount_button_confirm);
 
         createAccountButton.setOnClickListener(new View.OnClickListener()
         {

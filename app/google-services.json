@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "846237786552",
+    "firebase_url": "https://bookworkadventuresdeluxe2.firebaseio.com",
+    "project_id": "bookworkadventuresdeluxe2",
+    "storage_bucket": "bookworkadventuresdeluxe2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:846237786552:android:226eb77fcaa58a557b2f4d",
+        "android_client_info": {
+          "package_name": "com.example.bookwormadventuresdeluxe2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "846237786552-pca14sjvmkg2lf61ehje97rf05t4d6b1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjO85TWr-s15MDXdT5CFy13NOz9eLxpD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "846237786552-pca14sjvmkg2lf61ehje97rf05t4d6b1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
