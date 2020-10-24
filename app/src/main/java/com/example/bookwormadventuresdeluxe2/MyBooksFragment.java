@@ -1,26 +1,20 @@
 package com.example.bookwormadventuresdeluxe2;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.Toast;
-
 import com.example.bookwormadventuresdeluxe2.Utilities.RecyclerViewClickListener;
 import com.example.bookwormadventuresdeluxe2.Utilities.RecyclerViewTouchListener;
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
-
-// Todo: Notification Icon Temporarily set to sign out. Fix by adding sign out icon
 
 /**
  * A {@link Fragment} subclass for navbar menu item 1.
@@ -32,7 +26,6 @@ public class MyBooksFragment extends Fragment
     private RecyclerView.LayoutManager myBooksRecyclerLayoutManager;
     private ArrayList<Book> myBooksList;
 
-    private FirebaseAuth firebaseAuth;
     private ImageButton notificationButton;
 
     public MyBooksFragment()
@@ -91,21 +84,5 @@ public class MyBooksFragment extends Fragment
                 // Required for now in case we need it later
             }
         }));
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        notificationButton = view.findViewById(R.id.app_header_notification_button);
-        notificationButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if (firebaseAuth != null)
-                {
-                    firebaseAuth.signOut();
-                    // Take User back to Login Page
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
-                }
-            }
-        });
     }
 }

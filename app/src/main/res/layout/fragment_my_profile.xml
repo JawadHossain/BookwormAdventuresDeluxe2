@@ -10,6 +10,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <Button
+            android:id="@+id/profile_logout"
+            android:layout_width="251dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="48dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="@string/sign_out"
+            android:textAllCaps="false"
+            android:textColor="@color/colorBackground"
+            android:textSize="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.506"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <ImageView
             android:id="@+id/my_profile_image"
             android:layout_width="wrap_content"
@@ -61,16 +76,17 @@
 
         <Button
             android:id="@+id/profile_edit"
-            android:layout_width="wrap_content"
+            android:layout_width="251dp"
             android:layout_height="60dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="16dp"
             android:backgroundTint="@color/colorPrimary"
             android:text="@string/edit_contact"
             android:textAllCaps="false"
             android:textColor="@color/colorBackground"
             android:textSize="24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/profile_logout"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.512"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView

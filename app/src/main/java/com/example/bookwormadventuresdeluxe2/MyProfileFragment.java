@@ -1,10 +1,8 @@
 package com.example.bookwormadventuresdeluxe2;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,15 +10,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.fragment.app.Fragment;
+
+import com.google.firebase.auth.FirebaseAuth;
+
 // Todo: Rename Class to ProfileFragment or rename other fragments
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyProfileFragment extends Fragment implements View.OnClickListener
+public class MyProfileFragment extends Fragment
 {
-    Button edit;
-    View view;
+    private Button editButton;
+    private Button signoutButton;
+    private View view;
+    private FirebaseAuth firebaseAuth;
 
     public MyProfileFragment()
     {
@@ -31,15 +35,29 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        // Inflate the layout for this fragment
+        /* Inflate the layout for this fragment */
         view = inflater.inflate(R.layout.fragment_my_profile, container, false);
-        edit = view.findViewById(R.id.profile_edit);
-        edit.setOnClickListener(this);
+
+        /* Find the buttons */
+        editButton = view.findViewById(R.id.profile_edit);
+        signoutButton = view.findViewById(R.id.profile_logout);
+
+        /* Set the button listeners */
+        editButton.setOnClickListener(this::onEditClick);
+        signoutButton.setOnClickListener(this::onSignoutClick);
+
+        /* Get the firebaseAuth instance to use for logging out when the signout button
+           is clicked. */
+        firebaseAuth = FirebaseAuth.getInstance();
         return view;
     }
 
-    @Override
-    public void onClick(View view)
+    /**
+     * Listener for when the edit profile button is clicked
+     *
+     * @param view
+     */
+    public void onEditClick(View view)
     {
         final View editInfo = LayoutInflater.from(this.getContext()).inflate(R.layout.edit_profile, null);
 
@@ -53,7 +71,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener
         final AlertDialog builder = new AlertDialog.Builder(this.getContext()).create();
         builder.setView(editInfo);
 
-        // Set up the buttons
+        /* Set up the buttons for the edit profile dialog */
         editInfo.findViewById(R.id.edit_confirm).setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -63,7 +81,6 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener
                 builder.dismiss();
             }
         });
-
         editInfo.findViewById(R.id.edit_cancel).setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -74,5 +91,20 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener
         });
 
         builder.show();
+    }
+
+    /**
+     * Listener for signout button to sign user out of firebase account
+     *
+     * @param view
+     */
+    public void onSignoutClick(View view)
+    {
+        if (firebaseAuth != null)
+        {
+            firebaseAuth.signOut();
+            /* Take User back to Login Page */
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+        }
     }
 }
