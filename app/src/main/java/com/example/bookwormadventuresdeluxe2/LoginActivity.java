@@ -1,22 +1,51 @@
 package com.example.bookwormadventuresdeluxe2;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
-public class LoginActivity extends AppCompatActivity
+import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener
 {
-    EditText editTextUsername;
+    EditText editTextEmail;
     EditText editTextPassword;
     Button loginButton;
     Button createAccountButton;
     ImageButton visibilityButton;
+    ProgressBar progressBar;
+
+
+    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener authStateListener;
+    private FirebaseUser currentUser;
+
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference collectionReference = db.collection("Users");
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -25,7 +54,51 @@ public class LoginActivity extends AppCompatActivity
         setContentView(R.layout.activity_login);
         setTheme(R.style.AppTheme);
 
-        editTextUsername = (EditText) findViewById(R.id.login_username);
+        firebaseAuth = FirebaseAuth.getInstance();
+        authStateListener = new FirebaseAuth.AuthStateListener()
+        {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth)
+            {
+                currentUser = firebaseAuth.getCurrentUser();
+
+                /* if User exists redirect directly to MyBooks */
+                if (currentUser != null)
+                {
+                    String currentUserId = currentUser.getUid();
+
+                    collectionReference
+                            .whereEqualTo("userId", currentUserId)
+                            .addSnapshotListener(new EventListener<QuerySnapshot>()
+                            {
+                                @Override
+                                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error)
+                                {
+                                    if (error != null)
+                                    {
+                                        return;
+                                    }
+
+                                    /* Fill User Credentials */
+                                    for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots)
+                                    {
+                                        UserCredentialAPI userCredentialAPI = UserCredentialAPI.getInstance();
+                                        userCredentialAPI.setUserId(snapshot.getString("userId"));
+                                        userCredentialAPI.setUsername(snapshot.getString("username"));
+                                        Intent myBooksIntent = new Intent(LoginActivity.this, MyBooksActivity.class);
+                                        startActivity(myBooksIntent);
+                                        finish(); // Removes activity from stack so user not brought back here with back button
+                                    }
+                                }
+                            });
+                }
+
+
+            }
+        };
+
+        progressBar = findViewById(R.id.login_progressBar);
+        editTextEmail = (EditText) findViewById(R.id.login_email);
         editTextPassword = (EditText) findViewById(R.id.login_password);
         loginButton = (Button) findViewById(R.id.login_button);
         createAccountButton = (Button) findViewById(R.id.create_account_button);
@@ -34,26 +107,9 @@ public class LoginActivity extends AppCompatActivity
         /* Set the password to hidden by default */
         editTextPassword.setTransformationMethod(new PasswordTransformationMethod());
 
-        loginButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                /* Override to open My Books Activity */
-                // TODO: Validate login
-                Intent myBooksIntent = new Intent(LoginActivity.this, MyBooksActivity.class);
-                LoginActivity.this.startActivity(myBooksIntent);
-            }
-        });
+        loginButton.setOnClickListener(this);
 
-        createAccountButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                /* Override to open Create Account Activity */
-                Intent myBooksIntent = new Intent(LoginActivity.this, CreateAccountActivity.class);
-                LoginActivity.this.startActivity(myBooksIntent);
-            }
-        });
+        createAccountButton.setOnClickListener(this);
 
         visibilityButton.setOnClickListener(new View.OnClickListener()
         {
@@ -88,5 +144,112 @@ public class LoginActivity extends AppCompatActivity
                 editTextPassword.setSelection(cursorStart, cursorEnd);
             }
         });
+    }
+
+    @Override
+    protected void onStart()
+    {
+        currentUser = firebaseAuth.getCurrentUser();
+        firebaseAuth.addAuthStateListener(authStateListener);
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        if (firebaseAuth != null)
+        {
+            firebaseAuth.removeAuthStateListener(authStateListener);
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onClick(View view)
+    {
+        switch (view.getId())
+        {
+            case R.id.login_button:
+                loginUser(editTextEmail.getText().toString().trim(),
+                        editTextPassword.getText().toString().trim());
+                break;
+            case R.id.create_account_button:
+                /* Override to open Create Account Activity */
+                Intent myBooksIntent = new Intent(LoginActivity.this, CreateAccountActivity.class);
+                LoginActivity.this.startActivity(myBooksIntent);
+                break;
+        }
+    }
+
+    public void loginUser(String email, String password)
+    {
+        progressBar.setVisibility(View.VISIBLE);
+        /* Check email and password parameters*/
+        if (!TextUtils.isEmpty(email)
+                && !TextUtils.isEmpty(password))
+        {
+            firebaseAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>()
+                    {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task)
+                        {
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                            if (user != null)
+                            {
+                                String currentUserId = user.getUid();
+
+                                collectionReference
+                                        .whereEqualTo("userId", currentUserId)
+                                        .addSnapshotListener(new EventListener<QuerySnapshot>()
+                                        {
+                                            @Override
+                                            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error)
+                                            {
+                                                if (error != null)
+                                                {
+                                                    return;
+                                                }
+                                                if (!queryDocumentSnapshots.isEmpty())
+                                                {
+                                                    for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots)
+                                                    {
+                                                        // add to UserCredentialAPI to be accessible throughout app
+                                                        UserCredentialAPI userCredentialAPI = UserCredentialAPI.getInstance();
+                                                        userCredentialAPI.setUsername(snapshot.getString("username"));
+                                                        userCredentialAPI.setUserId(snapshot.getString("userId"));
+
+                                                    }
+                                                    progressBar.setVisibility(View.INVISIBLE);
+                                                    // Go to ListActivity
+                                                    startActivity(new Intent(LoginActivity.this, MyBooksActivity.class));
+                                                }
+                                            }
+                                        });
+                            }
+                            else
+                            {
+                                // user not Found
+                                progressBar.setVisibility(View.INVISIBLE);
+                                Toast.makeText(LoginActivity.this, "Invalid Credentials. Try Again", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener()
+                    {
+                        @Override
+                        public void onFailure(@NonNull Exception e)
+                        {
+                            progressBar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(LoginActivity.this, "Error Logging In " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+        }
+        else
+        {
+            Toast.makeText(LoginActivity.this, "Missing Credentials", Toast.LENGTH_LONG).show();
+        }
     }
 }
