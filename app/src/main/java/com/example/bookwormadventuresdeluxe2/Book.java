@@ -1,6 +1,12 @@
 package com.example.bookwormadventuresdeluxe2;
 
+import android.graphics.PorterDuff;
+import android.widget.ImageView;
+
+import androidx.core.content.res.ResourcesCompat;
+
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
+import com.example.bookwormadventuresdeluxe2.R;
 
 public class Book
 {
@@ -11,10 +17,12 @@ public class Book
     private String description;
     private Status status;
 
-    public Book(String title, String author, String isbn, Status status)
+
+    public Book(String title, String author, String description, String isbn, Status status)
     {
         this.title = title;
         this.author = author;
+        this.description = description;
         this.isbn = isbn;
         this.status = status;
     }
@@ -67,6 +75,34 @@ public class Book
     public void setStatus(Status status)
     {
         this.status = status;
+    }
+
+    /**
+     * Sets the color of an image view based on the given status
+     *
+     * @param status       The status of the item displaying the imageView
+     * @param statusCircle The reference to the imageView to re-color
+     */
+    public void setStatusCircleColor(Status status, ImageView statusCircle)
+    {
+        switch (status)
+        {
+            case Available:
+                statusCircle.getDrawable().setColorFilter(ResourcesCompat.getColor(GlobalApplication.getAppContext().getResources(), R.color.available, null), PorterDuff.Mode.SRC_ATOP);
+                break;
+            case Borrowed:
+                statusCircle.getDrawable().setColorFilter(ResourcesCompat.getColor(GlobalApplication.getAppContext().getResources(), R.color.borrowed, null), PorterDuff.Mode.SRC_ATOP);
+                break;
+            case Requested:
+                statusCircle.getDrawable().setColorFilter(ResourcesCompat.getColor(GlobalApplication.getAppContext().getResources(), R.color.requested, null), PorterDuff.Mode.SRC_ATOP);
+                break;
+            case Accepted:
+                statusCircle.getDrawable().setColorFilter(ResourcesCompat.getColor(GlobalApplication.getAppContext().getResources(), R.color.accepted, null), PorterDuff.Mode.SRC_ATOP);
+                break;
+            default:
+                /* We would not expect any other id */
+                throw new IllegalArgumentException();
+        }
     }
 }
 

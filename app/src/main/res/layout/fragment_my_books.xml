@@ -5,10 +5,15 @@
     android:layout_height="match_parent"
     tools:context=".MyBooksFragment">
 
+    <include
+        android:id="@+id/include"
+        layout="@layout/app_header" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/my_books_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/my_books_add_button"
