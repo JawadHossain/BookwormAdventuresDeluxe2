@@ -55,6 +55,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
         setTheme(R.style.AppTheme);
 
+        Intent myBooksIntent = new Intent(this, ViewLocationActivity.class);
+        startActivity(myBooksIntent);
+
         firebaseAuth = FirebaseAuth.getInstance();
         authStateListener = new FirebaseAuth.AuthStateListener()
         {
