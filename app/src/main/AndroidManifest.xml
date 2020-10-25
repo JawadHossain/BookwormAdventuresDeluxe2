@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.bookwormadventuresdeluxe2">
+
+    <uses-feature android:name="android.hardware.camera" />
+
+    <application
+        android:name="com.example.bookwormadventuresdeluxe2.GlobalApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.NoActionBar">
+
+        <activity
+            android:name=".CreateAccountActivity"
+            android:theme="@style/BlackTextTheme" />
+        <activity
+            android:name=".AddOrEditBooksActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MyBooksActivity" />
+        </activity>
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            tools:replace="screenOrientation" />
+        <activity android:name=".MyBooksActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/BlackTextTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SetLocationActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ViewLocationActivity"
+            android:theme="@style/AppTheme" />
+    </application>
+
+</manifest>

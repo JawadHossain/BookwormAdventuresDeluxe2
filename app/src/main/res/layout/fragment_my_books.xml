@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MyBooksFragment">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/app_header" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/my_books_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/my_books_add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/fab_content_desc"
+        android:onClick="addBook"
+        app:backgroundTint="@color/colorPrimary"
+        app:borderWidth="0dp"
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:tint="@android:color/white" />
+
+</FrameLayout>

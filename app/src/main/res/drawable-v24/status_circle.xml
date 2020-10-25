@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--    https://devdeeds.com/android-create-round-shape-using-xml/-->
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval" android:layout_height="wrap_content" android:layout_width="wrap_content">
+    <solid
+        android:color="@color/available"/>
+    <size
+        android:width="22sp"
+        android:height="22sp"/>
+</shape>
