@@ -30,10 +30,10 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
         {
             super(notificationItemLayout);
             this.message = (TextView) notificationItemLayout.getViewById(R.id.notification_message);
-            this.title = (TextView) notificationItemLayout.getViewById(R.id.notification_item_title);
-            this.author = (TextView) notificationItemLayout.getViewById(R.id.notification_item_author);
-            this.isbn = (TextView) notificationItemLayout.getViewById(R.id.notification_item_isbn);
-            this.statusCircle = (ImageView) notificationItemLayout.getViewById(R.id.notification_item_status);
+            this.title = (TextView) (notificationItemLayout.getViewById(R.id.book_item)).findViewById(R.id.book_item_title);
+            this.author = (TextView) (notificationItemLayout.getViewById(R.id.book_item)).findViewById(R.id.book_item_author);
+            this.isbn = (TextView) (notificationItemLayout.getViewById(R.id.book_item)).findViewById(R.id.book_item_isbn);
+            this.statusCircle = (ImageView) (notificationItemLayout.getViewById(R.id.book_item)).findViewById(R.id.book_item_status);
         }
     }
 
