@@ -18,7 +18,7 @@
             android:name=".CreateAccountActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".EditBooksActivity"
+            android:name=".AddOrEditBooksActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

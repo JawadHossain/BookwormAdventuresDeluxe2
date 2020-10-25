@@ -15,18 +15,14 @@ import com.example.bookwormadventuresdeluxe2.Utilities.Status;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class EditBooksActivity extends AppCompatActivity
+public class AddOrEditBooksActivity extends AppCompatActivity
 {
     TextView takePhoto;
     ImageView bookPicture;
     EditText titleView, authorView, descriptionView, isbnView;
 
-    private static final int CAMERA_REQUEST = 1888;
-    private static final int MY_CAMERA_PERMISSION_CODE = 100;
-
-    // random numbers to identify what the activity will do
-    public static int ADD_BOOK = 50853;
-    public static int EDIT_BOOK = 34880;
+    public static int ADD_BOOK = 0;
+    public static int EDIT_BOOK = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -108,7 +104,7 @@ public class EditBooksActivity extends AppCompatActivity
     public void scanIsbn(View v)
     {
         IntentIntegrator integrator = new IntentIntegrator(
-                EditBooksActivity.this);
+                AddOrEditBooksActivity.this);
         integrator.setOrientationLocked(true);
         integrator.setBeepEnabled(false);
         integrator.initiateScan();

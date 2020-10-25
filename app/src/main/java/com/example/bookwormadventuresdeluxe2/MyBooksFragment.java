@@ -93,8 +93,8 @@ public class MyBooksFragment extends Fragment
             public void onClick(View v)
             {
                 // this function is called from the MyBooksFragment
-                Intent intent = new Intent(getActivity(), EditBooksActivity.class);
-                startActivityForResult(intent, EditBooksActivity.ADD_BOOK);
+                Intent intent = new Intent(getActivity(), AddOrEditBooksActivity.class);
+                startActivityForResult(intent, AddOrEditBooksActivity.ADD_BOOK);
             }
         });
     }
@@ -102,8 +102,8 @@ public class MyBooksFragment extends Fragment
     public void addBook(View view)
     {
         // this function is called from the MyBooksFragment
-        Intent intent = new Intent(getActivity(), EditBooksActivity.class);
-        startActivityForResult(intent, EditBooksActivity.ADD_BOOK);
+        Intent intent = new Intent(getActivity(), AddOrEditBooksActivity.class);
+        startActivityForResult(intent, AddOrEditBooksActivity.ADD_BOOK);
     }
 
     @Override
@@ -111,7 +111,7 @@ public class MyBooksFragment extends Fragment
     {
         super.onActivityResult(requestCode, resultCode, data);
         getActivity();
-        if (requestCode == EditBooksActivity.ADD_BOOK && resultCode == Activity.RESULT_OK)
+        if (requestCode == AddOrEditBooksActivity.ADD_BOOK && resultCode == Activity.RESULT_OK)
         {
             // TODO: Add book to database as well
             Book newBook = (Book) data.getSerializableExtra("NewBook");
