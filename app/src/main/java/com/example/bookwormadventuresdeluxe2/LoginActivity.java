@@ -276,14 +276,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     {
                                         case "ERROR_WRONG_PASSWORD":
                                             EditTextValidator.wrongPassword(editTextPassword);
-//                                            progressBar.setVisibility(View.INVISIBLE);
                                             break;
 
                                         case "ERROR_INVALID_EMAIL":
                                             /* Merged with next case as both set error to editTextEmail*/
                                         case "ERROR_USER_NOT_FOUND":
                                             EditTextValidator.emailNotFound(editTextEmail);
-//                                            progressBar.setVisibility(View.INVISIBLE);
                                             break;
 
                                         default:
