@@ -11,10 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <include
+            android:id="@+id/include"
+            layout="@layout/app_header" />
+
         <Button
             android:id="@+id/toggle_btn"
             android:layout_width="0dp"
             android:layout_height="70dp"
+            android:layout_marginTop="48dp"
             android:backgroundTint="@color/colorPrimary"
             android:text="@string/borrow"
             android:textAllCaps="false"
@@ -27,16 +32,18 @@
             android:id="@+id/current"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:gravity="center"
+            android:text="@string/my_requests"
             android:textAlignment="center"
             android:textSize="24dp"
-            android:text="@string/my_requests"
             app:layout_constraintBottom_toBottomOf="@+id/toggle_btn"
             app:layout_constraintEnd_toStartOf="@+id/toggle_btn"
+            app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/toggle_btn"
-            android:gravity="center" />
+            app:layout_constraintVertical_bias="1.0" />
 
-<!--        Todo: add book list-->
+        <!--        Todo: add book list-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

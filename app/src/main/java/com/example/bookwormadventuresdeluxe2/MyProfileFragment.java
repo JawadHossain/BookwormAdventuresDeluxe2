@@ -12,17 +12,21 @@ import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 
+// Todo: Rename Class to ProfileFragment or rename other fragments
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyProfileFragment extends Fragment
+public class MyProfileFragment extends Fragment implements View.OnClickListener
 {
-    private Button editButton;
-    private Button signoutButton;
-    private View view;
+    Button edit;
+    Button signoutButton;
+    MaterialTextView appHeaderText;
+    View view;
+
     private FirebaseAuth firebaseAuth;
 
     public MyProfileFragment()
@@ -34,81 +38,78 @@ public class MyProfileFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        /* Inflate the layout for this fragment */
+        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_my_profile, container, false);
-
-        /* Find the buttons */
-        editButton = view.findViewById(R.id.profile_edit);
         signoutButton = view.findViewById(R.id.profile_logout);
+        signoutButton.setOnClickListener(this);
 
-        /* Set the button listeners */
-        editButton.setOnClickListener(this::onEditClick);
-        signoutButton.setOnClickListener(this::onSignoutClick);
+        edit = view.findViewById(R.id.profile_edit);
+        edit.setOnClickListener(this);
 
-        /* Get the firebaseAuth instance to use for logging out when the signout button
-           is clicked. */
+        /* Set title */
+        appHeaderText = view.findViewById(R.id.app_header_title);
+        appHeaderText.setText(R.string.my_profile_title);
+
         firebaseAuth = FirebaseAuth.getInstance();
         return view;
     }
 
-    /**
-     * Listener for when the edit profile button is clicked
-     *
-     * @param view
-     */
-    public void onEditClick(View view)
+    @Override
+    public void onClick(View view)
     {
-        final View editInfo = LayoutInflater.from(this.getContext()).inflate(R.layout.edit_profile, null);
-
-        // Set up the input
-        final EditText inputEmail = editInfo.findViewById(R.id.edit_email);
-        final EditText inputPhone = editInfo.findViewById(R.id.edit_phone);
-        // Specify the type of input expected
-        inputEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-        inputPhone.setInputType(InputType.TYPE_CLASS_PHONE);
-
-        final AlertDialog builder = new AlertDialog.Builder(this.getContext()).create();
-        builder.setView(editInfo);
-
-        /* Set up the buttons for the edit profile dialog */
-        editInfo.findViewById(R.id.edit_confirm).setOnClickListener(new View.OnClickListener()
+        switch (view.getId())
         {
-            @Override
-            public void onClick(View view)
-            {
-                //TODO: test input, get input, update user
-                builder.dismiss();
-            }
-        });
-        editInfo.findViewById(R.id.edit_cancel).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                builder.dismiss();
-            }
-        });
+            case R.id.profile_edit:
+                final View editInfo = LayoutInflater.from(this.getContext()).inflate(R.layout.edit_profile, null);
 
-        builder.show();
-    }
+                // Set up the input
+                final EditText inputEmail = editInfo.findViewById(R.id.edit_email);
+                final EditText inputPhone = editInfo.findViewById(R.id.edit_phone);
+                // Specify the type of input expected
+                inputEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                inputPhone.setInputType(InputType.TYPE_CLASS_PHONE);
 
-    /**
-     * Listener for signout button to sign user out of firebase account
-     *
-     * @param view
-     */
-    /* https://stackoverflow.com/questions/53334017/back-button-will-bring-to-home-page-after-firebase-logout-on-app */
-    public void onSignoutClick(View view)
-    {
-        if (firebaseAuth != null)
-        {
-            firebaseAuth.signOut();
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            /* Take User back to Login Page */
-            startActivity(intent);
+                final AlertDialog builder = new AlertDialog.Builder(this.getContext()).create();
+                builder.setView(editInfo);
+
+                // Set up the buttons
+                editInfo.findViewById(R.id.edit_confirm).setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        //TODO: test input, get input, update user
+                        builder.dismiss();
+                    }
+                });
+
+                editInfo.findViewById(R.id.edit_cancel).setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        builder.dismiss();
+                    }
+                });
+
+                builder.show();
+
+                break;
+            case R.id.profile_logout:
+                /*
+                 * Listener for signout button to sign user out of firebase account
+                 * Source : https://stackoverflow.com/questions/53334017/back-button-will-bring-to-home-page-after-firebase-logout-on-app
+                 * */
+                if (firebaseAuth != null)
+                {
+                    firebaseAuth.signOut();
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                            | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                            | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    /* Take User back to Login Page */
+                    startActivity(intent);
+                }
         }
     }
 }
