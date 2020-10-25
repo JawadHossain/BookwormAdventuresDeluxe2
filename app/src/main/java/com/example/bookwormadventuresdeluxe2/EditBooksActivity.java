@@ -67,7 +67,7 @@ public class EditBooksActivity extends AppCompatActivity
             Intent intent = new Intent();
             setResult(Activity.RESULT_OK, intent);
             // status when adding book is available
-            intent.putExtra("NewBook", new Book(title, author, description, isbn, Status.AVAILABLE));
+            intent.putExtra("NewBook", new Book(title, author, description, isbn, Status.Available));
             finish();
         }
     }

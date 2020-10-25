@@ -161,6 +161,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/isbn_edit_text"
         app:layout_constraintEnd_toEndOf="@+id/isbn_edit_text"
         app:layout_constraintTop_toTopOf="@+id/isbn_edit_text"
-        app:srcCompat="@drawable/ic_scan" />
+        app:srcCompat="@drawable/ic_scan_black" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
