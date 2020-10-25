@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,6 +30,8 @@ public class MyBooksFragment extends Fragment
     private RecyclerView.LayoutManager myBooksRecyclerLayoutManager;
     private ArrayList<Book> myBooksList;
 
+    ImageButton notificationButton;
+
     public MyBooksFragment()
     {
         this.myBooksList = new ArrayList<Book>();
@@ -48,7 +51,9 @@ public class MyBooksFragment extends Fragment
         // Set visibility of desired custom header buttons
         myBooksView.findViewById(R.id.app_header_filter_button).setVisibility(View.VISIBLE);
         myBooksView.findViewById(R.id.app_header_scan_button).setVisibility(View.VISIBLE);
-        myBooksView.findViewById(R.id.app_header_notification_button).setVisibility(View.VISIBLE);
+        this.notificationButton = myBooksView.findViewById(R.id.app_header_notification_button);
+        this.notificationButton.setVisibility(View.VISIBLE);
+        this.notificationButton.setOnClickListener(this::onNotificationClick);
 
         return myBooksView;
     }
@@ -119,5 +124,11 @@ public class MyBooksFragment extends Fragment
             myBooksRecyclerAdapter.notifyDataSetChanged();
         }
 
+    }
+
+    private void onNotificationClick(View view)
+    {
+        NotificationFragment notificationFragment = new NotificationFragment();
+        getFragmentManager().beginTransaction().replace(R.id.frame_container, notificationFragment).commit();
     }
 }
