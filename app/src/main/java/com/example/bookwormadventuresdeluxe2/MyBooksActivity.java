@@ -68,11 +68,7 @@ public class MyBooksActivity extends AppCompatActivity implements BottomNavigati
         return true;
     }
 
-    public void addBook(View view)
-    {
-        Intent intent = new Intent(getBaseContext(), IsbnScanActivity.class);
-        startActivityForResult(intent, IsbnScanActivity.LAUNCH_SCAN_ISBN);
-    }
+
 
     public void replaceFragment(Fragment fragment)
     {
@@ -80,5 +76,18 @@ public class MyBooksActivity extends AppCompatActivity implements BottomNavigati
          * Use fade in and fade out for transition
          * */
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.frame_container, fragment).commit();
+    }
+
+    /**
+     * Gets called when an activity called with startActivityForResult returns
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
