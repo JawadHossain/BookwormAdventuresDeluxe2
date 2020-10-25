@@ -2,15 +2,16 @@ package com.example.bookwormadventuresdeluxe2;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.textview.MaterialTextView;
 
 // Todo: Rename Class to ProfileFragment or rename other fragments
 
@@ -20,6 +21,7 @@ import android.widget.EditText;
 public class MyProfileFragment extends Fragment implements View.OnClickListener
 {
     Button edit;
+    MaterialTextView appHeaderText;
     View view;
 
     public MyProfileFragment()
@@ -34,6 +36,10 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_my_profile, container, false);
         edit = view.findViewById(R.id.profile_edit);
+        /* Set title */
+        appHeaderText = view.findViewById(R.id.app_header_title);
+        appHeaderText.setText(R.string.my_profile_title);
+
         edit.setOnClickListener(this);
         return view;
     }

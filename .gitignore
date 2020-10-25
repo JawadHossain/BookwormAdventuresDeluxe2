@@ -54,9 +54,9 @@ captures/
 .cxx
 .idea/.name
 .idea/codeStyles/Project.xml
-.idea/gradle.xml
+/.idea/gradle.xml
 .idea/jarRepositories.xml
-.idea/misc.xml
+/.idea/misc.xml
 .idea/runConfigurations.xml
 .idea/vcs.xml
 app/.idea/codeStyles/Project.xml
