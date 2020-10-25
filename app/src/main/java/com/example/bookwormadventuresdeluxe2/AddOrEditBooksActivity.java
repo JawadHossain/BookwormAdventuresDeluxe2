@@ -123,7 +123,6 @@ public class AddOrEditBooksActivity extends AppCompatActivity
                 requestCode, resultCode, intent);
         if (scanResult != null)
         {
-//            Toast.makeText(getApplicationContext(), "scan   " + scanResult.getContents(), Toast.LENGTH_LONG).show();
             isbnView.setText(scanResult.getContents());
         }
         else
