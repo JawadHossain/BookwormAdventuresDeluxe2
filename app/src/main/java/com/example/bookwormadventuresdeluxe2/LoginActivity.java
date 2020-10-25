@@ -41,11 +41,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     ImageButton visibilityButton;
     ProgressBar progressBar;
 
-
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser currentUser;
-
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference collectionReference = db.collection("Users");
@@ -250,10 +248,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 {
                                     case "ERROR_WRONG_PASSWORD":
                                         EditTextErrors.wrongPassword(editTextPassword);
+                                        progressBar.setVisibility(View.INVISIBLE);
                                         break;
 
                                     case "ERROR_INVALID_EMAIL":
                                         EditTextErrors.emailNotFound(editTextEmail);
+                                        progressBar.setVisibility(View.INVISIBLE);
                                         break;
 
                                     default:
@@ -290,11 +290,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         else if (TextUtils.isEmpty(email))
         {
             EditTextErrors.isEmpty(editTextEmail);
+            progressBar.setVisibility(View.INVISIBLE);
             return;
         }
         else if (TextUtils.isEmpty(password))
         {
             EditTextErrors.isEmpty(editTextPassword);
+            progressBar.setVisibility(View.INVISIBLE);
             return;
         }
 //        else
