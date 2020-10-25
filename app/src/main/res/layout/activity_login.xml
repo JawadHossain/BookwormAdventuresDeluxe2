@@ -5,9 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
-<!--    Todo: remove explicit set textColor black-->
+    <!--    Todo: remove explicit set textColor black-->
     <EditText
-        android:textColor="@android:color/black"
         android:id="@+id/login_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,6 +14,7 @@
         android:ems="10"
         android:hint="Email"
         android:inputType="textPersonName"
+        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +22,6 @@
         app:layout_goneMarginLeft="10dp" />
 
     <EditText
-        android:textColor="@android:color/black"
         android:id="@+id/login_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,6 +29,7 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textPersonName"
+        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -84,21 +84,20 @@
         android:id="@+id/visibility_button"
         android:layout_width="43dp"
         android:layout_height="38dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginRight="1dp"
         android:backgroundTint="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="@+id/login_password"
-        app:layout_constraintEnd_toEndOf="@+id/login_password"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/login_password"
+        app:layout_constraintEnd_toStartOf="@+id/login_password"
         app:layout_constraintTop_toTopOf="@+id/login_password"
-        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/ic_visibility_off_24px" />
 
     <ProgressBar
         android:id="@+id/login_progressBar"
         style="?android:attr/progressBarStyle"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -19,8 +19,11 @@ import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -183,7 +186,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public void loginUser(String email, String password)
     {
+        editTextEmail.setError(null);
+        editTextPassword.setError(null);
         progressBar.setVisibility(View.VISIBLE);
+
         /* Check email and password parameters*/
         if (!TextUtils.isEmpty(email)
                 && !TextUtils.isEmpty(password))
@@ -195,8 +201,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         public void onComplete(@NonNull Task<AuthResult> task)
                         {
                             FirebaseUser user = firebaseAuth.getCurrentUser();
-
-                            if (user != null)
+                            if (task.isSuccessful())
                             {
                                 String currentUserId = user.getUid();
 
@@ -219,7 +224,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                         UserCredentialAPI userCredentialAPI = UserCredentialAPI.getInstance();
                                                         userCredentialAPI.setUsername(snapshot.getString("username"));
                                                         userCredentialAPI.setUserId(snapshot.getString("userId"));
-
                                                     }
                                                     progressBar.setVisibility(View.INVISIBLE);
                                                     // Go to ListActivity
@@ -230,26 +234,73 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             }
                             else
                             {
-                                // user not Found
-                                progressBar.setVisibility(View.INVISIBLE);
-                                Toast.makeText(LoginActivity.this, "Invalid Credentials. Try Again", Toast.LENGTH_SHORT).show();
+                                String errorCode = "";
+                                try
+                                {
+                                    errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
 
+                                }
+                                catch(Exception e)
+                                {
+                                    String toomany = task.getException().getMessage();
+                                    Toast.makeText(LoginActivity.this, toomany, Toast.LENGTH_LONG).show();
+                                }
+
+                                switch(errorCode)
+                                {
+                                    case "ERROR_WRONG_PASSWORD":
+                                        EditTextErrors.wrongPassword(editTextPassword);
+                                        break;
+
+                                    case "ERROR_INVALID_EMAIL":
+                                        EditTextErrors.emailNotFound(editTextEmail);
+                                        break;
+
+                                    default:
+                                        break;
+                                }
                             }
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener()
-                    {
-                        @Override
-                        public void onFailure(@NonNull Exception e)
-                        {
-                            progressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(LoginActivity.this, "Error Logging In " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
         }
-        else
+//                            }
+//                            if (user != null)
+//                            {
+
+//                            else
+//                            {
+//                                // user not Found
+//                                EditTextErrors.emailNotFound(editTextEmail);
+//                                progressBar.setVisibility(View.INVISIBLE);
+//                                Toast.makeText(LoginActivity.this, "Invalid Credentials. Try Again", Toast.LENGTH_SHORT).show();
+//                                return;
+//                            }
+//                        }
+//                    });
+//                    .addOnFailureListener(new OnFailureListener()
+//                    {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e)
+//                        {
+//                            progressBar.setVisibility(View.INVISIBLE);
+//                            Toast.makeText(LoginActivity.this, "Error Logging In " + e.getMessage(), Toast.LENGTH_LONG).show();
+//                        }
+//                    });
+
+        else if (TextUtils.isEmpty(email))
         {
-            Toast.makeText(LoginActivity.this, "Missing Credentials", Toast.LENGTH_LONG).show();
+            EditTextErrors.isEmpty(editTextEmail);
+            return;
         }
+        else if (TextUtils.isEmpty(password))
+        {
+            EditTextErrors.isEmpty(editTextPassword);
+            return;
+        }
+//        else
+//        {
+//            Toast.makeText(LoginActivity.this, "Missing Credentials", Toast.LENGTH_LONG).show();
+//            return;
+//        }
     }
 }

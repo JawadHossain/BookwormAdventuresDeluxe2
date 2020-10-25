@@ -98,13 +98,18 @@ public class MyProfileFragment extends Fragment
      *
      * @param view
      */
+    /* https://stackoverflow.com/questions/53334017/back-button-will-bring-to-home-page-after-firebase-logout-on-app */
     public void onSignoutClick(View view)
     {
         if (firebaseAuth != null)
         {
             firebaseAuth.signOut();
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             /* Take User back to Login Page */
-            startActivity(new Intent(getActivity(), LoginActivity.class));
+            startActivity(intent);
         }
     }
 }
