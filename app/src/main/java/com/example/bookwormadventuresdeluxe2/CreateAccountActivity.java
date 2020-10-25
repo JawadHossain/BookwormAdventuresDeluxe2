@@ -70,6 +70,7 @@ public class CreateAccountActivity extends AppCompatActivity
                 currentUser = firebaseAuth.getCurrentUser();
             }
         };
+
         createAccountButton = (Button) findViewById(R.id.create_acount_button_confirm);
         editTextUsername = findViewById(R.id.create_username);
         editTextEmail = findViewById(R.id.create_email);
@@ -78,6 +79,7 @@ public class CreateAccountActivity extends AppCompatActivity
         confirmPassword = findViewById(R.id.confirm_password);
         progressBar = findViewById(R.id.create_account_progressBar);
 
+        /* Set click listener to create account*/
         createAccountButton.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -86,12 +88,13 @@ public class CreateAccountActivity extends AppCompatActivity
                 editTextEmail.setError(null);
                 editTextPassword.setError(null);
                 confirmPassword.setError(null);
-                // Check fields
+                /* Check for Empty EditTexts */
                 if (!TextUtils.isEmpty(editTextEmail.getText().toString())
                         && !TextUtils.isEmpty(editTextPassword.getText().toString())
                         && !TextUtils.isEmpty(editTextUsername.getText().toString())
                         && !TextUtils.isEmpty(confirmPassword.getText().toString()))
                 {
+                    /* Check if passwords match */
                     if (EditTextErrors.passwordsMatch(editTextPassword, confirmPassword))
                     {
                         String email = editTextEmail.getText().toString().trim();
@@ -104,6 +107,7 @@ public class CreateAccountActivity extends AppCompatActivity
                 }
                 else
                 {
+                    /* Set EditText Error code */
                     if (TextUtils.isEmpty(confirmPassword.getText().toString()))
                     {
                         EditTextErrors.isEmpty(confirmPassword);
@@ -121,13 +125,22 @@ public class CreateAccountActivity extends AppCompatActivity
                         EditTextErrors.isEmpty(editTextUsername);
                     }
 
-//                    Toast.makeText(CreateAccountActivity.this, "Please Enter All Fields",
-//                            Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
+    /**
+     * Attempt to create a user
+     * Take to MyBooksActivity on success
+     * Show error message on failure
+     * ProgressBar visibility set to Invisible inside nested calls due to asynchronous firebase methods
+     *
+     * @param email
+     * @param password
+     * @param username
+     * @param phoneNumber
+     */
     public void createUser(String email, String password, final String username, String phoneNumber)
     {
         if (!TextUtils.isEmpty(email)
@@ -137,6 +150,7 @@ public class CreateAccountActivity extends AppCompatActivity
 
             progressBar.setVisibility(View.VISIBLE);
 
+            /* Create Firebase User */
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>()
                     {
@@ -153,14 +167,14 @@ public class CreateAccountActivity extends AppCompatActivity
                                 {
                                     final String currentUserId = currentUser.getUid();
 
-                                    // Add user to users collection in FireStore
+                                    // Create new User object with credentials
                                     Map<String, String> newUser = new HashMap<>();
                                     newUser.put("userId", currentUserId);
                                     newUser.put("email", email);
                                     newUser.put("username", username);
                                     newUser.put("phoneNumber", phoneNumber);
 
-                                    // Save user to db
+                                    // Save new user to Firestore
                                     collectionReference.add(newUser)
                                             .addOnSuccessListener(new OnSuccessListener<DocumentReference>()
                                             {
@@ -175,7 +189,7 @@ public class CreateAccountActivity extends AppCompatActivity
                                                                 {
                                                                     if (task.getResult().exists())
                                                                     {
-
+                                                                        /* Hide progress bar */
                                                                         progressBar.setVisibility(View.INVISIBLE);
                                                                         String name = task.getResult()
                                                                                 .getString("username");
@@ -185,10 +199,11 @@ public class CreateAccountActivity extends AppCompatActivity
                                                                         userCredentialAPI.setUserId(currentUserId);
                                                                         userCredentialAPI.setUsername(name);
 
+                                                                        /* Take user to My Books Activity */
                                                                         Intent intent = new Intent(CreateAccountActivity.this,
                                                                                 MyBooksActivity.class);
-                                                                        intent.putExtra("username", name);
-                                                                        intent.putExtra("userId", currentUserId);
+//                                                                        intent.putExtra("username", name);
+//                                                                        intent.putExtra("userId", currentUserId);
                                                                         startActivity(intent);
 
                                                                     }
@@ -215,20 +230,22 @@ public class CreateAccountActivity extends AppCompatActivity
                             {
                                 String errorCode = "";
 
+                                /* Extract Firebase Error Code */
                                 try
                                 {
                                     errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
 
-                                }
-                                catch(Exception e)
+                                } catch (Exception e)
                                 {
                                     String tooManyLogins = task.getException().getMessage();
                                     Toast.makeText(CreateAccountActivity.this, tooManyLogins, Toast.LENGTH_LONG).show();
                                 }
 
+                                /* Set EditText Error type from errorCode */
                                 switch (errorCode)
                                 {
                                     case "ERROR_INVALID_EMAIL":
+                                        /* Set Email EditText error code and additionally check password eligibility */
                                         EditTextErrors.weakPass(editTextPassword, confirmPassword);
                                         EditTextErrors.invalidEmail(editTextEmail);
                                         progressBar.setVisibility(View.INVISIBLE);
@@ -253,35 +270,6 @@ public class CreateAccountActivity extends AppCompatActivity
                     });
         }
     }
-//                            else
-//                            {
-//                                // Show Error Message
-//                                Toast.makeText(CreateAccountActivity.this, "Error Creating User", Toast.LENGTH_LONG).show();
-//
-//                            }
-//
-//                        }
-//                    })
-//                    .addOnFailureListener(new OnFailureListener()
-//                    {
-//
-//                        @Override
-//                        public void onFailure(@NonNull Exception e)
-//                        {
-//                            Toast.makeText(CreateAccountActivity.this, "Failed to save user", Toast.LENGTH_LONG)
-//                                    .show();
-//                        }
-//                    });
-//
-//
-//        }
-//        else
-//        {
-//            // Empty fields not allowed
-//            Toast.makeText(CreateAccountActivity.this, "Missing Credentials", Toast.LENGTH_LONG)
-//                    .show();
-//        }
-
 
     @Override
     protected void onStart()

@@ -63,11 +63,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             {
                 currentUser = firebaseAuth.getCurrentUser();
 
-                /* if User exists redirect directly to MyBooks */
+                /* If User logged in redirect directly to MyBooks */
                 if (currentUser != null)
                 {
                     String currentUserId = currentUser.getUid();
 
+                    /* Get Current User information from firestore */
                     collectionReference
                             .whereEqualTo("userId", currentUserId)
                             .addSnapshotListener(new EventListener<QuerySnapshot>()
@@ -80,7 +81,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         return;
                                     }
 
-                                    /* Fill User Credentials */
+                                    /* Store User Credentials */
                                     for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots)
                                     {
                                         UserCredentialAPI userCredentialAPI = UserCredentialAPI.getInstance();
@@ -147,6 +148,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
+    /**
+     * Set Current User and attach Auth state listener on Start of Activity
+     */
     @Override
     protected void onStart()
     {
@@ -155,6 +159,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onStart();
     }
 
+    /**
+     * Detach Auth State Listener on idle Activity
+     */
     @Override
     protected void onPause()
     {
@@ -182,13 +189,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * Attempt to login User
+     * Take to MyBooksActivity on success
+     * Show error message on failure
+     *
+     * @param email    Email of the user in the format joe@sample.com
+     * @param password Password of the user
+     */
     public void loginUser(String email, String password)
     {
         editTextEmail.setError(null);
         editTextPassword.setError(null);
         progressBar.setVisibility(View.VISIBLE);
 
-        /* Check email and password parameters*/
+        /* Check email and password parameters length*/
         if (!TextUtils.isEmpty(email)
                 && !TextUtils.isEmpty(password))
         {
@@ -203,6 +218,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             {
                                 String currentUserId = user.getUid();
 
+                                /* Get User information from firestore and take to MyBooksActivity */
                                 collectionReference
                                         .whereEqualTo("userId", currentUserId)
                                         .addSnapshotListener(new EventListener<QuerySnapshot>()
@@ -234,17 +250,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             {
                                 String errorCode = "";
 
+                                /* Extract Firebase Error Code */
                                 try
                                 {
                                     errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-                                    Toast.makeText(LoginActivity.this, errorCode, Toast.LENGTH_LONG).show();
-                                }
-                                catch(Exception e)
+                                } catch (Exception e)
                                 {
                                     String tooManyLogins = task.getException().getMessage();
                                     Toast.makeText(LoginActivity.this, tooManyLogins, Toast.LENGTH_LONG).show();
                                 }
-                                switch(errorCode)
+
+                                /* Set EditText Error type from errorCode */
+                                switch (errorCode)
                                 {
                                     case "ERROR_WRONG_PASSWORD":
                                         EditTextErrors.wrongPassword(editTextPassword);
@@ -268,30 +285,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     });
         }
-//                            }
-//                            if (user != null)
-//                            {
-
-//                            else
-//                            {
-//                                // user not Found
-//                                EditTextErrors.emailNotFound(editTextEmail);
-//                                progressBar.setVisibility(View.INVISIBLE);
-//                                Toast.makeText(LoginActivity.this, "Invalid Credentials. Try Again", Toast.LENGTH_SHORT).show();
-//                                return;
-//                            }
-//                        }
-//                    });
-//                    .addOnFailureListener(new OnFailureListener()
-//                    {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e)
-//                        {
-//                            progressBar.setVisibility(View.INVISIBLE);
-//                            Toast.makeText(LoginActivity.this, "Error Logging In " + e.getMessage(), Toast.LENGTH_LONG).show();
-//                        }
-//                    });
-
         else if (TextUtils.isEmpty(email))
         {
             EditTextErrors.isEmpty(editTextEmail);
@@ -304,10 +297,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             progressBar.setVisibility(View.INVISIBLE);
             return;
         }
-//        else
-//        {
-//            Toast.makeText(LoginActivity.this, "Missing Credentials", Toast.LENGTH_LONG).show();
-//            return;
-//        }
+        else
+        {
+            Toast.makeText(LoginActivity.this, "Unexpected Error", Toast.LENGTH_LONG).show();
+            progressBar.setVisibility(View.INVISIBLE);
+            return;
+        }
     }
 }
