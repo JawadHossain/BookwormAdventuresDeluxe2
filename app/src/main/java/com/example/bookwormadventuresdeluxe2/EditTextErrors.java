@@ -9,9 +9,11 @@ public class EditTextErrors
 {
     private static String EMPTY = "Cannot be left blank!";
     private static String PASSWORDSDONTMATCH = "Passwords do not match!";
-    private static String USEREXISTS = "Username taken!";
+    private static String EMAILTAKEN = "Email is already taken!";
     private static String EMAILNOTFOUND = "Email not found!";
-    private static String WRONGPASSWORD = "Incorrect password";
+    private static String WRONGPASSWORD = "Incorrect password!";
+    private static String WEAKPASS = "Password must be 6 characters or longer!";
+    private static String INVALIDEMAIL = "Invalid e-mail address!";
 
     /** Error notification method for empty field*/
     public static void isEmpty(EditText textChecked)
@@ -34,6 +36,18 @@ public class EditTextErrors
     public static void wrongPassword(EditText textChecked)
     {
         textChecked.setError(WRONGPASSWORD);
+        textChecked.requestFocus();
+    }
+
+    public static void emailTaken(EditText textChecked)
+    {
+        textChecked.setError(EMAILTAKEN);
+        textChecked.requestFocus();
+    }
+
+    public static void invalidEmail(EditText textChecked)
+    {
+        textChecked.setError(INVALIDEMAIL);
         textChecked.requestFocus();
     }
 
@@ -61,15 +75,28 @@ public class EditTextErrors
     }
 
     /** Returns error for CreateAccountActivity if passwords don't match*/
-    public static void passwordsMatch(EditText password1, EditText password2)
+    public static boolean passwordsMatch(EditText password1, EditText password2)
     {
-        if (password1.getText().toString() == password2.getText().toString())
+        if (password1.getText().toString().compareTo(password2.getText().toString()) == 0)
+        {
+            return true;
+        }
+        else
         {
             password1.setError(PASSWORDSDONTMATCH);
             password2.setError(PASSWORDSDONTMATCH);
-            password1.requestFocus();
             password2.requestFocus();
+            password1.requestFocus();
+            return false;
         }
+    }
+
+    public static void weakPass(EditText password1, EditText password2)
+    {
+        password1.setError(WEAKPASS);
+        password2.setError(WEAKPASS);
+        password2.requestFocus();
+        password1.requestFocus();
     }
 
 }

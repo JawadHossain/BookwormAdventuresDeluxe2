@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -29,6 +30,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,24 +82,51 @@ public class CreateAccountActivity extends AppCompatActivity
         {
             public void onClick(View v)
             {
+                editTextUsername.setError(null);
+                editTextEmail.setError(null);
+                editTextPassword.setError(null);
+                confirmPassword.setError(null);
                 // Check fields
                 if (!TextUtils.isEmpty(editTextEmail.getText().toString())
                         && !TextUtils.isEmpty(editTextPassword.getText().toString())
-                        && !TextUtils.isEmpty(editTextUsername.getText().toString()))
+                        && !TextUtils.isEmpty(editTextUsername.getText().toString())
+                        && !TextUtils.isEmpty(confirmPassword.getText().toString()))
                 {
+                    if (EditTextErrors.passwordsMatch(editTextPassword, confirmPassword))
+                    {
+                        String email = editTextEmail.getText().toString().trim();
+                        String password = editTextPassword.getText().toString().trim();
+                        String username = editTextUsername.getText().toString().trim();
+                        String phoneNumber = editTextPhoneNumber.getText().toString().trim();
 
-                    String email = editTextEmail.getText().toString().trim();
-                    String password = editTextPassword.getText().toString().trim();
-                    String username = editTextUsername.getText().toString().trim();
-                    String phoneNumber = editTextPhoneNumber.getText().toString().trim();
-
-                    createUser(email, password, username, phoneNumber);
-
+                        createUser(email, password, username, phoneNumber);
+                    }
                 }
                 else
                 {
-                    Toast.makeText(CreateAccountActivity.this, "Please Enter All Fields",
-                            Toast.LENGTH_LONG).show();
+                    if (TextUtils.isEmpty(confirmPassword.getText().toString()))
+                    {
+                        EditTextErrors.isEmpty(confirmPassword);
+                    }
+                    if (TextUtils.isEmpty(editTextPassword.getText().toString()))
+                    {
+                        EditTextErrors.isEmpty(editTextPassword);
+                    }
+                    if (TextUtils.isEmpty(editTextEmail.getText().toString()))
+                    {
+                        EditTextErrors.isEmpty(editTextEmail);
+                    }
+                    if (TextUtils.isEmpty(editTextUsername.getText().toString()))
+                    {
+                        EditTextErrors.isEmpty(editTextUsername);
+                    }
+
+
+
+
+
+//                    Toast.makeText(CreateAccountActivity.this, "Please Enter All Fields",
+//                            Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -187,34 +217,67 @@ public class CreateAccountActivity extends AppCompatActivity
                             }
                             else
                             {
-                                // Show Error Message
-                                Toast.makeText(CreateAccountActivity.this, "Error Creating User", Toast.LENGTH_LONG).show();
+                                String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                                Toast.makeText(CreateAccountActivity.this, errorCode, Toast.LENGTH_LONG).show();
 
+                                switch (errorCode)
+                                {
+                                    case "ERROR_INVALID_EMAIL":
+                                        EditTextErrors.invalidEmail(editTextEmail);
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                        break;
+
+                                    case "ERROR_EMAIL_ALREADY_IN_USE":
+                                        EditTextErrors.emailTaken(editTextEmail);
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                        break;
+
+                                    case "ERROR_WEAK_PASSWORD":
+                                        EditTextErrors.weakPass(editTextPassword, confirmPassword);
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                        break;
+
+
+
+
+
+                                    default:
+                                        break;
+                                }
                             }
-
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener()
-                    {
-
-                        @Override
-                        public void onFailure(@NonNull Exception e)
-                        {
-                            Toast.makeText(CreateAccountActivity.this, "Failed to save user", Toast.LENGTH_LONG)
-                                    .show();
                         }
                     });
-
-
         }
-        else
-        {
-            // Empty fields not allowed
-            Toast.makeText(CreateAccountActivity.this, "Missing Credentials", Toast.LENGTH_LONG)
-                    .show();
-        }
-
     }
+//                            else
+//                            {
+//                                // Show Error Message
+//                                Toast.makeText(CreateAccountActivity.this, "Error Creating User", Toast.LENGTH_LONG).show();
+//
+//                            }
+//
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener()
+//                    {
+//
+//                        @Override
+//                        public void onFailure(@NonNull Exception e)
+//                        {
+//                            Toast.makeText(CreateAccountActivity.this, "Failed to save user", Toast.LENGTH_LONG)
+//                                    .show();
+//                        }
+//                    });
+//
+//
+//        }
+//        else
+//        {
+//            // Empty fields not allowed
+//            Toast.makeText(CreateAccountActivity.this, "Missing Credentials", Toast.LENGTH_LONG)
+//                    .show();
+//        }
+
 
     @Override
     protected void onStart()

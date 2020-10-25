@@ -240,8 +240,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 }
                                 catch(Exception e)
                                 {
-                                    String toomany = task.getException().getMessage();
-                                    Toast.makeText(LoginActivity.this, toomany, Toast.LENGTH_LONG).show();
+                                    String toomanyLogins = task.getException().getMessage();
+                                    Toast.makeText(LoginActivity.this, toomanyLogins, Toast.LENGTH_LONG).show();
                                 }
 
                                 switch(errorCode)
