@@ -23,7 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class MyProfileFragment extends Fragment implements View.OnClickListener
 {
     Button edit;
-    Button signoutButton;
+    Button signOutButton;
     MaterialTextView appHeaderText;
     View view;
 
@@ -40,8 +40,8 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener
     {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_my_profile, container, false);
-        signoutButton = view.findViewById(R.id.profile_logout);
-        signoutButton.setOnClickListener(this);
+        signOutButton = view.findViewById(R.id.profile_logout);
+        signOutButton.setOnClickListener(this);
 
         edit = view.findViewById(R.id.profile_edit);
         edit.setOnClickListener(this);
@@ -97,7 +97,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.profile_logout:
                 /*
-                 * Listener for signout button to sign user out of firebase account
+                 * Listener for signOut button to sign user out of firebase account
                  * Source : https://stackoverflow.com/questions/53334017/back-button-will-bring-to-home-page-after-firebase-logout-on-app
                  * */
                 if (firebaseAuth != null)
