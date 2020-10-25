@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".CreateAccountActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/BlackTextTheme" />
         <activity
             android:name=".IsbnScanActivity"
             android:theme="@style/AppTheme">
@@ -23,7 +23,7 @@
         <activity android:name=".MyBooksActivity" />
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/BlackTextTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

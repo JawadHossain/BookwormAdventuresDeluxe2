@@ -35,6 +35,7 @@ import java.util.Map;
 
 public class CreateAccountActivity extends AppCompatActivity
 {
+    private static final String TAG = "CreateAccountActivity";
     private Button createAccountButton;
     private EditText editTextUsername;
     private EditText editTextEmail;
@@ -176,14 +177,15 @@ public class CreateAccountActivity extends AppCompatActivity
                 }
                 else
                 {
-                    Log.d("CreateAccountActivity", "Error getting documents in checkUsernameAvailability: ", task.getException());
+                    Log.d("CreateAccountActivity", "Error getting documents"
+                            + "in checkUsernameAvailability: ", task.getException());
                 }
             }
         });
     }
 
     /**
-     * Attempt to create a user
+     * Attempt to create an user
      * Take to MyBooksActivity on success
      * Show error message on failure
      * ProgressBar visibility set to Invisible inside nested calls due to asynchronous firebase methods
@@ -276,49 +278,54 @@ public class CreateAccountActivity extends AppCompatActivity
                             }
                             else
                             {
-                                String errorCode = "";
-
-                                /* Extract Firebase Error Code */
-                                try
-                                {
-                                    errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-
-                                } catch (Exception e)
-                                {
-                                    String tooManyLogins = task.getException().getMessage();
-                                    Toast.makeText(CreateAccountActivity.this, tooManyLogins, Toast.LENGTH_LONG).show();
-                                }
 
                                 /* Set EditText Error type from errorCode */
-                                switch (errorCode)
+                                try
                                 {
-                                    case "ERROR_INVALID_EMAIL":
-                                        /* Set Email EditText error code and additionally check password eligibility */
-                                        EditTextValidator.weakPass(editTextPassword, confirmPassword);
-                                        EditTextValidator.invalidEmail(editTextEmail);
-                                        progressBar.setVisibility(View.INVISIBLE);
-                                        break;
+                                    /* Extract Firebase Error Code */
+                                    String errorCode = "";
+                                    errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
 
-                                    case "ERROR_EMAIL_ALREADY_IN_USE":
-                                        EditTextValidator.weakPass(editTextPassword, confirmPassword);
-                                        EditTextValidator.emailTaken(editTextEmail);
-                                        progressBar.setVisibility(View.INVISIBLE);
-                                        break;
+                                    switch (errorCode)
+                                    {
+                                        case "ERROR_INVALID_EMAIL":
+                                            /* Set Email EditText error code and additionally check password eligibility */
+                                            EditTextValidator.weakPass(editTextPassword, confirmPassword);
+                                            EditTextValidator.invalidEmail(editTextEmail);
+                                            break;
 
-                                    case "ERROR_WEAK_PASSWORD":
-                                        EditTextValidator.weakPass(editTextPassword, confirmPassword);
-                                        progressBar.setVisibility(View.INVISIBLE);
-                                        break;
+                                        case "ERROR_EMAIL_ALREADY_IN_USE":
+                                            EditTextValidator.weakPass(editTextPassword, confirmPassword);
+                                            EditTextValidator.emailTaken(editTextEmail);
+                                            break;
 
-                                    default:
-                                        break;
+                                        case "ERROR_WEAK_PASSWORD":
+                                            EditTextValidator.weakPass(editTextPassword, confirmPassword);
+                                            break;
+
+                                        default:
+                                            /* Unexpected Error code*/
+                                            throw new Exception("Unexpected Firebase Error Code"
+                                                    + "inside click listener.");
+                                    }
+
+                                    /* Hide progress bar*/
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                } catch (Exception e)
+                                {
+                                    /* Log message to debug*/
+                                    Log.d(TAG, e.getMessage());
                                 }
+
                             }
                         }
                     });
         }
     }
 
+    /**
+     * Set Current User and attach Auth state listener on Start of Activity
+     */
     @Override
     protected void onStart()
     {
@@ -327,6 +334,9 @@ public class CreateAccountActivity extends AppCompatActivity
         super.onStart();
     }
 
+    /**
+     * Detach Auth State Listener on idle Activity
+     */
     @Override
     protected void onPause()
     {

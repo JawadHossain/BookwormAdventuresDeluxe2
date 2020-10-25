@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +33,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener
 {
+    private static final String TAG = "LoginActivity";
     EditText editTextEmail;
     EditText editTextPassword;
     Button loginButton;
@@ -170,21 +172,37 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onPause();
     }
 
+    /**
+     * Handle click on Login and SignOut button
+     *
+     * @param view View containing layout resources
+     */
     @Override
     public void onClick(View view)
     {
-        switch (view.getId())
+        try
         {
-            case R.id.login_button:
-                loginUser(editTextEmail.getText().toString().trim(),
-                        editTextPassword.getText().toString().trim());
-                break;
-            case R.id.create_account_button:
-                /* Override to open Create Account Activity */
-                Intent myBooksIntent = new Intent(LoginActivity.this, CreateAccountActivity.class);
-                LoginActivity.this.startActivity(myBooksIntent);
-                break;
+            switch (view.getId())
+            {
+                case R.id.login_button:
+                    loginUser(editTextEmail.getText().toString().trim(),
+                            editTextPassword.getText().toString().trim());
+                    break;
+                case R.id.create_account_button:
+                    /* Override to open Create Account Activity */
+                    Intent myBooksIntent = new Intent(LoginActivity.this, CreateAccountActivity.class);
+                    LoginActivity.this.startActivity(myBooksIntent);
+                    break;
+                default:
+                    /* Unexpected resource id*/
+                    throw new Exception("Unexpected resource Id inside click listener."
+                            + "Expected: R.id.login_button Or R.id.create_account_button");
+            }
+        } catch (Exception e) {
+            /* Log message to debug*/
+            Log.d(TAG, e.getMessage());
         }
+
     }
 
     /**
@@ -246,35 +264,39 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             }
                             else
                             {
-                                String errorCode = "";
-
-                                /* Extract Firebase Error Code */
-                                try
-                                {
-                                    errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-                                } catch (Exception e)
-                                {
-                                    String tooManyLogins = task.getException().getMessage();
-                                    Toast.makeText(LoginActivity.this, tooManyLogins, Toast.LENGTH_LONG).show();
-                                }
 
                                 /* Set EditText Error type from errorCode */
-                                switch (errorCode)
+                                try
                                 {
-                                    case "ERROR_WRONG_PASSWORD":
-                                        EditTextValidator.wrongPassword(editTextPassword);
-                                        progressBar.setVisibility(View.INVISIBLE);
-                                        break;
+                                    /* Extract Firebase Error Code */
+                                    String errorCode = "";
+                                    errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
 
-                                    case "ERROR_INVALID_EMAIL":
-                                        /* Merged with next case as both set error to editTextEmail*/
-                                    case "ERROR_USER_NOT_FOUND":
-                                        EditTextValidator.emailNotFound(editTextEmail);
-                                        progressBar.setVisibility(View.INVISIBLE);
-                                        break;
+                                    switch (errorCode)
+                                    {
+                                        case "ERROR_WRONG_PASSWORD":
+                                            EditTextValidator.wrongPassword(editTextPassword);
+//                                            progressBar.setVisibility(View.INVISIBLE);
+                                            break;
 
-                                    default:
-                                        break;
+                                        case "ERROR_INVALID_EMAIL":
+                                            /* Merged with next case as both set error to editTextEmail*/
+                                        case "ERROR_USER_NOT_FOUND":
+                                            EditTextValidator.emailNotFound(editTextEmail);
+//                                            progressBar.setVisibility(View.INVISIBLE);
+                                            break;
+
+                                        default:
+                                            /* Unexpected Error code*/
+                                            throw new Exception("Unexpected Firebase Error Code"
+                                                    + "inside click listener.");
+                                    }
+
+                                    /* Hide progress bar*/
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                } catch (Exception e){
+                                    /* Log message to debug*/
+                                    Log.d(TAG, e.getMessage());
                                 }
                             }
                         }

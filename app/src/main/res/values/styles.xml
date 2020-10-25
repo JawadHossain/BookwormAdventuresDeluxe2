@@ -17,4 +17,9 @@
         <item name="android:textColorPrimary">@android:color/white</item>
     </style>
 
+    <!-- Set Text colour to black   -->
+    <style name="BlackTextTheme" parent="@style/AppTheme">
+        <item name="android:textColorPrimary">@android:color/black</item>
+    </style>
+
 </resources>
