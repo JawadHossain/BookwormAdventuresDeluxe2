@@ -17,7 +17,7 @@ public class Book implements Serializable
     private String isbn;
     private String description;
     private Status status;
-    
+
     public Book(String title, String author, String description, String isbn, Status status)
     {
         this.title = title;
@@ -28,6 +28,15 @@ public class Book implements Serializable
         this.status = status;
     }
 
+    /**
+     * Returns true if the attributes provided is valid for an instance of a book object
+     *
+     * @param title
+     * @param author
+     * @param description
+     * @param isbn
+     * @return
+     */
     public static boolean fieldsValid(String title, String author, String description, String isbn)
     {
         // TODO: implement this properly later
