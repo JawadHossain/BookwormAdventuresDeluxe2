@@ -15,12 +15,10 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseException;
-import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
@@ -264,17 +262,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 switch (errorCode)
                                 {
                                     case "ERROR_WRONG_PASSWORD":
-                                        EditTextErrors.wrongPassword(editTextPassword);
+                                        EditTextValidator.wrongPassword(editTextPassword);
                                         progressBar.setVisibility(View.INVISIBLE);
                                         break;
 
                                     case "ERROR_INVALID_EMAIL":
-                                        EditTextErrors.emailNotFound(editTextEmail);
-                                        progressBar.setVisibility(View.INVISIBLE);
-                                        break;
-
+                                        /* Merged with next case as both set error to editTextEmail*/
                                     case "ERROR_USER_NOT_FOUND":
-                                        EditTextErrors.emailNotFound(editTextEmail);
+                                        EditTextValidator.emailNotFound(editTextEmail);
                                         progressBar.setVisibility(View.INVISIBLE);
                                         break;
 
@@ -285,22 +280,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     });
         }
-        else if (TextUtils.isEmpty(email))
-        {
-            EditTextErrors.isEmpty(editTextEmail);
-            progressBar.setVisibility(View.INVISIBLE);
-            return;
-        }
-        else if (TextUtils.isEmpty(password))
-        {
-            EditTextErrors.isEmpty(editTextPassword);
-            progressBar.setVisibility(View.INVISIBLE);
-            return;
-        }
         else
         {
-            Toast.makeText(LoginActivity.this, "Unexpected Error", Toast.LENGTH_LONG).show();
+            /* Hide progress bar*/
             progressBar.setVisibility(View.INVISIBLE);
+
+            /* Set Email Edit Text error */
+            if (TextUtils.isEmpty(email))
+            {
+                EditTextValidator.isEmpty(editTextEmail);
+            }
+            /* Set Password Edit Text error */
+            if (TextUtils.isEmpty(password))
+            {
+                EditTextValidator.isEmpty(editTextPassword);
+            }
             return;
         }
     }

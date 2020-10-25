@@ -1,18 +1,19 @@
 package com.example.bookwormadventuresdeluxe2;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -25,18 +26,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
 
-// Todo: Add conditional to check confirmPasswordEditText
 public class CreateAccountActivity extends AppCompatActivity
 {
     private Button createAccountButton;
@@ -95,36 +91,92 @@ public class CreateAccountActivity extends AppCompatActivity
                         && !TextUtils.isEmpty(confirmPassword.getText().toString()))
                 {
                     /* Check if passwords match */
-                    if (EditTextErrors.passwordsMatch(editTextPassword, confirmPassword))
+                    if (EditTextValidator.passwordsMatch(editTextPassword, confirmPassword))
                     {
                         String email = editTextEmail.getText().toString().trim();
                         String password = editTextPassword.getText().toString().trim();
                         String username = editTextUsername.getText().toString().trim();
                         String phoneNumber = editTextPhoneNumber.getText().toString().trim();
 
-                        createUser(email, password, username, phoneNumber);
+                        /* Create user if username is not already taken*/
+                        checkUsernameAvailability(email, password, username, phoneNumber);
+
                     }
                 }
                 else
                 {
-                    /* Set EditText Error code */
+                    /* Set Empty EditText Error code */
                     if (TextUtils.isEmpty(confirmPassword.getText().toString()))
                     {
-                        EditTextErrors.isEmpty(confirmPassword);
+                        EditTextValidator.isEmpty(confirmPassword);
                     }
                     if (TextUtils.isEmpty(editTextPassword.getText().toString()))
                     {
-                        EditTextErrors.isEmpty(editTextPassword);
+                        EditTextValidator.isEmpty(editTextPassword);
                     }
                     if (TextUtils.isEmpty(editTextEmail.getText().toString()))
                     {
-                        EditTextErrors.isEmpty(editTextEmail);
+                        EditTextValidator.isEmpty(editTextEmail);
                     }
                     if (TextUtils.isEmpty(editTextUsername.getText().toString()))
                     {
-                        EditTextErrors.isEmpty(editTextUsername);
+                        EditTextValidator.isEmpty(editTextUsername);
                     }
 
+                }
+            }
+        });
+    }
+
+    /**
+     * Check if username is available
+     * On Success create user
+     * On Failure add error to username editText
+     * Source: https://stackoverflow.com/questions/48570270/firestore-query-checking-if-username-already-exists
+     *
+     * @param username Username requiring availability check
+     */
+    public void checkUsernameAvailability(String email, String password, final String username, String phoneNumber)
+    {
+        /* Show progress bar */
+        progressBar.setVisibility(View.VISIBLE);
+        /* Query to find username match*/
+        Query userNameQuery = collectionReference.whereEqualTo("username", username);
+        userNameQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+        {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task)
+            {
+                if (task.isSuccessful())
+                {
+
+                    boolean isUsernameInUse = false;
+
+                    /* Search for documents containing username */
+                    for (DocumentSnapshot document : task.getResult())
+                    {
+                        if (document.exists())
+                        {
+                            /* Set variable to true if username exists */
+                            isUsernameInUse = true;
+                            break;
+                        }
+                    }
+                    /* Create User if username is available*/
+                    if (!isUsernameInUse)
+                    {
+                        createUser(email, password, username, phoneNumber);
+                    }
+                    else
+                    {
+                        /* Hide progressBar and set error in username editText*/
+                        progressBar.setVisibility(View.INVISIBLE);
+                        EditTextValidator.usernameTaken(editTextUsername);
+                    }
+                }
+                else
+                {
+                    Log.d("CreateAccountActivity", "Error getting documents in checkUsernameAvailability: ", task.getException());
                 }
             }
         });
@@ -147,8 +199,6 @@ public class CreateAccountActivity extends AppCompatActivity
                 && !TextUtils.isEmpty(password)
                 && !TextUtils.isEmpty(username))
         {
-
-            progressBar.setVisibility(View.VISIBLE);
 
             /* Create Firebase User */
             firebaseAuth.createUserWithEmailAndPassword(email, password)
@@ -202,8 +252,6 @@ public class CreateAccountActivity extends AppCompatActivity
                                                                         /* Take user to My Books Activity */
                                                                         Intent intent = new Intent(CreateAccountActivity.this,
                                                                                 MyBooksActivity.class);
-//                                                                        intent.putExtra("username", name);
-//                                                                        intent.putExtra("userId", currentUserId);
                                                                         startActivity(intent);
 
                                                                     }
@@ -246,19 +294,19 @@ public class CreateAccountActivity extends AppCompatActivity
                                 {
                                     case "ERROR_INVALID_EMAIL":
                                         /* Set Email EditText error code and additionally check password eligibility */
-                                        EditTextErrors.weakPass(editTextPassword, confirmPassword);
-                                        EditTextErrors.invalidEmail(editTextEmail);
+                                        EditTextValidator.weakPass(editTextPassword, confirmPassword);
+                                        EditTextValidator.invalidEmail(editTextEmail);
                                         progressBar.setVisibility(View.INVISIBLE);
                                         break;
 
                                     case "ERROR_EMAIL_ALREADY_IN_USE":
-                                        EditTextErrors.weakPass(editTextPassword, confirmPassword);
-                                        EditTextErrors.emailTaken(editTextEmail);
+                                        EditTextValidator.weakPass(editTextPassword, confirmPassword);
+                                        EditTextValidator.emailTaken(editTextEmail);
                                         progressBar.setVisibility(View.INVISIBLE);
                                         break;
 
                                     case "ERROR_WEAK_PASSWORD":
-                                        EditTextErrors.weakPass(editTextPassword, confirmPassword);
+                                        EditTextValidator.weakPass(editTextPassword, confirmPassword);
                                         progressBar.setVisibility(View.INVISIBLE);
                                         break;
 

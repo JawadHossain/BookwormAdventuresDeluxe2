@@ -1,71 +1,82 @@
-package com.example.bookwormadventuresdeluxe2;
+package com.example.bookwormadventuresdeluxe2.Utilities;
 
 import android.widget.EditText;
 
 /**
- * Returns error message and sets error notification for input textChecked
+ * Validates EditTexts and sets error notication on EditTexts
  */
-public class EditTextErrors
+public class EditTextValidator
 {
     private static String EMPTY = "Cannot be left blank!";
     private static String PASSWORDSDONTMATCH = "Passwords do not match!";
     private static String EMAILTAKEN = "Email is already taken!";
+    private static String USERNAMETAKEN = "Username is already taken!";
     private static String EMAILNOTFOUND = "Email not found!";
     private static String WRONGPASSWORD = "Incorrect password!";
     private static String WEAKPASS = "Password must be 6 characters or longer!";
     private static String INVALIDEMAIL = "Invalid e-mail address!";
 
-    /** Error notification method for empty field*/
-    public static void isEmpty(EditText textChecked)
+    /**
+     * Error notification method for empty field
+     */
+    public static void isEmpty(EditText editText)
     {
-        textChecked.requestFocus();
-        textChecked.setError(EMPTY);
+        editText.requestFocus();
+        editText.setError(EMPTY);
 
-        if(allSpaces(textChecked))
+        if (allSpaces(editText))
         {
-            textChecked.setText("");
+            editText.setText("");
         }
     }
 
-    public static void emailNotFound(EditText textChecked)
+    public static void emailNotFound(EditText editText)
     {
-        textChecked.setError(EMAILNOTFOUND);
-        textChecked.requestFocus();
+        editText.setError(EMAILNOTFOUND);
+        editText.requestFocus();
     }
 
-    public static void wrongPassword(EditText textChecked)
+    public static void usernameTaken(EditText editText)
     {
-        textChecked.setError(WRONGPASSWORD);
-        textChecked.requestFocus();
+        editText.setError(USERNAMETAKEN);
+        editText.requestFocus();
     }
 
-    public static void emailTaken(EditText textChecked)
+    public static void wrongPassword(EditText editText)
     {
-        textChecked.setError(EMAILTAKEN);
-        textChecked.requestFocus();
+        editText.setError(WRONGPASSWORD);
+        editText.requestFocus();
     }
 
-    public static void invalidEmail(EditText textChecked)
+    public static void emailTaken(EditText editText)
     {
-        textChecked.setError(INVALIDEMAIL);
-        textChecked.requestFocus();
+        editText.setError(EMAILTAKEN);
+        editText.requestFocus();
     }
 
-    /** Checks if input text was all space characters */
-    private static boolean allSpaces(EditText textChecked)
+    public static void invalidEmail(EditText editText)
+    {
+        editText.setError(INVALIDEMAIL);
+        editText.requestFocus();
+    }
+
+    /**
+     * Checks if input text was all space characters
+     */
+    private static boolean allSpaces(EditText editText)
     {
         int spaceCount = 0;
 
-        for (int i = 0; i < textChecked.length(); i++)
+        for (int i = 0; i < editText.length(); i++)
         {
-            if (Character.isSpaceChar(textChecked.getText().toString().charAt(i)))
+            if (Character.isSpaceChar(editText.getText().toString().charAt(i)))
             {
                 spaceCount++;
             }
         }
-        if (spaceCount == textChecked.length())
+        if (spaceCount == editText.length())
         {
-            textChecked.clearComposingText();
+            editText.clearComposingText();
             return true;
         }
         else
@@ -74,7 +85,9 @@ public class EditTextErrors
         }
     }
 
-    /** Returns error for CreateAccountActivity if passwords don't match*/
+    /**
+     * Returns error for CreateAccountActivity if passwords don't match
+     */
     public static boolean passwordsMatch(EditText password1, EditText password2)
     {
         if (password1.getText().toString().compareTo(password2.getText().toString()) == 0)
@@ -93,7 +106,7 @@ public class EditTextErrors
 
     public static void weakPass(EditText password1, EditText password2)
     {
-        if (password1.getText().toString().length() >=6 )
+        if (password1.getText().toString().length() >= 6)
         {
             password1.setError(null);
             password2.setError(null);
