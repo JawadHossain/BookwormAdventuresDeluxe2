@@ -98,7 +98,7 @@
             android:id="@+id/profile_edit"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="140dp"
             android:backgroundTint="@color/colorPrimary"
             android:text="@string/edit_contact"
             android:textAllCaps="false"
@@ -106,7 +106,24 @@
             android:textSize="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.506"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/profile_logout"
+            android:layout_width="251dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="48dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="@string/sign_out"
+            android:textAllCaps="false"
+            android:textColor="@color/colorBackground"
+            android:textSize="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.506"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_edit" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

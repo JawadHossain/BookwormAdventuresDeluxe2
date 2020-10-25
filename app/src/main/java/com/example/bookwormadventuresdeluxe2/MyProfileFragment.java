@@ -1,8 +1,10 @@
 package com.example.bookwormadventuresdeluxe2;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.EditText;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.auth.FirebaseAuth;
 
 // Todo: Rename Class to ProfileFragment or rename other fragments
 
@@ -20,9 +23,13 @@ import com.google.android.material.textview.MaterialTextView;
  */
 public class MyProfileFragment extends Fragment implements View.OnClickListener
 {
+    private static final String TAG = "MyProfileFragment";
     Button edit;
+    Button signOutButton;
     MaterialTextView appHeaderText;
     View view;
+
+    private FirebaseAuth firebaseAuth;
 
     public MyProfileFragment()
     {
@@ -35,50 +42,92 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener
     {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_my_profile, container, false);
+        signOutButton = view.findViewById(R.id.profile_logout);
+        signOutButton.setOnClickListener(this);
+
         edit = view.findViewById(R.id.profile_edit);
+        edit.setOnClickListener(this);
+
         /* Set title */
         appHeaderText = view.findViewById(R.id.app_header_title);
         appHeaderText.setText(R.string.my_profile_title);
 
-        edit.setOnClickListener(this);
+        firebaseAuth = FirebaseAuth.getInstance();
         return view;
     }
 
+    /**
+     * Handle click on Profile Edit and SignOut button
+     *
+     * @param view View containing layout resources
+     */
     @Override
     public void onClick(View view)
     {
-        final View editInfo = LayoutInflater.from(this.getContext()).inflate(R.layout.edit_profile, null);
-
-        // Set up the input
-        final EditText inputEmail = editInfo.findViewById(R.id.edit_email);
-        final EditText inputPhone = editInfo.findViewById(R.id.edit_phone);
-        // Specify the type of input expected
-        inputEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-        inputPhone.setInputType(InputType.TYPE_CLASS_PHONE);
-
-        final AlertDialog builder = new AlertDialog.Builder(this.getContext()).create();
-        builder.setView(editInfo);
-
-        // Set up the buttons
-        editInfo.findViewById(R.id.edit_confirm).setOnClickListener(new View.OnClickListener()
+        try
         {
-            @Override
-            public void onClick(View view)
+            switch (view.getId())
             {
-                //TODO: test input, get input, update user
-                builder.dismiss();
-            }
-        });
+                case R.id.profile_edit:
+                    final View editInfo = LayoutInflater.from(this.getContext()).inflate(R.layout.edit_profile, null);
 
-        editInfo.findViewById(R.id.edit_cancel).setOnClickListener(new View.OnClickListener()
+                    // Set up the input
+                    final EditText inputEmail = editInfo.findViewById(R.id.edit_email);
+                    final EditText inputPhone = editInfo.findViewById(R.id.edit_phone);
+                    // Specify the type of input expected
+                    inputEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                    inputPhone.setInputType(InputType.TYPE_CLASS_PHONE);
+
+                    final AlertDialog builder = new AlertDialog.Builder(this.getContext()).create();
+                    builder.setView(editInfo);
+
+                    // Set up the buttons
+                    editInfo.findViewById(R.id.edit_confirm).setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View view)
+                        {
+                            //TODO: test input, get input, update user
+                            builder.dismiss();
+                        }
+                    });
+
+                    editInfo.findViewById(R.id.edit_cancel).setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View view)
+                        {
+                            builder.dismiss();
+                        }
+                    });
+
+                    builder.show();
+
+                    break;
+                case R.id.profile_logout:
+                    /*
+                     * Listener for signOut button to sign user out of firebase account
+                     * Source : https://stackoverflow.com/questions/53334017/back-button-will-bring-to-home-page-after-firebase-logout-on-app
+                     * */
+                    if (firebaseAuth != null)
+                    {
+                        firebaseAuth.signOut();
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        /* Take User back to Login Page */
+                        startActivity(intent);
+                    }
+                default:
+                    /* Unexpected resource id*/
+                    throw new Exception("Unexpected resource Id inside click listener."
+                            + "Expected: R.id.login_button Or R.idcreate_account_button");
+            }
+        } catch (Exception e)
         {
-            @Override
-            public void onClick(View view)
-            {
-                builder.dismiss();
-            }
-        });
-
-        builder.show();
+            /* Log message to debug*/
+            Log.d(TAG, e.getMessage());
+        }
     }
 }

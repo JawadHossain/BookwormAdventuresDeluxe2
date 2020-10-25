@@ -18,7 +18,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-
 /**
  * A {@link Fragment} subclass for navbar menu item 1.
  */
