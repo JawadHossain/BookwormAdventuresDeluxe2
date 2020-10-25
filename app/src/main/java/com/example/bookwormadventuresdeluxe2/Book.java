@@ -2,7 +2,9 @@ package com.example.bookwormadventuresdeluxe2;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
 
-public class Book
+import java.io.Serializable;
+
+public class Book implements Serializable
 {
     // Basic attributes for now, rest added as needed
     private String title;
@@ -11,12 +13,19 @@ public class Book
     private String description;
     private Status status;
 
-    public Book(String title, String author, String isbn, Status status)
+    public Book(String title, String author, String description, String isbn, Status status)
     {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
+        this.description = description;
         this.status = status;
+    }
+
+    public static boolean fieldsValid(String title, String author, String description, String isbn)
+    {
+        // TODO: implement this properly later
+        return true;
     }
 
     public String getTitle()
