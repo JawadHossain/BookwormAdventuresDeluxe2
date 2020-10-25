@@ -233,17 +233,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             else
                             {
                                 String errorCode = "";
+
                                 try
                                 {
                                     errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-
+                                    Toast.makeText(LoginActivity.this, errorCode, Toast.LENGTH_LONG).show();
                                 }
                                 catch(Exception e)
                                 {
-                                    String toomanyLogins = task.getException().getMessage();
-                                    Toast.makeText(LoginActivity.this, toomanyLogins, Toast.LENGTH_LONG).show();
+                                    String tooManyLogins = task.getException().getMessage();
+                                    Toast.makeText(LoginActivity.this, tooManyLogins, Toast.LENGTH_LONG).show();
                                 }
-
                                 switch(errorCode)
                                 {
                                     case "ERROR_WRONG_PASSWORD":
@@ -252,6 +252,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         break;
 
                                     case "ERROR_INVALID_EMAIL":
+                                        EditTextErrors.emailNotFound(editTextEmail);
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                        break;
+
+                                    case "ERROR_USER_NOT_FOUND":
                                         EditTextErrors.emailNotFound(editTextEmail);
                                         progressBar.setVisibility(View.INVISIBLE);
                                         break;

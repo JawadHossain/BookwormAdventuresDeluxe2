@@ -121,10 +121,6 @@ public class CreateAccountActivity extends AppCompatActivity
                         EditTextErrors.isEmpty(editTextUsername);
                     }
 
-
-
-
-
 //                    Toast.makeText(CreateAccountActivity.this, "Please Enter All Fields",
 //                            Toast.LENGTH_LONG).show();
                 }
@@ -217,17 +213,29 @@ public class CreateAccountActivity extends AppCompatActivity
                             }
                             else
                             {
-                                String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-                                Toast.makeText(CreateAccountActivity.this, errorCode, Toast.LENGTH_LONG).show();
+                                String errorCode = "";
+
+                                try
+                                {
+                                    errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+
+                                }
+                                catch(Exception e)
+                                {
+                                    String tooManyLogins = task.getException().getMessage();
+                                    Toast.makeText(CreateAccountActivity.this, tooManyLogins, Toast.LENGTH_LONG).show();
+                                }
 
                                 switch (errorCode)
                                 {
                                     case "ERROR_INVALID_EMAIL":
+                                        EditTextErrors.weakPass(editTextPassword, confirmPassword);
                                         EditTextErrors.invalidEmail(editTextEmail);
                                         progressBar.setVisibility(View.INVISIBLE);
                                         break;
 
                                     case "ERROR_EMAIL_ALREADY_IN_USE":
+                                        EditTextErrors.weakPass(editTextPassword, confirmPassword);
                                         EditTextErrors.emailTaken(editTextEmail);
                                         progressBar.setVisibility(View.INVISIBLE);
                                         break;
@@ -236,10 +244,6 @@ public class CreateAccountActivity extends AppCompatActivity
                                         EditTextErrors.weakPass(editTextPassword, confirmPassword);
                                         progressBar.setVisibility(View.INVISIBLE);
                                         break;
-
-
-
-
 
                                     default:
                                         break;

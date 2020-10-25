@@ -93,10 +93,18 @@ public class EditTextErrors
 
     public static void weakPass(EditText password1, EditText password2)
     {
-        password1.setError(WEAKPASS);
-        password2.setError(WEAKPASS);
-        password2.requestFocus();
-        password1.requestFocus();
+        if (password1.getText().toString().length() >=6 )
+        {
+            password1.setError(null);
+            password2.setError(null);
+        }
+        else
+        {
+            password1.setError(WEAKPASS);
+            password2.setError(WEAKPASS);
+            password2.requestFocus();
+            password1.requestFocus();
+        }
     }
 
 }
