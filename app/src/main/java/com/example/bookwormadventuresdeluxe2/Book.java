@@ -6,9 +6,10 @@ import android.widget.ImageView;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
-import com.example.bookwormadventuresdeluxe2.R;
 
-public class Book
+import java.io.Serializable;
+
+public class Book implements Serializable
 {
     // Basic attributes for now, rest added as needed
     private String title;
@@ -17,14 +18,29 @@ public class Book
     private String description;
     private Status status;
 
-
     public Book(String title, String author, String description, String isbn, Status status)
     {
         this.title = title;
         this.author = author;
         this.description = description;
         this.isbn = isbn;
+        this.description = description;
         this.status = status;
+    }
+
+    /**
+     * Returns true if the attributes provided is valid for an instance of a book object
+     *
+     * @param title
+     * @param author
+     * @param description
+     * @param isbn
+     * @return
+     */
+    public static boolean fieldsValid(String title, String author, String description, String isbn)
+    {
+        // TODO: implement this properly later
+        return true;
     }
 
     public String getTitle()
