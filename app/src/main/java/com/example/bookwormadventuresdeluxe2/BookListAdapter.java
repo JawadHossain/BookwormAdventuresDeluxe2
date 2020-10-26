@@ -1,20 +1,23 @@
 package com.example.bookwormadventuresdeluxe2;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bookwormadventuresdeluxe2.Utilities.Status;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 import java.util.ArrayList;
 
-public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookListViewHolder>
+// https://stackoverflow.com/questions/49277797/how-to-display-data-from-firestore-in-a-recyclerview-with-android
+public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdapter.BookListViewHolder>
 {
     private ArrayList<Book> books;
     private Context context;
@@ -36,12 +39,13 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookLi
             this.author = (TextView) bookItemLayout.getViewById(R.id.book_item_author);
             this.isbn = (TextView) bookItemLayout.getViewById(R.id.book_item_isbn);
             this.statusCircle = (ImageView) bookItemLayout.getViewById(R.id.book_item_status);
+            this.bookItemLayout = (ConstraintLayout) bookItemLayout.getViewById(R.id.book_item);
         }
     }
 
-    public BookListAdapter(ArrayList<Book> books, Context context)
+    public BookListAdapter(Context context, FirestoreRecyclerOptions options)
     {
-        this.books = books;
+        super(options);
         this.context = context;
     }
 
@@ -55,24 +59,30 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookLi
         return bookListViewHolder;
     }
 
-    public BookListAdapter.BookListViewHolder getViewHolder()
-    {
-        return this.bookListViewHolder;
-    }
-
-    // Replace the contents of the view with the appropriate data
-    public void onBindViewHolder(BookListViewHolder bookListViewHolder, int position)
-    {
-        bookListViewHolder.title.setText(books.get(position).getTitle());
-        bookListViewHolder.author.setText(books.get(position).getAuthor());
-        bookListViewHolder.isbn.setText(books.get(position).getIsbn());
-
-        books.get(position).setStatusCircleColor(books.get(position).getStatus(), bookListViewHolder.statusCircle);
-    }
-
     @Override
-    public int getItemCount()
+    protected void onBindViewHolder(@NonNull BookListViewHolder holder, int position, @NonNull Book book)
     {
-        return books.size();
+        // Set the text on the item view for each book
+        String documentId = getSnapshots().getSnapshot(position).getId();
+        bookListViewHolder.title.setText(book.getTitle());
+        bookListViewHolder.author.setText(book.getAuthor());
+        bookListViewHolder.isbn.setText(book.getIsbn());
+
+        book.setStatusCircleColor(book.getStatus(), bookListViewHolder.statusCircle);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener()
+        {
+            // Handles a click on an item in the recycler view
+            @Override
+            public void onClick(View v)
+            {
+                // Opens the book in detail view
+                MyBooksDetailViewFragment bookDetailFragment = new MyBooksDetailViewFragment();
+                bookDetailFragment.onFragmentInteraction(book, documentId);
+
+                ((MyBooksActivity) context).getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_container, bookDetailFragment).commit();
+            }
+        });
     }
 }

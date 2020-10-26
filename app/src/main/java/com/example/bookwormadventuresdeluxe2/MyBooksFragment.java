@@ -11,12 +11,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bookwormadventuresdeluxe2.Utilities.RecyclerViewClickListener;
-import com.example.bookwormadventuresdeluxe2.Utilities.RecyclerViewTouchListener;
-import com.example.bookwormadventuresdeluxe2.Utilities.Status;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A {@link Fragment} subclass for navbar menu item 1.
@@ -26,17 +27,12 @@ public class MyBooksFragment extends Fragment
     private RecyclerView myBooksRecyclerView;
     private BookListAdapter myBooksRecyclerAdapter;
     private RecyclerView.LayoutManager myBooksRecyclerLayoutManager;
-    private ArrayList<Book> myBooksList;
 
     public MyBooksFragment()
     {
-        this.myBooksList = new ArrayList<Book>();
-        // Temporary books to show how listview looks
-        myBooksList.add(new Book("1984", "George Orwell", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do" +
-                "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis", "9780141036144", Status.Available));
-        myBooksList.add(new Book("To Kill a Mockingbird", "Harper Lee", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do" +
-                "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis", "9780446310789", Status.Requested));
+        // Required empty constructor
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,34 +52,21 @@ public class MyBooksFragment extends Fragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
+        FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
+        Query query = rootRef.collection("Books").orderBy("title");
+
+        FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(query, Book.class)
+                .build();
+
         myBooksRecyclerView = (RecyclerView) view.findViewById(R.id.my_books_recycler_view);
         myBooksRecyclerView.setHasFixedSize(true);
 
         myBooksRecyclerLayoutManager = new LinearLayoutManager(this.getContext());
         myBooksRecyclerView.setLayoutManager(myBooksRecyclerLayoutManager);
 
-        myBooksRecyclerAdapter = new BookListAdapter(myBooksList, this.getContext());
+        myBooksRecyclerAdapter = new BookListAdapter(this.getContext(), options);
         myBooksRecyclerView.setAdapter(myBooksRecyclerAdapter);
-
-        // Handles clicks on the RecyclerView
-        myBooksRecyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(this.getContext(), myBooksRecyclerView, new RecyclerViewClickListener()
-        {
-            @Override
-            public void onClick(View view, int position)
-            {
-                // Open book detail view when an item is clicked
-                MyBooksDetailViewFragment bookDetailFragment = new MyBooksDetailViewFragment();
-                // Send the selected book to MyBooksDetailViewFragment and open the fragment
-                bookDetailFragment.onFragmentInteraction(myBooksList.get(position));
-                getFragmentManager().beginTransaction().replace(R.id.frame_container, bookDetailFragment).commit();
-            }
-
-            @Override
-            public void onLongClick(View view, int position)
-            {
-                // Required for now in case we need it later
-            }
-        }));
 
         FloatingActionButton btn = (FloatingActionButton) getView().findViewById(R.id.my_books_add_button);
         btn.setOnClickListener(new View.OnClickListener()
@@ -98,25 +81,46 @@ public class MyBooksFragment extends Fragment
         });
     }
 
-    public void addBook(View view)
+    // For listening to firebase for updates to the books list
+    @Override
+    public void onStart()
     {
-        // this function is called from the MyBooksFragment
-        Intent intent = new Intent(getActivity(), AddOrEditBooksActivity.class);
-        startActivityForResult(intent, AddOrEditBooksActivity.ADD_BOOK);
+        super.onStart();
+        myBooksRecyclerAdapter.startListening();
+    }
+
+    // Stops listening to the firebase on completion
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+
+        if (myBooksRecyclerAdapter != null)
+        {
+            myBooksRecyclerAdapter.stopListening();
+        }
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    public void onActivityResult(int requestCode, int resultCode, Intent intentData)
     {
-        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, intentData);
         getActivity();
         if (requestCode == AddOrEditBooksActivity.ADD_BOOK && resultCode == Activity.RESULT_OK)
         {
-            // TODO: Add book to database as well
-            Book newBook = (Book) data.getSerializableExtra("NewBook");
-            myBooksList.add(newBook);
+            Book newBook = (Book) intentData.getSerializableExtra("NewBook");
+
+            // Get the data from the new book and add it to the database
+            Map<String, Object> data = new HashMap<>();
+            data.put("title", newBook.getTitle());
+            data.put("author", newBook.getAuthor());
+            data.put("description", newBook.getDescription());
+            data.put("isbn", newBook.getIsbn());
+            data.put("status", newBook.getStatus());
+
+            FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
+            rootRef.collection("Books").add(data);
             myBooksRecyclerAdapter.notifyDataSetChanged();
         }
-
     }
 }
