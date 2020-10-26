@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -123,25 +124,25 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                         public void onClick(View view)
                         {
                             if (viewUserObject.getEmail().compareTo(inputEmail.getText().toString()) == 0
-                                    && viewUserObject.getPhoneNumber().compareTo(inputPhone.getText().toString()) == 0)
+                                && viewUserObject.getPhoneNumber().compareTo(inputPhone.getText().toString()) == 0)
                             {
                                 builder.dismiss();
+                                return;
+                            }
+                            if (TextUtils.isEmpty(inputEmail.getText().toString()))
+                            {
+                                EditTextValidator.isEmpty(inputEmail);
+                                return;
+                            }
+                            if (inputEmail.getError() != null)
+                            {
+                                return;
                             }
                             else
                             {
-                                if (viewUserObject.getEmail().compareTo(inputEmail.getText().toString()) == 0)
-                                {
-                                    FirebaseUserGetSet.editPhone(viewUserObject.getDocumentId(),
-                                            inputPhone.getText().toString());
-                                    builder.dismiss();
-                                }
-                                changeAuthEmail(inputEmail);
+                                changeAuthInfo(inputEmail, inputPhone);
                                 if (inputEmail.getError() != null)
                                 {
-                                    FirebaseUserGetSet.editEmail(viewUserObject.getDocumentId(),
-                                            inputEmail.getText().toString());
-                                    FirebaseUserGetSet.editPhone(viewUserObject.getDocumentId(),
-                                            inputPhone.getText().toString());
                                     builder.dismiss();
                                 }
                             }
@@ -188,7 +189,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-    public void changeAuthEmail(EditText inputEmail)
+    public void changeAuthInfo(EditText inputEmail, EditText inputPhone)
     {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -200,7 +201,11 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                     {
                         if (task.isSuccessful())
                         {
-                            Log.d(TAG, "User email address updated.");
+                            FirebaseUserGetSet.editEmail(viewUserObject.getDocumentId(),
+                                    inputEmail.getText().toString());
+                            FirebaseUserGetSet.editPhone(viewUserObject.getDocumentId(),
+                                    inputPhone.getText().toString());
+                            Log.d(TAG, "User info updated.");
                         }
                         else
                         {
@@ -223,7 +228,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
 
                                     default:
                                         /* Unexpected Error code*/
-                                        inputEmail.setError(((FirebaseAuthException) task.getException()).getErrorCode());
+                                        inputEmail.setError(((FirebaseAuthException) task.getException()).getMessage());
                                         throw new Exception("Unexpected Firebase Error Code"
                                                 + "inside click listener.");
                                 }
