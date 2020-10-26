@@ -9,5 +9,5 @@
     <color name="accepted">#EB00FF</color>
     <color name="borrowed">#FD0505</color>
     <color name="tempPhotoBackground">#C4C4C4</color>
-    <color name="EditTextBlack">#000000</color>
+    <color name="TextBlack">#000000</color>
 </resources>
