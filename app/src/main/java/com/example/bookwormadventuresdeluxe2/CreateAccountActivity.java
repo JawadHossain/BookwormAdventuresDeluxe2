@@ -295,9 +295,9 @@ public class CreateAccountActivity extends AppCompatActivity
                                             break;
 
                                         case "ERROR_EMAIL_ALREADY_IN_USE":
-                                        EditTextValidator.weakPass(editTextPassword, confirmPassword);
-                                        EditTextValidator.emailTaken(editTextEmail);
-                                        break;
+                                            EditTextValidator.weakPass(editTextPassword, confirmPassword);
+                                            EditTextValidator.emailTaken(editTextEmail);
+                                            break;
 
                                         case "ERROR_WEAK_PASSWORD":
                                             EditTextValidator.weakPass(editTextPassword, confirmPassword);
