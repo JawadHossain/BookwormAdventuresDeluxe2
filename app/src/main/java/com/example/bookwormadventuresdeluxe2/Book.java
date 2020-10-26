@@ -126,6 +126,11 @@ public class Book implements Serializable
                 throw new IllegalArgumentException();
         }
     }
+
+    public Notification createNotification(String message)
+    {
+        return new Notification(this, message);
+    }
 }
 
 
