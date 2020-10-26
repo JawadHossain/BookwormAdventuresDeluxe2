@@ -73,6 +73,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        /* Pulling UserProfileObject from database */
         FirebaseUserGetSet.getUser(UserCredentialAPI.getInstance().getUsername(), new FirebaseUserGetSet.UserCallback()
         {
             @Override
@@ -123,26 +124,33 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                         @Override
                         public void onClick(View view)
                         {
+                            /* Checks if no changes were made */
                             if (viewUserObject.getEmail().compareTo(inputEmail.getText().toString()) == 0
                                 && viewUserObject.getPhoneNumber().compareTo(inputPhone.getText().toString()) == 0)
                             {
                                 builder.dismiss();
                                 return;
                             }
+
+                            /* Checks if empty and disables confirm button */
                             if (TextUtils.isEmpty(inputEmail.getText().toString()))
                             {
                                 EditTextValidator.isEmpty(inputEmail);
                                 return;
                             }
+
+                            /* Checks if error is present and disables confirm button */
                             if (inputEmail.getError() != null)
                             {
                                 return;
                             }
                             else
                             {
+                                /* Attempts to write new email and phone number */
                                 changeAuthInfo(inputEmail, inputPhone);
                                 if (inputEmail.getError() != null)
                                 {
+                                    // Closes dialog
                                     builder.dismiss();
                                 }
                             }
@@ -189,6 +197,13 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
         }
     }
 
+
+    /**
+     * Edits FirebaseAuth email and Firebase database email/phone number of user
+     *
+     * @param inputEmail New email to be written
+     * @param inputPhone New phone number to be written
+     */
     public void changeAuthInfo(EditText inputEmail, EditText inputPhone)
     {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -201,6 +216,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                     {
                         if (task.isSuccessful())
                         {
+                            /* Successful profile edit*/
                             FirebaseUserGetSet.editEmail(viewUserObject.getDocumentId(),
                                     inputEmail.getText().toString());
                             FirebaseUserGetSet.editPhone(viewUserObject.getDocumentId(),
@@ -211,6 +227,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                         {
                             try
                             {
+                                /* Tries to match errorCode to EditText error */
                                 String errorCode = "";
                                 errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
 
@@ -235,14 +252,22 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                             }
                             catch (Exception e)
                             {
-                                /* Log message to debug*/
-                                Log.d(TAG, "Unexpected Firebase Error code: " + e.getMessage());
+                                /* Different type from errorCode, cannot be cast to the same object.
+                                 * Sets EditText error to new type.
+                                 *
+                                 * Log message to debug
+                                 */
+                                inputEmail.setError(task.getException().getMessage());
+                                Log.d(TAG, e.getMessage());
                             }
                         }
                     }
                 });
     }
 
+    /**
+     * Callback for UserProfileObject
+     */
     @Override
     public void onCallback(UserProfileObject userObject)
     {

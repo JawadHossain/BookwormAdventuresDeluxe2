@@ -314,7 +314,7 @@ public class CreateAccountActivity extends AppCompatActivity
                                 catch (Exception e)
                                 {
                                     /* Log message to debug*/
-                                    Log.d(TAG, "Unexpected Firebase Error code: " + e.getMessage());
+                                    Log.d(TAG, e.getMessage());
                                 }
                             }
                         }

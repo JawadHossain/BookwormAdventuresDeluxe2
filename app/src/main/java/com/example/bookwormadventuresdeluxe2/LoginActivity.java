@@ -295,8 +295,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 }
                                 catch (Exception e)
                                 {
-                                    /* Log message to debug*/
-                                    Log.d(TAG, "Unexpected Firebase Error code: " + e.getMessage());
+                                    /* Different type from errorCode, cannot be cast to the same object.
+                                     * Sets EditText error to new type.
+                                     *
+                                     * Log message to debug
+                                     */
+                                    editTextEmail.setError(task.getException().getMessage());
+                                    Log.d(TAG, e.getMessage());
+                                    progressBar.setVisibility(View.INVISIBLE);
                                 }
                             }
                         }

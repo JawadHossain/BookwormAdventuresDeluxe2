@@ -15,8 +15,17 @@ import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
+/**
+ * Firebase writer and reader for UserProfileObject
+ */
 public class FirebaseUserGetSet
 {
+    /**
+     * Performs query to extract UserProfileObject from database
+     *
+     * @param username username of object to be called
+     * @param myCallback interface for returning object after query success
+     */
     public static void getUser(String username, UserCallback myCallback)
     {
         FirebaseFirestore firebase = FirebaseFirestore.getInstance();
@@ -52,6 +61,12 @@ public class FirebaseUserGetSet
                 });
     }
 
+    /**
+     * Edits firebase email of target user with new email
+     *
+     * @param docId Firebase document ID to user to be targeted
+     * @param newEmail New email written
+     */
     public static void editEmail(String docId, String newEmail)
     {
         FirebaseFirestore firebase = FirebaseFirestore.getInstance();
@@ -64,6 +79,12 @@ public class FirebaseUserGetSet
                 .update(data);
     }
 
+    /**
+     * Edits firebase phoneNumber of target user with a new email
+     *
+     * @param docId Firebase document ID of user to be targeted
+     * @param newPhone New phone number written
+     */
     public static void editPhone(String docId, String newPhone)
     {
         FirebaseFirestore firebase = FirebaseFirestore.getInstance();
@@ -76,8 +97,14 @@ public class FirebaseUserGetSet
                 .update(data);
     }
 
-    /* https://stackoverflow.com/questions/49514859/how-to-get-data-object-from-another-event-android-studio */
+
+    /**
+     * Callback for UserProfileObject
+     */
     public interface UserCallback
+    /*
+    * Source: https://stackoverflow.com/questions/49514859/how-to-get-data-object-from-another-event-android-studio
+    * */
     {
         void onCallback(UserProfileObject userObject);
     }
