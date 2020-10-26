@@ -73,6 +73,8 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        getContext().getTheme().applyStyle(R.style.BlackTextTheme, true);
+
         /* Pulling UserProfileObject from database */
         FirebaseUserGetSet.getUser(UserCredentialAPI.getInstance().getUsername(), new FirebaseUserGetSet.UserCallback()
         {
@@ -121,43 +123,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                     builder.setView(editInfo);
 
                     /* Set up the buttons */
-                    editInfo.findViewById(R.id.edit_confirm).setOnClickListener(new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View view)
-                        {
-                            /* Checks if no changes were made */
-                            if (viewUserObject.getEmail().compareTo(inputEmail.getText().toString()) == 0
-                                && viewUserObject.getPhoneNumber().compareTo(inputPhone.getText().toString()) == 0)
-                            {
-                                builder.dismiss();
-                                return;
-                            }
 
-                            /* Checks if empty and disables confirm button */
-                            if (TextUtils.isEmpty(inputEmail.getText().toString()))
-                            {
-                                EditTextValidator.isEmpty(inputEmail);
-                                return;
-                            }
-
-                            /* Checks if error is present and disables confirm button */
-                            if (inputEmail.getError() != null)
-                            {
-                                return;
-                            }
-                            else
-                            {
-                                /* Attempts to write new email and phone number */
-                                changeAuthInfo(inputEmail, inputPhone);
-                                if (inputEmail.getError() != null)
-                                {
-                                    // Closes dialog
-                                    builder.dismiss();
-                                }
-                            }
-                        }
-                    });
 
                     editInfo.findViewById(R.id.edit_cancel).setOnClickListener(new View.OnClickListener()
                     {
@@ -197,74 +163,6 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
             /* Log message to debug*/
             Log.d(TAG, "Unexpected Firebase Error code: " + e.getMessage());
         }
-    }
-
-
-    /**
-     * Edits FirebaseAuth email and Firebase database email/phone number of user
-     *
-     * @param inputEmail New email to be written
-     * @param inputPhone New phone number to be written
-     */
-    public void changeAuthInfo(EditText inputEmail, EditText inputPhone)
-    {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        user.updateEmail(inputEmail.getText().toString())
-                .addOnCompleteListener(new OnCompleteListener<Void>()
-                {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task)
-                    {
-                        if (task.isSuccessful())
-                        {
-                            /* Successful profile edit*/
-                            FirebaseUserGetSet.editEmail(viewUserObject.getDocumentId(),
-                                    inputEmail.getText().toString());
-                            FirebaseUserGetSet.editPhone(viewUserObject.getDocumentId(),
-                                    inputPhone.getText().toString());
-                            Log.d(TAG, "User info updated.");
-                        }
-                        else
-                        {
-                            try
-                            {
-                                /* Tries to match errorCode to EditText error */
-                                String errorCode = "";
-                                errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-
-                                switch (errorCode)
-                                {
-                                    case "ERROR_INVALID_EMAIL":
-                                        /* Set Email EditText error code to check validity */
-                                        EditTextValidator.invalidEmail(inputEmail);
-                                        break;
-
-                                    case "ERROR_EMAIL_ALREADY_IN_USE":
-                                        /* Set Email EditText error code to email taken */
-                                        EditTextValidator.emailTaken(inputEmail);
-                                        break;
-
-                                    default:
-                                        /* Unexpected Error code*/
-                                        inputEmail.setError(((FirebaseAuthException) task.getException()).getMessage());
-                                        throw new Exception("Unexpected Firebase Error Code"
-                                                + "inside click listener.");
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                /* Different type from errorCode, cannot be cast to the same object.
-                                 * Sets EditText error to new type.
-                                 *
-                                 * Log message to debug
-                                 */
-                                inputEmail.setError(task.getException().getMessage());
-                                Log.d(TAG, e.getMessage());
-                            }
-                        }
-                    }
-                });
     }
 
     /**

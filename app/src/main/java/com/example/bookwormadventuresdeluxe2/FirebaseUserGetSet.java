@@ -1,11 +1,16 @@
 package com.example.bookwormadventuresdeluxe2;
 
 import android.util.Log;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 
+import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -43,10 +48,12 @@ public class FirebaseUserGetSet
                             for (QueryDocumentSnapshot document : task.getResult())
                             {
                                 /* Extracting userObject from document */
-                                UserProfileObject userObject = new UserProfileObject(document.getData().get("username").toString(),
+                                UserProfileObject userObject = new UserProfileObject(
+                                                    document.getData().get("username").toString(),
                                                     document.getData().get("email").toString(),
                                                     document.getData().get("userId").toString(),
-                                                    document.getId());
+                                                    document.getId()
+                                                    );
 
                                 if (document.getData().get("phoneNumber").toString() != null)
                                 {
@@ -102,7 +109,6 @@ public class FirebaseUserGetSet
                 .update(data);
     }
 
-
     /**
      * Callback for UserProfileObject
      */
@@ -112,5 +118,71 @@ public class FirebaseUserGetSet
     * */
     {
         void onCallback(UserProfileObject userObject);
+    }
+
+    /**
+     * Edits FirebaseAuth email and Firebase database email/phone number of user
+     *
+     * @param inputEmail New email to be written
+     * @param inputPhone New phone number to be written
+     */
+    public static void changeAuthInfo(EditText inputEmail, EditText inputPhone, String documentID)
+    {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        user.updateEmail(inputEmail.getText().toString())
+                .addOnCompleteListener(new OnCompleteListener<Void>()
+                {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task)
+                    {
+                        if (task.isSuccessful())
+                        {
+                            /* Successful profile edit*/
+                            FirebaseUserGetSet.editEmail(documentID,
+                                    inputEmail.getText().toString());
+                            FirebaseUserGetSet.editPhone(documentID,
+                                    inputPhone.getText().toString());
+                            Log.d(TAG, "User info updated.");
+                        }
+                        else
+                        {
+                            try
+                            {
+                                /* Tries to match errorCode to EditText error */
+                                String errorCode = "";
+                                errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+
+                                switch (errorCode)
+                                {
+                                    case "ERROR_INVALID_EMAIL":
+                                        /* Set Email EditText error code to check validity */
+                                        EditTextValidator.invalidEmail(inputEmail);
+                                        break;
+
+                                    case "ERROR_EMAIL_ALREADY_IN_USE":
+                                        /* Set Email EditText error code to email taken */
+                                        EditTextValidator.emailTaken(inputEmail);
+                                        break;
+
+                                    default:
+                                        /* Unexpected Error code*/
+                                        throw new Exception("Unexpected Firebase Error Code"
+                                                + "inside click listener.");
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                /* Different type from errorCode, cannot be cast to the same object.
+                                 * Sets EditText error to new type.
+                                 *
+                                 * Log message to debug
+                                 */
+                                inputEmail.setError(task.getException().getMessage());
+                                Log.d(TAG, e.getMessage());
+                            }
+                        }
+                    }
+                });
     }
 }
