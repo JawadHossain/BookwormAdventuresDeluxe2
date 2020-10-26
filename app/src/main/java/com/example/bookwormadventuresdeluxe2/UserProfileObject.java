@@ -17,7 +17,7 @@ public class UserProfileObject
     }
 
     /**
-     * Default constructor for UserObject
+     * Default constructor for UserProfileObject
      * @param username username pulled from database
      * @param email email pulled from database
      * @param userId userId pulled from database, unique to FirebaseAuth account
