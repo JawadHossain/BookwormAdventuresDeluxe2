@@ -18,6 +18,12 @@ public class Book implements Serializable
     private String description;
     private Status status;
 
+    // BookListAdapter which is now a FirestoreRecyclerAdapter requires empty constructor
+    public Book()
+    {
+
+    }
+
     public Book(String title, String author, String description, String isbn, Status status)
     {
         this.title = title;

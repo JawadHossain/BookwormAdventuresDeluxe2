@@ -1,5 +1,7 @@
 package com.example.bookwormadventuresdeluxe2;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 /**
  * This fragment holds the view for viewing the details of a book after it is clicked
  * on from the RecyclerView in MyBooks. From here, the user can view the details of their
@@ -20,8 +24,9 @@ public class MyBooksDetailViewFragment extends Fragment
 {
     ImageButton backButton;
     ImageButton editButton;
-
+    View bookDetailView;
     Book selectedBook;
+    String selectedBookId;
 
     public MyBooksDetailViewFragment()
     {
@@ -44,7 +49,7 @@ public class MyBooksDetailViewFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View bookDetailView = inflater.inflate(R.layout.fragment_my_books_detail_view, null, false);
+        this.bookDetailView = inflater.inflate(R.layout.fragment_my_books_detail_view, null, false);
 
         // Make the desired custom header buttons visible and set their click listeners
         this.editButton = bookDetailView.findViewById(R.id.app_header_edit_button);
@@ -55,26 +60,39 @@ public class MyBooksDetailViewFragment extends Fragment
         this.backButton.setVisibility(View.VISIBLE);
         this.backButton.setOnClickListener(this::onBackClick);
 
-        // Set the content based on the book that was selected
-        TextView title = bookDetailView.findViewById(R.id.book_details_title);
-        title.setText(this.selectedBook.getTitle());
-
-        TextView authorName = bookDetailView.findViewById(R.id.book_details_author);
-        authorName.setText(this.selectedBook.getAuthor());
-
-        TextView description = bookDetailView.findViewById(R.id.book_details_description);
-        description.setText(this.selectedBook.getDescription());
-
-        TextView status = bookDetailView.findViewById(R.id.book_details_status);
-        status.setText(this.selectedBook.getStatus().toString());
-
-        TextView isbn = bookDetailView.findViewById(R.id.book_details_isbn);
-        isbn.setText(this.selectedBook.getIsbn());
-
-        ImageView statusCircle = bookDetailView.findViewById(R.id.book_details_status_circle);
-        this.selectedBook.setStatusCircleColor(this.selectedBook.getStatus(), statusCircle);
+        if (this.selectedBook != null)
+        {
+            updateView(this.selectedBook);
+        }
 
         return bookDetailView;
+    }
+
+    /**
+     * Update the textfields for book detail view based on the given book
+     *
+     * @param book The book containing the data to populate the textfields with
+     */
+    public void updateView(Book book)
+    {
+        // Set the content based on the book that was selected
+        TextView title = bookDetailView.findViewById(R.id.book_details_title);
+        title.setText(book.getTitle());
+
+        TextView authorName = bookDetailView.findViewById(R.id.book_details_author);
+        authorName.setText(book.getAuthor());
+
+        TextView description = bookDetailView.findViewById(R.id.book_details_description);
+        description.setText(book.getDescription());
+
+        TextView status = bookDetailView.findViewById(R.id.book_details_status);
+        status.setText(book.getStatus().toString());
+
+        TextView isbn = bookDetailView.findViewById(R.id.book_details_isbn);
+        isbn.setText(book.getIsbn());
+
+        ImageView statusCircle = bookDetailView.findViewById(R.id.book_details_status_circle);
+        book.setStatusCircleColor(book.getStatus(), statusCircle);
     }
 
     /**
@@ -85,6 +103,9 @@ public class MyBooksDetailViewFragment extends Fragment
     public void onBackClick(View v)
     {
         MyBooksFragment myBooksFragment = new MyBooksFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("editedBook", this.selectedBook);
+        myBooksFragment.setArguments(args);
         getFragmentManager().beginTransaction().replace(R.id.frame_container, myBooksFragment).commit();
     }
 
@@ -95,7 +116,32 @@ public class MyBooksDetailViewFragment extends Fragment
      */
     public void onEditClick(View v)
     {
-        // TODO: Once Richmond is done add book this will be much easier
+        Intent intent = new Intent(getActivity(), AddOrEditBooksActivity.class);
+        intent.putExtra("requestCode", AddOrEditBooksActivity.EDIT_BOOK);
+        intent.putExtra("bookToEdit", this.selectedBook);
+        intent.putExtra("documentId", this.selectedBookId);
+        startActivityForResult(intent, AddOrEditBooksActivity.EDIT_BOOK);
+    }
+
+    // Called by AddOrEditBooksActivity when user presses save on editing screen
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        getActivity();
+        if (requestCode == AddOrEditBooksActivity.EDIT_BOOK && resultCode == Activity.RESULT_OK)
+        {
+            // Get the book that was edited and its new values
+            this.selectedBook = (Book) data.getSerializableExtra("EditedBook");
+            updateView(this.selectedBook);
+
+            // Update the book in firebase
+            FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
+            rootRef.collection("Books").document(this.selectedBookId).update("title", this.selectedBook.getTitle());
+            rootRef.collection("Books").document(this.selectedBookId).update("author", this.selectedBook.getAuthor());
+            rootRef.collection("Books").document(this.selectedBookId).update("description", this.selectedBook.getDescription());
+            rootRef.collection("Books").document(this.selectedBookId).update("isbn", this.selectedBook.getIsbn());
+        }
     }
 
     /**
@@ -103,8 +149,11 @@ public class MyBooksDetailViewFragment extends Fragment
      *
      * @param selectedBook The book that was selected from MyBooksFragment
      */
-    public void onFragmentInteraction(Book selectedBook)
+    public void onFragmentInteraction(Book selectedBook, String documentId)
     {
         this.selectedBook = selectedBook;
+        this.selectedBookId = documentId;
     }
+
+
 }
