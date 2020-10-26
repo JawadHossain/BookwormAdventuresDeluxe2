@@ -10,9 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -21,13 +23,19 @@ import com.google.firebase.auth.FirebaseAuth;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyProfileFragment extends Fragment implements View.OnClickListener
+public class MyProfileFragment extends Fragment implements View.OnClickListener, FirebaseUserGetSet.UserCallback
 {
     private static final String TAG = "MyProfileFragment";
     Button edit;
     Button signOutButton;
     MaterialTextView appHeaderText;
     View view;
+
+    TextView viewUsername;
+    TextView viewEmail;
+    TextView viewPhoneNumber;
+
+    UserObject viewUserObject;
 
     private FirebaseAuth firebaseAuth;
 
@@ -52,7 +60,25 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener
         appHeaderText = view.findViewById(R.id.app_header_title);
         appHeaderText.setText(R.string.my_profile_title);
 
+        viewUsername = view.findViewById(R.id.view_username);
+        viewEmail = view.findViewById(R.id.view_email);
+        viewPhoneNumber = view.findViewById(R.id.view_phone);
+
         firebaseAuth = FirebaseAuth.getInstance();
+
+        FirebaseUserGetSet.getUser(UserCredentialAPI.getInstance().getUsername(), new FirebaseUserGetSet.UserCallback()
+        {
+            @Override
+            public void onCallback(UserObject userObject)
+            {
+                viewUserObject = userObject;
+
+                viewUsername.setText(viewUserObject.getUsername());
+                viewEmail.setText(viewUserObject.getEmail());
+                viewPhoneNumber.setText(viewUserObject.getPhoneNumber());
+            }
+        });
+
         return view;
     }
 
@@ -78,6 +104,9 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener
                     inputEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                     inputPhone.setInputType(InputType.TYPE_CLASS_PHONE);
 
+                    inputEmail.setText(viewUserObject.getEmail());
+                    inputPhone.setText(viewUserObject.getPhoneNumber());
+
                     final AlertDialog builder = new AlertDialog.Builder(this.getContext()).create();
                     builder.setView(editInfo);
 
@@ -87,6 +116,9 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener
                         @Override
                         public void onClick(View view)
                         {
+                            FirebaseUserGetSet.editInfo(viewUserObject.getDocumentId(),
+                                                        inputEmail.getText().toString(),
+                                                        inputPhone.getText().toString());
                             //TODO: test input, get input, update user
                             builder.dismiss();
                         }
@@ -129,5 +161,11 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener
             /* Log message to debug*/
             Log.d(TAG, e.getMessage());
         }
+    }
+
+    @Override
+    public void onCallback(UserObject userObject)
+    {
+
     }
 }
