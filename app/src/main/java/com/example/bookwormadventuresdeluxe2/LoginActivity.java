@@ -200,7 +200,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         } catch (Exception e) {
             /* Log message to debug*/
-            Log.d(TAG, e.getMessage());
+            Log.d(TAG, "Unexpected Firebase Error code: "+ e.getMessage());
         }
 
     }
@@ -292,9 +292,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                     /* Hide progress bar*/
                                     progressBar.setVisibility(View.INVISIBLE);
-                                } catch (Exception e){
+                                }
+                                catch (Exception e)
+                                {
                                     /* Log message to debug*/
-                                    Log.d(TAG, e.getMessage());
+                                    Log.d(TAG, "Unexpected Firebase Error code: " + e.getMessage());
                                 }
                             }
                         }

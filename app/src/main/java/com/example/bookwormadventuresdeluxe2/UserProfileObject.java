@@ -3,7 +3,7 @@ package com.example.bookwormadventuresdeluxe2;
 /**
  * UserObject is required to display information pulled from Firebase
  */
-public class UserObject
+public class UserProfileObject
 {
     private String username;
     private String email;
@@ -11,7 +11,7 @@ public class UserObject
     private String userId;
     private String documentId;
 
-    public UserObject()
+    public UserProfileObject()
     {
 
     }
@@ -23,7 +23,7 @@ public class UserObject
      * @param userId userId pulled from database, unique to FirebaseAuth account
      * @param documentId documentId pulled from database, used to target object
      */
-    public UserObject(String username, String email, String userId, String documentId)
+    public UserProfileObject(String username, String email, String userId, String documentId)
     {
         this.username = username;
         this.email = email;

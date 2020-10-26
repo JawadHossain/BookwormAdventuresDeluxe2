@@ -33,7 +33,7 @@ public class FirebaseUserGetSet
                         {
                             for (QueryDocumentSnapshot document : task.getResult())
                             {
-                                UserObject userObject = new UserObject(document.getData().get("username").toString(),
+                                UserProfileObject userObject = new UserProfileObject(document.getData().get("username").toString(),
                                                     document.getData().get("email").toString(),
                                                     document.getData().get("userId").toString(),
                                                     document.getId());
@@ -52,22 +52,35 @@ public class FirebaseUserGetSet
                 });
     }
 
-    public static void editInfo(String docId, String newEmail, String newPhoneNumber)
+    public static void editEmail(String docId, String newEmail)
     {
         FirebaseFirestore firebase = FirebaseFirestore.getInstance();
 
         Map<String, Object> data = new HashMap<>();
         data.put("email", newEmail);
-        data.put("phoneNumber", newPhoneNumber);
 
         firebase.collection("Users")
                 .document(docId)
                 .update(data);
     }
 
+    public static void editPhone(String docId, String newPhone)
+    {
+        FirebaseFirestore firebase = FirebaseFirestore.getInstance();
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("phoneNumber", newPhone);
+
+        firebase.collection("Users")
+                .document(docId)
+                .update(data);
+    }
+
+
+
     /* https://stackoverflow.com/questions/49514859/how-to-get-data-object-from-another-event-android-studio */
     public interface UserCallback
     {
-        void onCallback(UserObject userObject);
+        void onCallback(UserProfileObject userObject);
     }
 }

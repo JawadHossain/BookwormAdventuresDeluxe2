@@ -295,9 +295,9 @@ public class CreateAccountActivity extends AppCompatActivity
                                             break;
 
                                         case "ERROR_EMAIL_ALREADY_IN_USE":
-                                            EditTextValidator.weakPass(editTextPassword, confirmPassword);
-                                            EditTextValidator.emailTaken(editTextEmail);
-                                            break;
+                                        EditTextValidator.weakPass(editTextPassword, confirmPassword);
+                                        EditTextValidator.emailTaken(editTextEmail);
+                                        break;
 
                                         case "ERROR_WEAK_PASSWORD":
                                             EditTextValidator.weakPass(editTextPassword, confirmPassword);
@@ -308,15 +308,14 @@ public class CreateAccountActivity extends AppCompatActivity
                                             throw new Exception("Unexpected Firebase Error Code"
                                                     + "inside click listener.");
                                     }
-
                                     /* Hide progress bar*/
                                     progressBar.setVisibility(View.INVISIBLE);
-                                } catch (Exception e)
+                                }
+                                catch (Exception e)
                                 {
                                     /* Log message to debug*/
-                                    Log.d(TAG, e.getMessage());
+                                    Log.d(TAG, "Unexpected Firebase Error code: " + e.getMessage());
                                 }
-
                             }
                         }
                     });

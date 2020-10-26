@@ -23,11 +23,6 @@ import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 // Todo: Rename Class to ProfileFragment or rename other fragments
 
@@ -46,14 +41,9 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
     TextView viewEmail;
     TextView viewPhoneNumber;
 
-    UserObject viewUserObject;
-
-//    Boolean emailInUse = false;
-//    Boolean validEmail = false;
+    UserProfileObject viewUserObject;
 
     private FirebaseAuth firebaseAuth;
-    private FirebaseFirestore firebase = FirebaseFirestore.getInstance();
-    private CollectionReference collectionReference = firebase.collection("Users");
 
     public MyProfileFragment()
     {
@@ -85,7 +75,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
         FirebaseUserGetSet.getUser(UserCredentialAPI.getInstance().getUsername(), new FirebaseUserGetSet.UserCallback()
         {
             @Override
-            public void onCallback(UserObject userObject)
+            public void onCallback(UserProfileObject userObject)
             {
                 viewUserObject = userObject;
 
@@ -129,20 +119,32 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                     // Set up the buttons
                     editInfo.findViewById(R.id.edit_confirm).setOnClickListener(new View.OnClickListener()
                     {
+
                         @Override
                         public void onClick(View view)
                         {
-                            if (viewUserObject.getEmail().compareTo(inputEmail.getText().toString()) == 0)
+                            if (viewUserObject.getEmail().compareTo(inputEmail.getText().toString()) == 0
+                                    && viewUserObject.getPhoneNumber().compareTo(inputPhone.getText().toString()) == 0)
                             {
                                 builder.dismiss();
                             }
-                            changeAuthEmail(inputEmail);
-                            if (inputEmail.getError() != null)
+                            else
                             {
-                                FirebaseUserGetSet.editInfo(viewUserObject.getDocumentId(),
-                                        inputEmail.getText().toString(),
-                                        inputPhone.getText().toString());
-                                builder.dismiss();
+                                if (viewUserObject.getEmail().compareTo(inputEmail.getText().toString()) == 0)
+                                {
+                                    FirebaseUserGetSet.editPhone(viewUserObject.getDocumentId(),
+                                            inputPhone.getText().toString());
+                                    builder.dismiss();
+                                }
+                                changeAuthEmail(inputEmail);
+                                if (inputEmail.getError() != null)
+                                {
+                                    FirebaseUserGetSet.editEmail(viewUserObject.getDocumentId(),
+                                            inputEmail.getText().toString());
+                                    FirebaseUserGetSet.editPhone(viewUserObject.getDocumentId(),
+                                            inputPhone.getText().toString());
+                                    builder.dismiss();
+                                }
                             }
                         }
                     });
@@ -177,23 +179,28 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                 default:
                     /* Unexpected resource id*/
                     throw new Exception("Unexpected resource Id inside click listener."
-                            + "Expected: R.id.login_button Or R.idcreate_account_button");
+                            + "Expected: R.id.login_button Or R.id create_account_button");
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             /* Log message to debug*/
-            Log.d(TAG, e.getMessage());
+            Log.d(TAG, "Unexpected Firebase Error code: " + e.getMessage());
         }
     }
 
-    public void changeAuthEmail(EditText inputEmail) {
+    public void changeAuthEmail(EditText inputEmail)
+    {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         user.updateEmail(inputEmail.getText().toString())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                .addOnCompleteListener(new OnCompleteListener<Void>()
+                {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
+                    public void onComplete(@NonNull Task<Void> task)
+                    {
+                        if (task.isSuccessful())
+                        {
                             Log.d(TAG, "User email address updated.");
                         }
                         else
@@ -216,6 +223,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
 
                                     default:
                                         /* Unexpected Error code*/
+                                        inputEmail.setError(((FirebaseAuthException) task.getException()).getErrorCode());
                                         throw new Exception("Unexpected Firebase Error Code"
                                                 + "inside click listener.");
                                 }
@@ -223,7 +231,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                             catch (Exception e)
                             {
                                 /* Log message to debug*/
-                                Log.d(TAG, e.getMessage());
+                                Log.d(TAG, "Unexpected Firebase Error code: " + e.getMessage());
                             }
                         }
                     }
@@ -231,9 +239,8 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onCallback(UserObject userObject)
+    public void onCallback(UserProfileObject userObject)
     {
 
     }
-
 }
