@@ -12,16 +12,17 @@ import java.io.Serializable;
 public class Book implements Serializable
 {
     // Basic attributes for now, rest added as needed
-    protected String title;
-    protected String author;
-    protected String isbn;
-    protected String description;
-    protected Status status;
+    private String title;
+    private String author;
+    private String isbn;
+    private String description;
+    private Status status;
 
     public Book(String title, String author, String description, String isbn, Status status)
     {
         this.title = title;
         this.author = author;
+        this.description = description;
         this.isbn = isbn;
         this.description = description;
         this.status = status;
@@ -118,10 +119,6 @@ public class Book implements Serializable
                 /* We would not expect any other id */
                 throw new IllegalArgumentException();
         }
-    }
-
-    public Notification createNotification(String message) {
-        return new Notification(this.title, this.author, this.description, this.isbn, this.status, message);
     }
 }
 
