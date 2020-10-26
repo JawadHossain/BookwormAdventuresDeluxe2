@@ -123,7 +123,45 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                     builder.setView(editInfo);
 
                     /* Set up the buttons */
+                    editInfo.findViewById(R.id.edit_confirm).setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View view)
+                        {
+                            /* Checks if no changes were made */
+                            if (viewUserObject.getEmail().equals(inputEmail.getText().toString())
+                                && viewUserObject.getPhoneNumber().equals(inputPhone.getText().toString()))
+                            {
+                                builder.dismiss();
+                                return;
+                            }
 
+                            /* Checks if empty and disables confirm button */
+                            if (TextUtils.isEmpty(inputEmail.getText().toString()))
+                            {
+                                EditTextValidator.isEmpty(inputEmail);
+                                return;
+                            }
+
+                            /* Checks if error is present and disables confirm button */
+                            if (inputEmail.getError() != null)
+                            {
+                                return;
+                            }
+                            else
+                            {
+                                /* Attempts to write new email and phone number */
+                                FirebaseUserGetSet.changeAuthInfo(inputEmail,
+                                                                    inputPhone,
+                                                                    viewUserObject.getDocumentId());
+                                if (inputEmail.getError() != null)
+                                {
+                                    // Closes dialog
+                                    builder.dismiss();
+                                }
+                            }
+                        }
+                    });
 
                     editInfo.findViewById(R.id.edit_cancel).setOnClickListener(new View.OnClickListener()
                     {
@@ -135,8 +173,8 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                     });
 
                     builder.show();
-
                     break;
+
                 case R.id.profile_logout:
                     /*
                      * Listener for signOut button to sign user out of firebase account
@@ -152,6 +190,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                         /* Take User back to Login Page */
                         startActivity(intent);
                     }
+
                 default:
                     /* Unexpected resource id*/
                     throw new Exception("Unexpected resource Id inside click listener."
