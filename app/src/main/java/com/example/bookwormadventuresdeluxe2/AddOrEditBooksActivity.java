@@ -43,7 +43,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
         int requestCode = -1;
         if (getIntent().getSerializableExtra("requestCode") != null)
         {
-            requestCode = (int) getIntent().getSerializableExtra("requestCode");
+            requestCode = getIntent().getIntExtra("requestCode", 0);
         }
         if (requestCode == AddOrEditBooksActivity.EDIT_BOOK)
         {
