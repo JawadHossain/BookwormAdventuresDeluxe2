@@ -76,8 +76,6 @@ public class FirebaseUserGetSet
                 .update(data);
     }
 
-
-
     /* https://stackoverflow.com/questions/49514859/how-to-get-data-object-from-another-event-android-studio */
     public interface UserCallback
     {
