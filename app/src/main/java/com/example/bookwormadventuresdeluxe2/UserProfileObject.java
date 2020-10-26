@@ -1,7 +1,7 @@
 package com.example.bookwormadventuresdeluxe2;
 
 /**
- * UserObject is required to display information pulled from Firebase
+ * UserProfileObject is required to display information pulled from Firebase
  */
 public class UserProfileObject
 {
