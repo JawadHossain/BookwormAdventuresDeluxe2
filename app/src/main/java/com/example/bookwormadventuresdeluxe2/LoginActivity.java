@@ -198,7 +198,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     throw new Exception("Unexpected resource Id inside click listener."
                             + "Expected: R.id.login_button Or R.id.create_account_button");
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             /* Log message to debug*/
             Log.d(TAG, "Unexpected Firebase Error code: "+ e.getMessage());
         }

@@ -119,7 +119,6 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                     // Set up the buttons
                     editInfo.findViewById(R.id.edit_confirm).setOnClickListener(new View.OnClickListener()
                     {
-
                         @Override
                         public void onClick(View view)
                         {
@@ -213,11 +212,12 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                                 switch (errorCode)
                                 {
                                     case "ERROR_INVALID_EMAIL":
-                                        /* Set Email EditText error code and additionally check password eligibility */
+                                        /* Set Email EditText error code to check validity */
                                         EditTextValidator.invalidEmail(inputEmail);
                                         break;
 
                                     case "ERROR_EMAIL_ALREADY_IN_USE":
+                                        /* Set Email EditText error code to email taken */
                                         EditTextValidator.emailTaken(inputEmail);
                                         break;
 
