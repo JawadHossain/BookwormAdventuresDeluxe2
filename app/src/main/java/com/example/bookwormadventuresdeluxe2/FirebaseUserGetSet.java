@@ -42,14 +42,19 @@ public class FirebaseUserGetSet
                         {
                             for (QueryDocumentSnapshot document : task.getResult())
                             {
+                                /* Extracting userObject from document */
                                 UserProfileObject userObject = new UserProfileObject(document.getData().get("username").toString(),
                                                     document.getData().get("email").toString(),
                                                     document.getData().get("userId").toString(),
                                                     document.getId());
+
                                 if (document.getData().get("phoneNumber").toString() != null)
                                 {
+                                    /* Adding phone number to userObject if it exists */
                                     userObject.setPhoneNumber(document.getData().get("phoneNumber").toString());
                                 }
+
+                                /* Returns object after query is complete, avoids null returns while waiting*/
                                 myCallback.onCallback(userObject);
                             }
                         }

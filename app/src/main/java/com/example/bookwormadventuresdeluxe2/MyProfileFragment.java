@@ -105,20 +105,22 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                 case R.id.profile_edit:
                     final View editInfo = LayoutInflater.from(this.getContext()).inflate(R.layout.edit_profile, null);
 
-                    // Set up the input
+                    /* Set up the input */
                     EditText inputEmail = editInfo.findViewById(R.id.edit_email);
                     EditText inputPhone = editInfo.findViewById(R.id.edit_phone);
-                    // Specify the type of input expected
+
+                    /* Specify the type of input expected */
                     inputEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                     inputPhone.setInputType(InputType.TYPE_CLASS_PHONE);
 
+                    /* Setting text to user's details */
                     inputEmail.setText(viewUserObject.getEmail());
                     inputPhone.setText(viewUserObject.getPhoneNumber());
 
                     final AlertDialog builder = new AlertDialog.Builder(this.getContext()).create();
                     builder.setView(editInfo);
 
-                    // Set up the buttons
+                    /* Set up the buttons */
                     editInfo.findViewById(R.id.edit_confirm).setOnClickListener(new View.OnClickListener()
                     {
                         @Override

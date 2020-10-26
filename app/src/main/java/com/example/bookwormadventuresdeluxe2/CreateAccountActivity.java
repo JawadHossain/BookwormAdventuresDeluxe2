@@ -313,8 +313,14 @@ public class CreateAccountActivity extends AppCompatActivity
                                 }
                                 catch (Exception e)
                                 {
-                                    /* Log message to debug*/
+                                    /* Different type from errorCode, cannot be cast to the same object.
+                                     * Sets EditText error to new type.
+                                     *
+                                     * Log message to debug
+                                     */
+                                    editTextEmail.setError(task.getException().getMessage());
                                     Log.d(TAG, e.getMessage());
+                                    progressBar.setVisibility(View.INVISIBLE);
                                 }
                             }
                         }
