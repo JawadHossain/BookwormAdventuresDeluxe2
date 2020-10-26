@@ -33,7 +33,8 @@ public class SetLocationActivity extends AppCompatActivity implements OnMapReady
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap)
+    {
         map = googleMap;
     }
 
