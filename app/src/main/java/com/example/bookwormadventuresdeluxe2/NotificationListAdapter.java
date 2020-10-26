@@ -62,11 +62,11 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
     public void onBindViewHolder(NotificationListAdapter.NotificationListViewHolder NotificationListViewHolder, int position)
     {
         NotificationListViewHolder.message.setText(notifications.get(position).getMessage());
-        NotificationListViewHolder.title.setText(notifications.get(position).getTitle());
-        NotificationListViewHolder.author.setText(notifications.get(position).getAuthor());
-        NotificationListViewHolder.isbn.setText(notifications.get(position).getIsbn());
+        NotificationListViewHolder.title.setText(notifications.get(position).getBook().getTitle());
+        NotificationListViewHolder.author.setText(notifications.get(position).getBook().getAuthor());
+        NotificationListViewHolder.isbn.setText(notifications.get(position).getBook().getIsbn());
 
-        notifications.get(position).setStatusCircleColor(notifications.get(position).getStatus(), NotificationListViewHolder.statusCircle);
+        notifications.get(position).getBook().setStatusCircleColor(notifications.get(position).getBook().getStatus(), NotificationListViewHolder.statusCircle);
     }
 
     @Override
