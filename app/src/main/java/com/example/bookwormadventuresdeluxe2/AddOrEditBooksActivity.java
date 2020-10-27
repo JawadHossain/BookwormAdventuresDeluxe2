@@ -109,7 +109,8 @@ public class AddOrEditBooksActivity extends AppCompatActivity
 
     /**
      * Validate the fields entered in this activity
-     * Title, author, and isbn cannot be empty
+     * Title and author cannot be empty
+     * ISBN can be empty, or has digits or length 10 or 13
      *
      * @return true if all fields are valid, false otherwise
      */
@@ -126,14 +127,17 @@ public class AddOrEditBooksActivity extends AppCompatActivity
             EditTextValidator.isEmpty(authorView);
             valid = false;
         }
-        /*
-        // Leaving this in in case the requirements include the ISBN to be non-empty
-        if (TextUtils.isEmpty(isbnView.getText().toString().trim()))
+        // ISBN can be empty, or has digits of length 10 or 13
+        // https://en.wikipedia.org/wiki/International_Standard_Book_Number
+        String isbn_input = isbnView.getText().toString();
+        if (!(isbn_input.matches("\\d{10}") ||
+                isbn_input.matches("\\d{13}") ||
+                TextUtils.isEmpty(isbn_input)))
         {
-            EditTextValidator.isEmpty(isbnView);
+            EditTextValidator.invalidIsbn(isbnView);
             valid = false;
         }
-         */
+
         return valid;
     }
 
@@ -192,7 +196,14 @@ public class AddOrEditBooksActivity extends AppCompatActivity
                 requestCode, resultCode, intent);
         if (scanResult != null)
         {
-            isbnView.setText(scanResult.getContents());
+            String isbn_scan_result = scanResult.getContents();
+            // Older versions had 9 digits but can be converted to 10 "by prefixing it with a zero"
+            // https://en.wikipedia.org/wiki/International_Standard_Book_Number
+            if (isbn_scan_result.length() == 9)
+            {
+                isbn_scan_result = "0" + isbn_scan_result;
+            }
+            isbnView.setText(isbn_scan_result);
         }
         else
         {
