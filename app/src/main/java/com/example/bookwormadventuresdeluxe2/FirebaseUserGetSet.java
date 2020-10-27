@@ -6,11 +6,15 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
+
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -25,6 +29,9 @@ import static android.content.ContentValues.TAG;
  */
 public class FirebaseUserGetSet
 {
+    private static FirebaseFirestore firebase = FirebaseFirestore.getInstance();
+    private static CollectionReference usersRef = firebase.collection("Users");
+
     /**
      * Performs query to extract UserProfileObject from database
      *
@@ -33,11 +40,7 @@ public class FirebaseUserGetSet
      */
     public static void getUser(String username, UserCallback myCallback)
     {
-        FirebaseFirestore firebase = FirebaseFirestore.getInstance();
-
-        firebase.collection("Users")
-                .whereEqualTo("username", username)
-                .get()
+        usersRef.whereEqualTo("username", username).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
                 {
                     @Override
@@ -74,39 +77,33 @@ public class FirebaseUserGetSet
     }
 
     /**
-     * Edits firebase email of target user with new email
+     * Edits Firebase email of target user with new email
      *
      * @param docId Firebase document ID to user to be targeted
      * @param newEmail New email written
      */
     public static void editEmail(String docId, String newEmail)
     {
-        FirebaseFirestore firebase = FirebaseFirestore.getInstance();
-
         Map<String, Object> data = new HashMap<>();
+
         data.put("email", newEmail);
 
-        firebase.collection("Users")
-                .document(docId)
-                .update(data);
+        usersRef.document(docId).update(data);
     }
 
     /**
-     * Edits firebase phoneNumber of target user with a new email
+     * Edits Firebase phoneNumber of target user with a new phone number
      *
      * @param docId Firebase document ID of user to be targeted
      * @param newPhone New phone number written
      */
     public static void editPhone(String docId, String newPhone)
     {
-        FirebaseFirestore firebase = FirebaseFirestore.getInstance();
-
         Map<String, Object> data = new HashMap<>();
+
         data.put("phoneNumber", newPhone);
 
-        firebase.collection("Users")
-                .document(docId)
-                .update(data);
+        usersRef.document(docId).update(data);
     }
 
     /**
@@ -139,9 +136,9 @@ public class FirebaseUserGetSet
                         if (task.isSuccessful())
                         {
                             /* Successful profile edit*/
-                            FirebaseUserGetSet.editEmail(documentID,
+                            editEmail(documentID,
                                     inputEmail.getText().toString());
-                            FirebaseUserGetSet.editPhone(documentID,
+                            editPhone(documentID,
                                     inputPhone.getText().toString());
                             Log.d(TAG, "User info updated.");
                         }
@@ -167,6 +164,7 @@ public class FirebaseUserGetSet
 
                                     default:
                                         /* Unexpected Error code*/
+                                        inputEmail.setError(errorCode);
                                         throw new Exception("Unexpected Firebase Error Code"
                                                 + "inside click listener.");
                                 }

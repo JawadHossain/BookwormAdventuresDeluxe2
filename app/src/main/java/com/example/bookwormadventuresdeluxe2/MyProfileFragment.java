@@ -13,17 +13,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseUser;
 
 // Todo: Rename Class to ProfileFragment or rename other fragments
 
@@ -33,18 +29,20 @@ import com.google.firebase.auth.FirebaseUser;
 public class MyProfileFragment extends Fragment implements View.OnClickListener, FirebaseUserGetSet.UserCallback
 {
     private static final String TAG = "MyProfileFragment";
+
     Button edit;
     Button signOutButton;
+
     MaterialTextView appHeaderText;
-    View view;
 
     TextView viewUsername;
     TextView viewEmail;
     TextView viewPhoneNumber;
 
-    UserProfileObject viewUserObject;
+    View view;
 
-    private FirebaseAuth firebaseAuth;
+    FirebaseAuth firebaseAuth;
+    UserProfileObject viewUserObject;
 
     public MyProfileFragment()
     {
@@ -55,7 +53,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        // Inflate the layout for this fragment
+        /* Inflate the layout for this fragment */
         view = inflater.inflate(R.layout.fragment_my_profile, container, false);
         signOutButton = view.findViewById(R.id.profile_logout);
         signOutButton.setOnClickListener(this);
@@ -71,9 +69,9 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
         viewEmail = view.findViewById(R.id.view_email);
         viewPhoneNumber = view.findViewById(R.id.view_phone);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-
         getContext().getTheme().applyStyle(R.style.BlackTextTheme, true);
+
+        firebaseAuth = FirebaseAuth.getInstance();
 
         /* Pulling UserProfileObject from database */
         FirebaseUserGetSet.getUser(UserCredentialAPI.getInstance().getUsername(), new FirebaseUserGetSet.UserCallback()
@@ -187,6 +185,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                                 | Intent.FLAG_ACTIVITY_CLEAR_TOP
                                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
                         /* Take User back to Login Page */
                         startActivity(intent);
                     }
