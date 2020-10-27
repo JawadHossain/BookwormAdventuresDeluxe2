@@ -3,6 +3,7 @@ package com.example.bookwormadventuresdeluxe2;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -80,7 +82,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
         description = descriptionView.getText().toString();
         isbn = isbnView.getText().toString();
 
-        if (Book.fieldsValid(title, author, description, isbn))
+        if (fieldsValid())
         {
             if (editingBook)
             {
@@ -103,6 +105,36 @@ public class AddOrEditBooksActivity extends AppCompatActivity
             }
             finish();
         }
+    }
+
+    /**
+     * Validate the fields entered in this activity
+     * Title, author, and isbn cannot be empty
+     *
+     * @return true if all fields are valid, false otherwise
+     */
+    private boolean fieldsValid()
+    {
+        boolean valid = true;
+        if (TextUtils.isEmpty(titleView.getText().toString()))
+        {
+            EditTextValidator.isEmpty(titleView);
+            valid = false;
+        }
+        if (TextUtils.isEmpty(authorView.getText().toString()))
+        {
+            EditTextValidator.isEmpty(authorView);
+            valid = false;
+        }
+        /*
+        // Leaving this in in case the requirements include the ISBN to be non-empty
+        if (TextUtils.isEmpty(isbnView.getText().toString().trim()))
+        {
+            EditTextValidator.isEmpty(isbnView);
+            valid = false;
+        }
+         */
+        return valid;
     }
 
     /**

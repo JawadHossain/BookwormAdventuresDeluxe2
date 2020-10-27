@@ -158,10 +158,8 @@
 
         <EditText
             android:id="@+id/isbn_edit_text"
-            android:layout_width="268dp"
+            android:layout_width="219dp"
             android:layout_height="49dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
             android:ems="10"
             android:hint="@string/isbn"
             android:inputType="number"
@@ -169,7 +167,6 @@
             android:textColor="@android:color/black"
             android:textSize="20sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/isbn_text_view"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/author_edit_text" />
 
         <ImageButton
@@ -180,8 +177,12 @@
             android:onClick="scanIsbn"
             android:src="@drawable/ic_scan_black"
             app:layout_constraintBottom_toBottomOf="@+id/isbn_edit_text"
-            app:layout_constraintEnd_toEndOf="@+id/isbn_edit_text"
-            app:layout_constraintTop_toTopOf="@+id/isbn_edit_text" />
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/isbn_edit_text"
+            app:layout_constraintTop_toTopOf="@+id/isbn_edit_text"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
