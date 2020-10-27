@@ -314,15 +314,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             /* Hide progress bar*/
             progressBar.setVisibility(View.INVISIBLE);
 
-            /* Set Email Edit Text error */
-            if (TextUtils.isEmpty(email))
-            {
-                EditTextValidator.isEmpty(editTextEmail);
-            }
             /* Set Password Edit Text error */
             if (TextUtils.isEmpty(password))
             {
                 EditTextValidator.isEmpty(editTextPassword);
+            }
+
+            /* Set Email Edit Text error */
+            if (TextUtils.isEmpty(email))
+            {
+                EditTextValidator.isEmpty(editTextEmail);
             }
             return;
         }
