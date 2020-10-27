@@ -6,16 +6,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/google_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
+
     <TextView
         android:id="@+id/view_address_text"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="8dp"
         android:hint="Autofilled"
+        android:gravity="center_vertical"
+        android:paddingLeft="12dp"
+        android:background="@color/colorBackground"
         android:imeOptions="actionDone"
         android:inputType="text"
-        android:textSize="24dp"
+        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
