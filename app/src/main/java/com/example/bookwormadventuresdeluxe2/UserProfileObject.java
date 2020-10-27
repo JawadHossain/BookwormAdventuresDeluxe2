@@ -23,10 +23,11 @@ public class UserProfileObject
      * @param userId userId pulled from database, unique to FirebaseAuth account
      * @param documentId documentId pulled from database, used to target object
      */
-    public UserProfileObject(String username, String email, String userId, String documentId)
+    public UserProfileObject(String username, String email, String phoneNumber, String userId, String documentId)
     {
         this.username = username;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.userId = userId;
         this.documentId = documentId;
     }

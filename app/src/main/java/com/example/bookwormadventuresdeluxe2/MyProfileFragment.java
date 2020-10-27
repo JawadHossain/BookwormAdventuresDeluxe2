@@ -144,6 +144,13 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                                 return;
                             }
 
+                            /* Checks if phone number was empty and disables confirm button */
+                            if (TextUtils.isEmpty(inputPhone.getText().toString()))
+                            {
+                                EditTextValidator.isEmpty(inputPhone);
+                                return;
+                            }
+
                             /* Checks if error is present and disables confirm button */
                             if (inputEmail.getError() != null)
                             {
