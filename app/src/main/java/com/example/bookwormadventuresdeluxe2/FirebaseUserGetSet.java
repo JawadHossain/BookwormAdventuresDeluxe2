@@ -159,7 +159,7 @@ public class FirebaseUserGetSet
 
                                     default:
                                         /* Unexpected Error code*/
-                                        inputEmail.setError(errorCode);
+                                        inputEmail.setError(task.getException().getMessage());
                                 }
                             }
                             catch (Exception e)

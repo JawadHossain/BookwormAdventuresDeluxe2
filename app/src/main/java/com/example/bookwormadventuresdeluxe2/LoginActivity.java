@@ -288,7 +288,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                         default:
                                             /* Unexpected Error code*/
-                                            editTextEmail.setError(errorCode);
+                                            editTextEmail.setError(task.getException().getMessage());
                                     }
 
                                     /* Hide progress bar*/
