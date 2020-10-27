@@ -65,10 +65,12 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
         appHeaderText = view.findViewById(R.id.app_header_title);
         appHeaderText.setText(R.string.my_profile_title);
 
+        /* Set display texts */
         viewUsername = view.findViewById(R.id.view_username);
         viewEmail = view.findViewById(R.id.view_email);
         viewPhoneNumber = view.findViewById(R.id.view_phone);
 
+        /* Theme for popup dialog fragment */
         getContext().getTheme().applyStyle(R.style.BlackTextTheme, true);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -117,6 +119,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                     inputEmail.setText(viewUserObject.getEmail());
                     inputPhone.setText(viewUserObject.getPhoneNumber());
 
+                    /* Create popup dialog for editing profile */
                     final AlertDialog builder = new AlertDialog.Builder(this.getContext()).create();
                     builder.setView(editInfo);
 
