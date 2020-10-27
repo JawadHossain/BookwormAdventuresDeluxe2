@@ -24,6 +24,7 @@ public class EditTextValidator
     public static void isEmpty(EditText editText)
     {
         editText.setError(EMPTY);
+        editText.clearComposingText();
         editText.requestFocus();
     }
 
