@@ -20,6 +20,8 @@ public class AddOrEditBooksActivity extends AppCompatActivity
     TextView takePhoto;
     ImageView bookPicture;
     EditText titleView, authorView, descriptionView, isbnView;
+    boolean editingBook = false;
+    Book bookToEdit;
 
     public static int ADD_BOOK = 0;
     public static int EDIT_BOOK = 1;
@@ -36,6 +38,26 @@ public class AddOrEditBooksActivity extends AppCompatActivity
         authorView = findViewById(R.id.author_edit_text);
         descriptionView = findViewById(R.id.description_edit_text);
         isbnView = findViewById(R.id.isbn_edit_text);
+
+        // If editing a book, prepopulate text fields with their old values
+        int requestCode = -1;
+        if (getIntent().getSerializableExtra("requestCode") != null)
+        {
+            requestCode = getIntent().getIntExtra("requestCode", 0);
+        }
+        if (requestCode == AddOrEditBooksActivity.EDIT_BOOK)
+        {
+            this.editingBook = true;
+            this.bookToEdit = (Book) getIntent().getSerializableExtra("bookToEdit");
+
+            if (bookToEdit != null)
+            {
+                titleView.setText(bookToEdit.getTitle());
+                authorView.setText(bookToEdit.getAuthor());
+                descriptionView.setText(bookToEdit.getDescription());
+                isbnView.setText(bookToEdit.getIsbn());
+            }
+        }
     }
 
     public void takePhoto(View view)
@@ -45,7 +67,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
     }
 
     /**
-     * Returns the new book to the activity that called EditBooksActivity
+     * Returns the new or edited book to the activity that called EditBooksActivity
      *
      * @param view
      */
@@ -60,10 +82,25 @@ public class AddOrEditBooksActivity extends AppCompatActivity
 
         if (Book.fieldsValid(title, author, description, isbn))
         {
-            Intent intent = new Intent();
-            setResult(Activity.RESULT_OK, intent);
-            // status when adding book is available
-            intent.putExtra("NewBook", new Book(title, author, description, isbn, Status.Available));
+            if (editingBook)
+            {
+                // Update the book and send it back to the calling fragment, MyBooksDetailViewFragment
+                this.bookToEdit.setTitle(titleView.getText().toString());
+                this.bookToEdit.setAuthor(authorView.getText().toString());
+                this.bookToEdit.setDescription(descriptionView.getText().toString());
+                this.bookToEdit.setIsbn(isbnView.getText().toString());
+
+                Intent intent = new Intent();
+                setResult(Activity.RESULT_OK, intent);
+                intent.putExtra("EditedBook", this.bookToEdit);
+            }
+            else
+            {
+                Intent intent = new Intent();
+                setResult(Activity.RESULT_OK, intent);
+                // status when adding book is available
+                intent.putExtra("NewBook", new Book(title, author, description, isbn, Status.Available));
+            }
             finish();
         }
     }

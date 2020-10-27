@@ -1,166 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddOrEditBooksActivity">
 
-
-    <ImageView
-        android:id="@+id/book_view"
-        android:layout_width="185sp"
-        android:layout_height="185sp"
-        android:layout_marginTop="32dp"
-        android:background="@color/tempPhotoBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_camera" />
-
-    <!--TODO: Implement the camera by adding an onClick attribute-->
-    <TextView
-        android:id="@+id/take_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="Take Photo"
-        android:textColor="#548A96"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/book_view" />
-
-    <TextView
-        android:id="@+id/title_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
-        android:text="Title:"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/take_photo" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 
-    <!--    TODO: display the ISBN-->
+        <ImageView
+            android:id="@+id/book_view"
+            android:layout_width="185sp"
+            android:layout_height="185sp"
+            android:layout_marginTop="32dp"
+            android:background="@color/tempPhotoBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/ic_menu_camera" />
 
-    <EditText
-        android:id="@+id/title_edit_text"
-        android:layout_width="288dp"
-        android:layout_height="49dp"
-        android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:hint="title"
-        android:inputType="textPersonName"
-        android:text=""
-        android:textColor="@android:color/black"
-        android:textSize="22sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/title_text_view"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <!--TODO: Implement the camera by adding an onClick attribute-->
+        <TextView
+            android:id="@+id/take_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/take_photo"
+            android:textColor="#548A96"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/book_view" />
 
-    <TextView
-        android:id="@+id/author_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Author:"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/title_text_view"
-        app:layout_constraintTop_toBottomOf="@+id/title_edit_text" />
+        <TextView
+            android:id="@+id/title_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="28dp"
+            android:text="@string/title"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/take_photo" />
 
-    <EditText
-        android:id="@+id/author_edit_text"
-        android:layout_width="288dp"
-        android:layout_height="48dp"
-        android:ems="10"
-        android:hint="author"
-        android:inputType="textPersonName"
-        android:textColor="@android:color/black"
-        android:textSize="22sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/author_text_view"
-        app:layout_constraintEnd_toEndOf="@+id/title_edit_text"
-        app:layout_constraintStart_toStartOf="@+id/title_edit_text" />
 
-    <TextView
-        android:id="@+id/description_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Description:"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/author_text_view"
-        app:layout_constraintTop_toBottomOf="@+id/author_edit_text" />
+        <!--    TODO: display the ISBN-->
 
-    <EditText
-        android:id="@+id/description_edit_text"
-        android:layout_width="376dp"
-        android:layout_height="100dp"
-        android:ems="10"
-        android:gravity="top"
-        android:hint="describe the book"
-        android:text=""
-        android:textColor="@android:color/black"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="@+id/author_edit_text"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/description_text_view"
-        app:layout_constraintTop_toBottomOf="@+id/description_text_view" />
+        <EditText
+            android:id="@+id/title_edit_text"
+            android:layout_width="268dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:ems="10"
+            android:hint="@string/title"
+            android:inputType="textPersonName"
+            android:text=""
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/title_text_view"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/my_books_save_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="16dp"
-        android:contentDescription="@string/fab_content_desc"
-        android:onClick="saveBook"
-        android:src="@drawable/ic_save"
-        app:backgroundTint="@color/colorPrimary"
-        app:borderWidth="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@android:color/white" />
+        <TextView
+            android:id="@+id/author_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/author"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/title_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/title_edit_text" />
 
-    <TextView
-        android:id="@+id/isbn_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="ISBN: "
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/description_edit_text"
-        app:layout_constraintTop_toBottomOf="@+id/description_edit_text" />
+        <EditText
+            android:id="@+id/author_edit_text"
+            android:layout_width="268dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/author"
+            android:inputType="textPersonName"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/author_text_view"
+            app:layout_constraintEnd_toEndOf="@+id/title_edit_text"
+            app:layout_constraintStart_toStartOf="@+id/title_edit_text" />
 
-    <EditText
-        android:id="@+id/isbn_edit_text"
-        android:layout_width="288dp"
-        android:layout_height="49dp"
-        android:ems="10"
-        android:hint="isbn"
-        android:inputType="number"
-        android:textColor="@android:color/black"
-        android:textSize="22sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/isbn_text_view"
-        app:layout_constraintEnd_toEndOf="@+id/description_edit_text"
-        app:layout_constraintStart_toStartOf="@+id/author_edit_text" />
+        <TextView
+            android:id="@+id/description_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/description"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/author_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/author_edit_text" />
 
-    <ImageButton
-        android:id="@+id/scan_isbn_button"
-        android:layout_width="49dp"
-        android:layout_height="49dp"
-        android:backgroundTint="@android:color/transparent"
-        android:onClick="scanIsbn"
-        app:layout_constraintBottom_toBottomOf="@+id/isbn_edit_text"
-        app:layout_constraintEnd_toEndOf="@+id/isbn_edit_text"
-        app:layout_constraintTop_toTopOf="@+id/isbn_edit_text"
-        app:srcCompat="@drawable/ic_scan_black" />
+        <EditText
+            android:id="@+id/description_edit_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:ems="10"
+            android:gravity="top"
+            android:hint="@string/describe_the_book"
+            android:inputType="textMultiLine"
+            android:text=""
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/description_text_view" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/my_books_save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/fab_content_desc"
+            android:onClick="saveBook"
+            android:src="@drawable/ic_save"
+            app:backgroundTint="@color/colorPrimary"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@android:color/white" />
+
+        <TextView
+            android:id="@+id/isbn_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:paddingBottom="100sp"
+            android:text="@string/isbn"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/description_edit_text"
+            app:layout_constraintTop_toBottomOf="@+id/description_edit_text" />
+
+        <EditText
+            android:id="@+id/isbn_edit_text"
+            android:layout_width="268dp"
+            android:layout_height="49dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:ems="10"
+            android:hint="@string/isbn"
+            android:inputType="number"
+            android:paddingBottom="100sp"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/isbn_text_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/author_edit_text" />
+
+        <ImageButton
+            android:id="@+id/scan_isbn_button"
+            android:layout_width="49dp"
+            android:layout_height="49dp"
+            android:backgroundTint="@android:color/transparent"
+            android:onClick="scanIsbn"
+            android:src="@drawable/ic_scan_black"
+            app:layout_constraintBottom_toBottomOf="@+id/isbn_edit_text"
+            app:layout_constraintEnd_toEndOf="@+id/isbn_edit_text"
+            app:layout_constraintTop_toTopOf="@+id/isbn_edit_text" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

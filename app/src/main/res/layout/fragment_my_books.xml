@@ -10,7 +10,7 @@
         layout="@layout/app_header" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/my_books_recycler_view"
+        android:id="@+id/search_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize" />
@@ -25,7 +25,7 @@
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/fab_content_desc"
         android:onClick="addBook"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorPrimaryDark"
         app:borderWidth="0dp"
         app:srcCompat="@android:drawable/ic_input_add"
         app:tint="@android:color/white" />

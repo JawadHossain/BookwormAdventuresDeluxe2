@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
     tools:context=".MyProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,12 +17,14 @@
         <Button
             android:id="@+id/toggle_btn"
             android:layout_width="0dp"
-            android:layout_height="70dp"
+            android:layout_height="60dp"
             android:layout_marginTop="48dp"
             android:backgroundTint="@color/colorPrimary"
+            android:fontFamily="sans-serif"
             android:text="@string/borrow"
             android:textAllCaps="false"
-            android:textSize="24dp"
+            android:textSize="20sp"
+            app:backgroundTint="@color/colorPrimaryDark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/current"
             app:layout_constraintTop_toTopOf="parent" />
@@ -32,10 +33,13 @@
             android:id="@+id/current"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:fontFamily="sans-serif"
             android:gravity="center"
             android:text="@string/my_requests"
             android:textAlignment="center"
-            android:textSize="24dp"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/toggle_btn"
             app:layout_constraintEnd_toStartOf="@+id/toggle_btn"
             app:layout_constraintHorizontal_chainStyle="spread"
@@ -43,7 +47,10 @@
             app:layout_constraintTop_toTopOf="@+id/toggle_btn"
             app:layout_constraintVertical_bias="1.0" />
 
-        <!--        Todo: add book list-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/requests_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="120dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </FrameLayout>
