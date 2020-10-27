@@ -164,7 +164,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                                                                     viewUserObject.getDocumentId());
                                 if (inputEmail.getError() != null)
                                 {
-                                    // Closes dialog
+                                    /* Closes dialog */
                                     builder.dismiss();
                                 }
                             }
