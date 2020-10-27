@@ -199,7 +199,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
         catch (Exception e)
         {
             /* Log message to debug*/
-            Log.d(TAG, "Unexpected Firebase Error code: " + e.getMessage());
+            Log.d(TAG, e.getMessage());
         }
     }
 
