@@ -129,6 +129,9 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                         @Override
                         public void onClick(View view)
                         {
+                            inputEmail.setError(null);
+                            inputPhone.setError(null);
+
                             /* Checks if no changes were made */
                             if (viewUserObject.getEmail().equals(inputEmail.getText().toString())
                                 && viewUserObject.getPhoneNumber().equals(inputPhone.getText().toString()))
