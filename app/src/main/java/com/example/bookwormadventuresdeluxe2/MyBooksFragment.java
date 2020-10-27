@@ -58,7 +58,7 @@ public class MyBooksFragment extends Fragment
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
         FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
-        Query query = rootRef.collection("Books").orderBy("title");
+        Query query = rootRef.collection(getString(R.string.books_collection)).orderBy("title");
 
         FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(query, Book.class)
@@ -124,7 +124,7 @@ public class MyBooksFragment extends Fragment
             data.put("status", newBook.getStatus());
 
             FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
-            rootRef.collection("Books").add(data);
+            rootRef.collection(getString(R.string.books_collection)).add(data);
             myBooksRecyclerAdapter.notifyDataSetChanged();
         }
     }

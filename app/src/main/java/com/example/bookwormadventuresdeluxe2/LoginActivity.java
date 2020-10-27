@@ -1,9 +1,5 @@
 package com.example.bookwormadventuresdeluxe2;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,6 +11,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private FirebaseUser currentUser;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference collectionReference = db.collection("Users");
+    private CollectionReference collectionReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         TextView appHeaderTitle = findViewById(R.id.app_header_title);
         appHeaderTitle.setText("Bookworm Adventures Deluxe 2");
 
+        collectionReference = db.collection(getString(R.string.users_collection));
         firebaseAuth = FirebaseAuth.getInstance();
         authStateListener = new FirebaseAuth.AuthStateListener()
         {

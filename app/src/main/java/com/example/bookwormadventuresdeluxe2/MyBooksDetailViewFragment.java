@@ -1,11 +1,7 @@
 package com.example.bookwormadventuresdeluxe2;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +9,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
@@ -123,24 +122,42 @@ public class MyBooksDetailViewFragment extends Fragment
         startActivityForResult(intent, AddOrEditBooksActivity.EDIT_BOOK);
     }
 
-    // Called by AddOrEditBooksActivity when user presses save on editing screen
+    /* Called by AddOrEditBooksActivity when user presses save or delete on edit screen */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
         getActivity();
-        if (requestCode == AddOrEditBooksActivity.EDIT_BOOK && resultCode == Activity.RESULT_OK)
+        if (requestCode == AddOrEditBooksActivity.EDIT_BOOK)
         {
-            // Get the book that was edited and its new values
-            this.selectedBook = (Book) data.getSerializableExtra("EditedBook");
-            updateView(this.selectedBook);
+            /* Save was pressed */
+            if (resultCode == AddOrEditBooksActivity.EDIT_BOOK)
+            {
+                /* Get the book that was edited and its new values */
+                this.selectedBook = (Book) data.getSerializableExtra("EditedBook");
+                updateView(this.selectedBook);
 
-            // Update the book in firebase
-            FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
-            rootRef.collection("Books").document(this.selectedBookId).update("title", this.selectedBook.getTitle());
-            rootRef.collection("Books").document(this.selectedBookId).update("author", this.selectedBook.getAuthor());
-            rootRef.collection("Books").document(this.selectedBookId).update("description", this.selectedBook.getDescription());
-            rootRef.collection("Books").document(this.selectedBookId).update("isbn", this.selectedBook.getIsbn());
+                /* Update the book in firebase */
+                DocumentReference bookDocument = FirebaseFirestore
+                        .getInstance()
+                        .collection(getString(R.string.books_collection))
+                        .document(this.selectedBookId);
+
+                bookDocument.update("title", this.selectedBook.getTitle());
+                bookDocument.update("author", this.selectedBook.getAuthor());
+                bookDocument.update("description", this.selectedBook.getDescription());
+                bookDocument.update("isbn", this.selectedBook.getIsbn());
+            }
+            else if (resultCode == AddOrEditBooksActivity.DELETE_BOOK) /* Delete was pressed */
+            {
+                /* Simulate back click to exit this fragment since the book no longer exists */
+                this.onBackClick(getView());
+            }
+            else
+            {
+                /* We shouldn't be returning any other result codes */
+                throw new IllegalStateException("Unknown return code received from Edit Book Activity.");
+            }
         }
     }
 

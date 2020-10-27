@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -21,10 +23,12 @@ public class AddOrEditBooksActivity extends AppCompatActivity
     ImageView bookPicture;
     EditText titleView, authorView, descriptionView, isbnView;
     boolean editingBook = false;
+    Button deleteButton;
     Book bookToEdit;
 
     public static int ADD_BOOK = 0;
     public static int EDIT_BOOK = 1;
+    public static int DELETE_BOOK = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -38,6 +42,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
         authorView = findViewById(R.id.author_edit_text);
         descriptionView = findViewById(R.id.description_edit_text);
         isbnView = findViewById(R.id.isbn_edit_text);
+        deleteButton = findViewById(R.id.delete_button);
 
         // If editing a book, prepopulate text fields with their old values
         int requestCode = -1;
@@ -57,6 +62,12 @@ public class AddOrEditBooksActivity extends AppCompatActivity
                 descriptionView.setText(bookToEdit.getDescription());
                 isbnView.setText(bookToEdit.getIsbn());
             }
+        }
+
+        /* Hide the delete button if we are adding a book */
+        if (!this.editingBook)
+        {
+            deleteButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -91,7 +102,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
                 this.bookToEdit.setIsbn(isbnView.getText().toString());
 
                 Intent intent = new Intent();
-                setResult(Activity.RESULT_OK, intent);
+                setResult(this.EDIT_BOOK, intent);
                 intent.putExtra("EditedBook", this.bookToEdit);
             }
             else
@@ -168,5 +179,44 @@ public class AddOrEditBooksActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Listener for the delete button
+     * When the delete button is pressed, remove the current book from the db
+     *
+     * @param view
+     */
+    public void onDeleteButtonClick(View view)
+    {
+        String documentId;
+        FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
+        if (getIntent().getSerializableExtra("documentId") != null)
+        {
+            documentId = getIntent().getStringExtra("documentId");
+        }
+        else
+        {
+            /* This should never be possible, documentId is passed into this activity. No document
+               id means a problem for the query.
+             */
+            throw new IllegalStateException("No documentId passed to Edit Book Activity.");
+        }
 
+        if (this.bookToEdit != null)
+        {
+            rootRef.collection(getString(R.string.books_collection)).document(documentId).delete();
+
+            Intent intent = new Intent();
+            /* Set result to deleted so when we return to the previous fragment we know delete was pressed */
+            setResult(this.DELETE_BOOK, intent);
+            /* Return one activity up */
+            finish();
+        }
+        else
+        {
+            /* We should never be able to get into a state where we can see this button but we
+               aren't editing a book.
+             */
+            throw new IllegalStateException("Pressed the Delete Button but wasn't editing a book!");
+        }
+    }
 }
