@@ -23,13 +23,8 @@ public class EditTextValidator
      */
     public static void isEmpty(EditText editText)
     {
-        editText.requestFocus();
         editText.setError(EMPTY);
-
-        if (allSpaces(editText))
-        {
-            editText.setText("");
-        }
+        editText.requestFocus();
     }
 
     /**
@@ -85,34 +80,6 @@ public class EditTextValidator
     {
         editText.setError(INVALIDEMAIL);
         editText.requestFocus();
-    }
-
-    /**
-     * Checks if input text was all space characters
-     *
-     * @param editText editText to be checked
-     * @return boolean stating if all spaces
-     */
-    private static boolean allSpaces(EditText editText)
-    {
-        int spaceCount = 0;
-
-        for (int i = 0; i < editText.length(); i++)
-        {
-            if (Character.isSpaceChar(editText.getText().toString().charAt(i)))
-            {
-                spaceCount++;
-            }
-        }
-        if (spaceCount == editText.length())
-        {
-            editText.clearComposingText();
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 
     /**
