@@ -10,7 +10,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
@@ -43,6 +45,7 @@ public class CreateAccountActivity extends AppCompatActivity
     private EditText editTextPassword;
     private EditText confirmPassword;
     private ProgressBar progressBar;
+    private ImageButton visibilityButton;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -57,6 +60,9 @@ public class CreateAccountActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
+
+        TextView appHeaderTitle = findViewById(R.id.app_header_title);
+        appHeaderTitle.setText(R.string.create_account);
 
         firebaseAuth = FirebaseAuth.getInstance();
         authStateListener = new FirebaseAuth.AuthStateListener()

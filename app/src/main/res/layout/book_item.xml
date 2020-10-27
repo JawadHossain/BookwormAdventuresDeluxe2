@@ -25,11 +25,13 @@
 
     <TextView
         android:id="@+id/book_item_title"
-        android:layout_width="wrap_content"
+        android:layout_width="210dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="29dp"
         android:layout_marginLeft="29dp"
         android:layout_marginTop="13dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="Book Title"
         android:textColor="@android:color/black"
         android:textSize="18sp"
@@ -38,11 +40,13 @@
 
     <TextView
         android:id="@+id/book_item_author"
-        android:layout_width="wrap_content"
+        android:layout_width="210dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="29dp"
         android:layout_marginLeft="29dp"
         android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="Author Name"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/book_item_image"

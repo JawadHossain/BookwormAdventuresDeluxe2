@@ -37,7 +37,6 @@ public class RequestsFragment extends Fragment implements View.OnClickListener
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_requests, container, false);
         current = view.findViewById(R.id.current);
-        current.setBackgroundColor(getResources().getColor(R.color.colorBackground));
         toggle = view.findViewById(R.id.toggle_btn);
         borrow = false;
 

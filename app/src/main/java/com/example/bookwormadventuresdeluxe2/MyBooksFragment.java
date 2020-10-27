@@ -64,7 +64,7 @@ public class MyBooksFragment extends Fragment
                 .setQuery(query, Book.class)
                 .build();
 
-        myBooksRecyclerView = (RecyclerView) view.findViewById(R.id.my_books_recycler_view);
+        myBooksRecyclerView = (RecyclerView) view.findViewById(R.id.search_recycler_view);
         myBooksRecyclerView.setHasFixedSize(true);
 
         myBooksRecyclerLayoutManager = new LinearLayoutManager(this.getContext());
