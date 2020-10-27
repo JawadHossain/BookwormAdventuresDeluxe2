@@ -289,8 +289,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         default:
                                             /* Unexpected Error code*/
                                             editTextEmail.setError(errorCode);
-                                            throw new Exception("Unexpected Firebase Error Code"
-                                                    + "inside click listener.");
                                     }
 
                                     /* Hide progress bar*/

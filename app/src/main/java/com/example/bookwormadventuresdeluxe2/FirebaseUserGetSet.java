@@ -165,8 +165,6 @@ public class FirebaseUserGetSet
                                     default:
                                         /* Unexpected Error code*/
                                         inputEmail.setError(errorCode);
-                                        throw new Exception("Unexpected Firebase Error Code"
-                                                + "inside click listener.");
                                 }
                             }
                             catch (Exception e)
