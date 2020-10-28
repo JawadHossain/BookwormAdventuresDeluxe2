@@ -99,5 +99,6 @@ public class FilterMenu extends Fragment implements View.OnClickListener
                 .build();
 
         bookAdapter.updateOptions(options);
+        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
 }
