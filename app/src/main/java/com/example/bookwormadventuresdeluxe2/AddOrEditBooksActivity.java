@@ -138,13 +138,18 @@ public class AddOrEditBooksActivity extends AppCompatActivity
             EditTextValidator.isEmpty(authorView);
             valid = false;
         }
-        // ISBN can be empty, or has digits of length 10 or 13
-        // https://en.wikipedia.org/wiki/International_Standard_Book_Number
+        // ISBN cannot be empty
         String isbn_input = isbnView.getText().toString();
-        if (!(isbn_input.matches("\\d{10}") ||
-                isbn_input.matches("\\d{13}") ||
-                TextUtils.isEmpty(isbn_input)))
+        if (TextUtils.isEmpty(isbn_input))
         {
+            EditTextValidator.isEmpty(isbnView);
+            valid = false;
+        } // Only display one error message
+        else if (!(isbn_input.matches("\\d{10}") ||
+                isbn_input.matches("\\d{13}")))
+        {
+            // ISBN only has digits of length 10 or 13
+            // https://en.wikipedia.org/wiki/International_Standard_Book_Number
             EditTextValidator.invalidIsbn(isbnView);
             valid = false;
         }
