@@ -15,6 +15,7 @@ public class EditTextValidator
     private static String WRONGPASSWORD = "Incorrect password!";
     private static String WEAKPASS = "Password must be 6 characters or longer!";
     private static String INVALIDEMAIL = "Invalid e-mail address!";
+    private static String INVALIDISBN = "Invalid ISBN!";
 
     /**
      * Set empty field error notification
@@ -30,6 +31,15 @@ public class EditTextValidator
         {
             editText.setText("");
         }
+    }
+
+    /**
+     * Set invalid ISBN error notification
+     */
+    public static void invalidIsbn(EditText editText)
+    {
+        editText.setError(INVALIDISBN);
+        editText.requestFocus();
     }
 
     /**

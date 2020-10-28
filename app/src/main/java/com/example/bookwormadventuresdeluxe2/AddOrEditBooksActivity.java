@@ -3,6 +3,7 @@ package com.example.bookwormadventuresdeluxe2;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -91,7 +93,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
         description = descriptionView.getText().toString();
         isbn = isbnView.getText().toString();
 
-        if (Book.fieldsValid(title, author, description, isbn))
+        if (fieldsValid())
         {
             if (editingBook)
             {
@@ -114,6 +116,45 @@ public class AddOrEditBooksActivity extends AppCompatActivity
             }
             finish();
         }
+    }
+
+    /**
+     * Validate the fields entered in this activity
+     * Title and author cannot be empty
+     * ISBN can be empty, or has digits or length 10 or 13
+     *
+     * @return true if all fields are valid, false otherwise
+     */
+    private boolean fieldsValid()
+    {
+        boolean valid = true;
+        if (TextUtils.isEmpty(titleView.getText().toString()))
+        {
+            EditTextValidator.isEmpty(titleView);
+            valid = false;
+        }
+        if (TextUtils.isEmpty(authorView.getText().toString()))
+        {
+            EditTextValidator.isEmpty(authorView);
+            valid = false;
+        }
+        // ISBN cannot be empty
+        String isbn_input = isbnView.getText().toString();
+        if (TextUtils.isEmpty(isbn_input))
+        {
+            EditTextValidator.isEmpty(isbnView);
+            valid = false;
+        } // Only display one error message
+        else if (!(isbn_input.matches("\\d{10}") ||
+                isbn_input.matches("\\d{13}")))
+        {
+            // ISBN only has digits of length 10 or 13
+            // https://en.wikipedia.org/wiki/International_Standard_Book_Number
+            EditTextValidator.invalidIsbn(isbnView);
+            valid = false;
+        }
+
+        return valid;
     }
 
     /**
@@ -171,7 +212,14 @@ public class AddOrEditBooksActivity extends AppCompatActivity
                 requestCode, resultCode, intent);
         if (scanResult != null)
         {
-            isbnView.setText(scanResult.getContents());
+            String isbn_scan_result = scanResult.getContents();
+            // Older versions had 9 digits but can be converted to 10 "by prefixing it with a zero"
+            // https://en.wikipedia.org/wiki/International_Standard_Book_Number
+            if (isbn_scan_result.length() == 9)
+            {
+                isbn_scan_result = "0" + isbn_scan_result;
+            }
+            isbnView.setText(isbn_scan_result);
         }
         else
         {
