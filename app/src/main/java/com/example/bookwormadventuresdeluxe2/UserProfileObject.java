@@ -20,6 +20,7 @@ public class UserProfileObject
      * Default constructor for UserProfileObject
      * @param username username pulled from database
      * @param email email pulled from database
+     * @param phoneNumber phone number pulled from database
      * @param userId userId pulled from database, unique to FirebaseAuth account
      * @param documentId documentId pulled from database, used to target object
      */
