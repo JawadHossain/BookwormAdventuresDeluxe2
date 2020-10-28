@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Bookworm Adventure Deluxe 2</string>
-    <string name="description">Description</string>
-    <string name="isbn">ISBN</string>
+    <string name="app_name">Bookworm Adventures Deluxe 2</string>
+    <string name="description">Description:</string>
+    <string name="isbn">ISBN:</string>
     <string name="available">Available</string>
     <string name="requested">Requested</string>
     <string name="accepted">Accepted</string>

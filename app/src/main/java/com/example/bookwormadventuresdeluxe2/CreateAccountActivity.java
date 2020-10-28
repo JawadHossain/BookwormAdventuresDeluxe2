@@ -17,14 +17,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -92,6 +95,7 @@ public class CreateAccountActivity extends AppCompatActivity
                 editTextEmail.setError(null);
                 editTextPassword.setError(null);
                 confirmPassword.setError(null);
+
                 /* Check for Empty EditTexts */
                 if (!TextUtils.isEmpty(editTextEmail.getText().toString())
                         && !TextUtils.isEmpty(editTextPassword.getText().toString())
@@ -108,7 +112,6 @@ public class CreateAccountActivity extends AppCompatActivity
 
                         /* Create user if username is not already taken*/
                         checkUsernameAvailability(email, password, username, phoneNumber);
-
                     }
                 }
                 else
@@ -130,7 +133,6 @@ public class CreateAccountActivity extends AppCompatActivity
                     {
                         EditTextValidator.isEmpty(editTextUsername);
                     }
-
                 }
             }
         });
@@ -148,6 +150,7 @@ public class CreateAccountActivity extends AppCompatActivity
     {
         /* Show progress bar */
         progressBar.setVisibility(View.VISIBLE);
+
         /* Query to find username match*/
         Query userNameQuery = collectionReference.whereEqualTo("username", username);
         userNameQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
@@ -208,7 +211,6 @@ public class CreateAccountActivity extends AppCompatActivity
                 && !TextUtils.isEmpty(password)
                 && !TextUtils.isEmpty(username))
         {
-
             /* Create Firebase User */
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>()
@@ -226,14 +228,14 @@ public class CreateAccountActivity extends AppCompatActivity
                                 {
                                     final String currentUserId = currentUser.getUid();
 
-                                    // Create new User object with credentials
+                                    /* Create new User object with credentials */
                                     Map<String, String> newUser = new HashMap<>();
                                     newUser.put("userId", currentUserId);
                                     newUser.put("email", email);
                                     newUser.put("username", username);
                                     newUser.put("phoneNumber", phoneNumber);
 
-                                    // Save new user to Firestore
+                                    /* Save new user to Firestore */
                                     collectionReference.add(newUser)
                                             .addOnSuccessListener(new OnSuccessListener<DocumentReference>()
                                             {
@@ -262,7 +264,6 @@ public class CreateAccountActivity extends AppCompatActivity
                                                                         Intent intent = new Intent(CreateAccountActivity.this,
                                                                                 MyBooksActivity.class);
                                                                         startActivity(intent);
-
                                                                     }
                                                                     else
                                                                     {
@@ -285,7 +286,6 @@ public class CreateAccountActivity extends AppCompatActivity
                             }
                             else
                             {
-
                                 /* Set EditText Error type from errorCode */
                                 try
                                 {
@@ -315,15 +315,20 @@ public class CreateAccountActivity extends AppCompatActivity
                                             throw new Exception("Unexpected Firebase Error Code"
                                                     + "inside click listener.");
                                     }
-
                                     /* Hide progress bar*/
                                     progressBar.setVisibility(View.INVISIBLE);
-                                } catch (Exception e)
-                                {
-                                    /* Log message to debug*/
-                                    Log.d(TAG, e.getMessage());
                                 }
-
+                                catch (Exception e)
+                                {
+                                    /* Different type from errorCode, cannot be cast to the same object.
+                                     * Sets EditText error to new type.
+                                     *
+                                     * Log message to debug
+                                     */
+                                    editTextEmail.setError(task.getException().getMessage());
+                                    Log.d(TAG, e.getMessage());
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                }
                             }
                         }
                     });

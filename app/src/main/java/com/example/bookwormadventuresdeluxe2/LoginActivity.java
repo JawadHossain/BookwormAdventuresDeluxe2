@@ -91,13 +91,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         userCredentialAPI.setUsername(snapshot.getString("username"));
                                         Intent myBooksIntent = new Intent(LoginActivity.this, MyBooksActivity.class);
                                         startActivity(myBooksIntent);
-                                        finish(); // Removes activity from stack so user not brought back here with back button
+
+                                        /* Removes activity from stack so user not brought back here with back  */
+                                        finish();
                                     }
                                 }
                             });
                 }
-
-
             }
         };
 
@@ -200,12 +200,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     throw new Exception("Unexpected resource Id inside click listener."
                             + "Expected: R.id.login_button Or R.id.create_account_button");
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             /* Log message to debug*/
             Log.d(TAG, e.getMessage());
         }
-
     }
 
     /**
@@ -253,13 +253,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                 {
                                                     for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots)
                                                     {
-                                                        // add to UserCredentialAPI to be accessible throughout app
+                                                        /* Add to UserCredentialAPI to be accessible throughout app */
                                                         UserCredentialAPI userCredentialAPI = UserCredentialAPI.getInstance();
                                                         userCredentialAPI.setUsername(snapshot.getString("username"));
                                                         userCredentialAPI.setUserId(snapshot.getString("userId"));
                                                     }
                                                     progressBar.setVisibility(View.INVISIBLE);
-                                                    // Go to ListActivity
+
+                                                    /* Go to ListActivity */
                                                     startActivity(new Intent(LoginActivity.this, MyBooksActivity.class));
                                                 }
                                             }
@@ -267,7 +268,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             }
                             else
                             {
-
                                 /* Set EditText Error type from errorCode */
                                 try
                                 {
@@ -289,16 +289,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                         default:
                                             /* Unexpected Error code*/
-                                            throw new Exception("Unexpected Firebase Error Code"
-                                                    + "inside click listener.");
+                                            editTextEmail.setError(task.getException().getMessage());
                                     }
 
                                     /* Hide progress bar*/
                                     progressBar.setVisibility(View.INVISIBLE);
-                                } catch (Exception e)
+                                }
+                                catch (Exception e)
                                 {
-                                    /* Log message to debug*/
+                                    /* Different type from errorCode, cannot be cast to the same object.
+                                     * Sets EditText error to new type.
+                                     *
+                                     * Log message to debug
+                                     */
+                                    editTextEmail.setError(task.getException().getMessage());
                                     Log.d(TAG, e.getMessage());
+                                    progressBar.setVisibility(View.INVISIBLE);
                                 }
                             }
                         }
@@ -309,15 +315,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             /* Hide progress bar*/
             progressBar.setVisibility(View.INVISIBLE);
 
-            /* Set Email Edit Text error */
-            if (TextUtils.isEmpty(email))
-            {
-                EditTextValidator.isEmpty(editTextEmail);
-            }
             /* Set Password Edit Text error */
             if (TextUtils.isEmpty(password))
             {
                 EditTextValidator.isEmpty(editTextPassword);
+            }
+
+            /* Set Email Edit Text error */
+            if (TextUtils.isEmpty(email))
+            {
+                EditTextValidator.isEmpty(editTextEmail);
             }
             return;
         }
