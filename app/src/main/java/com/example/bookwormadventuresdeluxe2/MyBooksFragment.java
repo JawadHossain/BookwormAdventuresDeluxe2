@@ -28,8 +28,10 @@ public class MyBooksFragment extends Fragment
     private RecyclerView myBooksRecyclerView;
     private BookListAdapter myBooksRecyclerAdapter;
     private RecyclerView.LayoutManager myBooksRecyclerLayoutManager;
+    private FilterMenu filterMenu;
 
     ImageButton notificationButton;
+    ImageButton filterButton;
 
     public MyBooksFragment()
     {
@@ -46,6 +48,15 @@ public class MyBooksFragment extends Fragment
         // Set visibility of desired custom header buttons
         myBooksView.findViewById(R.id.app_header_filter_button).setVisibility(View.VISIBLE);
         myBooksView.findViewById(R.id.app_header_scan_button).setVisibility(View.VISIBLE);
+
+        /* Setup Filter button */
+        this.filterButton = myBooksView.findViewById(R.id.app_header_filter_button);
+        this.filterButton.setVisibility(View.VISIBLE);
+        this.filterButton.setOnClickListener(this::onFilterClick);
+
+        // TODO: Setup scan button
+
+        /* Setup notification button */
         this.notificationButton = myBooksView.findViewById(R.id.app_header_notification_button);
         this.notificationButton.setVisibility(View.VISIBLE);
         this.notificationButton.setOnClickListener(this::onNotificationClick);
@@ -72,6 +83,9 @@ public class MyBooksFragment extends Fragment
 
         myBooksRecyclerAdapter = new BookListAdapter(this.getContext(), options);
         myBooksRecyclerView.setAdapter(myBooksRecyclerAdapter);
+
+        /* Initialize the filterMenu. This will update the queries using the adapter */
+        this.filterMenu = new FilterMenu(myBooksRecyclerAdapter, query);
 
         FloatingActionButton btn = (FloatingActionButton) getView().findViewById(R.id.my_books_add_button);
         btn.setOnClickListener(new View.OnClickListener()
@@ -133,5 +147,26 @@ public class MyBooksFragment extends Fragment
     {
         NotificationFragment notificationFragment = new NotificationFragment();
         getFragmentManager().beginTransaction().replace(R.id.frame_container, notificationFragment).commit();
+    }
+
+    /**
+     * Launch the filter menu fragment when the filter button is clicked
+     *
+     * @param view
+     */
+    private void onFilterClick(View view)
+    {
+        /* https://stackoverflow.com/questions/43207043/check-if-fragment-is-currently-visible-or-no/45059794 */
+        View fragmentRootView = filterMenu.getView();
+        if (fragmentRootView == null)
+        {
+            /* Fragment was hidden, show it */
+            getFragmentManager().beginTransaction().add(R.id.frame_container, filterMenu).commit();
+        }
+        else
+        {
+            /* Fragment is shown, hide it */
+            getFragmentManager().beginTransaction().remove(filterMenu).commit();
+        }
     }
 }

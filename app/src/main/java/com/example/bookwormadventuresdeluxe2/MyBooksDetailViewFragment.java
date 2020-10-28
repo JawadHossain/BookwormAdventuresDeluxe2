@@ -153,11 +153,9 @@ public class MyBooksDetailViewFragment extends Fragment
                 /* Simulate back click to exit this fragment since the book no longer exists */
                 this.onBackClick(getView());
             }
-            else
-            {
-                /* We shouldn't be returning any other result codes */
-                throw new IllegalStateException("Unknown return code received from Edit Book Activity.");
-            }
+            /* Throw no exception here because if the back button is pressed we will have
+               no return code.
+             */
         }
     }
 

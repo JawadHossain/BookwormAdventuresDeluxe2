@@ -14,14 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-import java.util.ArrayList;
-
 // https://stackoverflow.com/questions/49277797/how-to-display-data-from-firestore-in-a-recyclerview-with-android
 public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdapter.BookListViewHolder>
 {
-    private ArrayList<Book> books;
     private Context context;
-    public BookListAdapter.BookListViewHolder bookListViewHolder;
 
     // Reference to the views for each item
     public static class BookListViewHolder extends RecyclerView.ViewHolder
@@ -54,22 +50,22 @@ public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdap
     {
         ConstraintLayout bookItem = (ConstraintLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.book_item, parent, false);
-        BookListViewHolder bookListViewHolder = new BookListViewHolder((bookItem));
-        this.bookListViewHolder = bookListViewHolder;
+        BookListViewHolder bookListViewHolder = new BookListViewHolder(bookItem);
         return bookListViewHolder;
     }
 
     @Override
     protected void onBindViewHolder(@NonNull BookListViewHolder holder, int position, @NonNull Book book)
     {
-        // Set the text on the item view for each book
+        /* Set the text on the item view for each book */
         String documentId = getSnapshots().getSnapshot(position).getId();
-        bookListViewHolder.title.setText(book.getTitle());
-        bookListViewHolder.author.setText(book.getAuthor());
-        bookListViewHolder.isbn.setText(book.getIsbn());
+        holder.title.setText(book.getTitle());
+        holder.author.setText(book.getAuthor());
+        holder.isbn.setText(book.getIsbn());
 
-        book.setStatusCircleColor(book.getStatus(), bookListViewHolder.statusCircle);
+        book.setStatusCircleColor(book.getStatus(), holder.statusCircle);
 
+        /* We need to continually update the onClick listener in the case of filtered queries */
         holder.itemView.setOnClickListener(new View.OnClickListener()
         {
             // Handles a click on an item in the recycler view
