@@ -110,21 +110,10 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                     break;
 
                 case R.id.profile_logout:
-                    /*
-                     * Listener for signOut button to sign user out of firebase account
-                     * Source : https://stackoverflow.com/questions/53334017/back-button-will-bring-to-home-page-after-firebase-logout-on-app
-                     * */
-                    if (firebaseAuth != null)
-                    {
-                        firebaseAuth.signOut();
-                        Intent intent = new Intent(getActivity(), LoginActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                                | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-                        /* Take User back to Login Page */
-                        startActivity(intent);
-                    }
+                    /* Sign out of FirebaseAuth */
+                    signOut();
+                    break;
 
                 default:
                     /* Unexpected resource id*/
@@ -214,12 +203,16 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                     FirebaseUserGetSet.changeAuthInfo(inputEmail,
                             inputPhone,
                             viewUserObject.getDocumentId());
+                            Log.d("TEST", "RUNS 1");
                     if (inputEmail.getError() != null)
                     {
                         /* Closes dialog */
+                        Log.d("TEST", "DOES NOT RUN 2");
                         builder.dismiss();
                     }
+                    Log.d("TEST", "RUNS 3");
                 }
+                Log.d("TEST", "RUNS 4");
             }
         });
 
@@ -233,5 +226,27 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
         });
 
         builder.show();
+    }
+
+    /**
+     * Signs out of FirebaseAuth account
+     */
+    public void signOut()
+    {
+        /*
+         * Listener for signOut button to sign user out of firebase account
+         * Source : https://stackoverflow.com/questions/53334017/back-button-will-bring-to-home-page-after-firebase-logout-on-app
+         * */
+        if (firebaseAuth != null)
+        {
+            firebaseAuth.signOut();
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+            /* Take User back to Login Page */
+            startActivity(intent);
+        }
     }
 }
