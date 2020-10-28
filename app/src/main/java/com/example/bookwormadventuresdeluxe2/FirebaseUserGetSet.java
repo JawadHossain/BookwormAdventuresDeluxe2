@@ -132,9 +132,9 @@ public class FirebaseUserGetSet
                         {
                             /* Successful profile edit*/
                             editEmail(documentID,
-                                    inputEmail.getText().toString());
+                                    inputEmail.getText().toString().trim());
                             editPhone(documentID,
-                                    inputPhone.getText().toString());
+                                    inputPhone.getText().toString().trim());
                             Log.d(TAG, "User info updated.");
                         }
                         else

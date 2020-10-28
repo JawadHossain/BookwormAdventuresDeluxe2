@@ -54,15 +54,17 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
     {
         /* Inflate the layout for this fragment */
         view = inflater.inflate(R.layout.fragment_my_profile, container, false);
+
+        /* Set title */
+        appHeaderText = view.findViewById(R.id.app_header_title);
+        appHeaderText.setText(R.string.my_profile_title);
+
+        /* Buttons */
         signOutButton = view.findViewById(R.id.profile_logout);
         signOutButton.setOnClickListener(this);
 
         edit = view.findViewById(R.id.profile_edit);
         edit.setOnClickListener(this);
-
-        /* Set title */
-        appHeaderText = view.findViewById(R.id.app_header_title);
-        appHeaderText.setText(R.string.my_profile_title);
 
         /* Set display texts */
         viewUsername = view.findViewById(R.id.view_username);
@@ -178,14 +180,14 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                     return;
                 }
 
-                /* Checks if email was empty and disables confirm button */
+                /* Checks if email was empty and sets error */
                 if (TextUtils.isEmpty(inputEmail.getText().toString().trim()))
                 {
                     EditTextValidator.isEmpty(inputEmail);
                     hasValidationError = true;
                 }
 
-                /* Checks if phone number was empty and disables confirm button */
+                /* Checks if phone number was empty and sets error*/
                 if (TextUtils.isEmpty(inputPhone.getText().toString().trim()))
                 {
                     EditTextValidator.isEmpty(inputPhone);
@@ -197,22 +199,24 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                 {
                     return;
                 }
-                else
+
+                FirebaseUserGetSet.changeAuthInfo(inputEmail,
+                        inputPhone,
+                        viewUserObject.getDocumentId());
+
+                if (inputEmail.getError() == null)
                 {
-                    /* Attempts to write new email and phone number */
-                    FirebaseUserGetSet.changeAuthInfo(inputEmail,
-                            inputPhone,
-                            viewUserObject.getDocumentId());
-                            Log.d("TEST", "RUNS 1");
-                    if (inputEmail.getError() != null)
-                    {
-                        /* Closes dialog */
-                        Log.d("TEST", "DOES NOT RUN 2");
-                        builder.dismiss();
-                    }
-                    Log.d("TEST", "RUNS 3");
+                    /* Updating user object in Fragment*/
+                    viewUserObject.setEmail(inputEmail.getText().toString().trim());
+                    viewUserObject.setPhoneNumber(inputPhone.getText().toString().trim());
+
+                    /* Updating TextView in fragment */
+                    viewEmail.setText(inputPhone.getText().toString().trim());
+                    viewPhoneNumber.setText(inputPhone.getText().toString().trim());
+
+                    /* Closing dialog */
+                    builder.dismiss();
                 }
-                Log.d("TEST", "RUNS 4");
             }
         });
 
