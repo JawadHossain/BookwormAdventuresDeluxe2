@@ -98,6 +98,7 @@ public class FilterMenu extends Fragment implements View.OnClickListener
                 .setQuery(nextQuery, Book.class)
                 .build();
 
+        /* Update book results and close filter */
         bookAdapter.updateOptions(options);
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
