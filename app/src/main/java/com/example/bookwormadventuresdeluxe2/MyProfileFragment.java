@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
-
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -131,6 +130,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                         {
                             inputEmail.setError(null);
                             inputPhone.setError(null);
+                            boolean hasValidationError = false;
 
                             /* Checks if no changes were made */
                             if (viewUserObject.getEmail().equals(inputEmail.getText().toString())
@@ -140,31 +140,23 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                                 return;
                             }
 
-                            /* Checks if both email and phone number are empty and disables confirm button */
-                            if (TextUtils.isEmpty(inputEmail.getText().toString().trim())
-                                && TextUtils.isEmpty(inputPhone.getText().toString().trim()))
-                            {
-                                EditTextValidator.isEmpty(inputPhone);
-                                EditTextValidator.isEmpty(inputEmail);
-                                return;
-                            }
 
                             /* Checks if email was empty and disables confirm button */
                             if (TextUtils.isEmpty(inputEmail.getText().toString().trim()))
                             {
                                 EditTextValidator.isEmpty(inputEmail);
-                                return;
+                                hasValidationError = true;
                             }
 
                             /* Checks if phone number was empty and disables confirm button */
                             if (TextUtils.isEmpty(inputPhone.getText().toString().trim()))
                             {
                                 EditTextValidator.isEmpty(inputPhone);
-                                return;
+                                hasValidationError = true;
                             }
 
                             /* Checks if error is present and disables confirm button */
-                            if (inputEmail.getError() != null)
+                            if ((inputEmail.getError() != null) || hasValidationError)
                             {
                                 return;
                             }
@@ -172,8 +164,8 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
                             {
                                 /* Attempts to write new email and phone number */
                                 FirebaseUserGetSet.changeAuthInfo(inputEmail,
-                                                                    inputPhone,
-                                                                    viewUserObject.getDocumentId());
+                                        inputPhone,
+                                        viewUserObject.getDocumentId());
                                 if (inputEmail.getError() != null)
                                 {
                                     /* Closes dialog */
