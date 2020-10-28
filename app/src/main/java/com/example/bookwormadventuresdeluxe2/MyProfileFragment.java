@@ -25,7 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyProfileFragment extends Fragment implements View.OnClickListener, FirebaseUserGetSet.UserCallback
+public class MyProfileFragment extends Fragment implements FirebaseUserGetSet.UserCallback
 {
     private static final String TAG = "MyProfileFragment";
 
@@ -61,10 +61,10 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
 
         /* Buttons */
         signOutButton = view.findViewById(R.id.profile_logout);
-        signOutButton.setOnClickListener(this);
+        signOutButton.setOnClickListener(this::signOut);
 
         edit = view.findViewById(R.id.profile_edit);
-        edit.setOnClickListener(this);
+        edit.setOnClickListener(this::editFragment);
 
         /* Set display texts */
         viewUsername = view.findViewById(R.id.view_username);
@@ -94,43 +94,6 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
     }
 
     /**
-     * Handle click on Profile Edit and SignOut button
-     *
-     * @param view View containing layout resources
-     */
-    @Override
-    public void onClick(View view)
-    {
-        try
-        {
-            switch (view.getId())
-            {
-                case R.id.profile_edit:
-
-                    /* Initialize edit details fragment */
-                    editFragment();
-                    break;
-
-                case R.id.profile_logout:
-
-                    /* Sign out of FirebaseAuth */
-                    signOut();
-                    break;
-
-                default:
-                    /* Unexpected resource id*/
-                    throw new Exception("Unexpected resource Id inside click listener."
-                            + "Expected: R.id.login_button Or R.id create_account_button");
-            }
-        }
-        catch (Exception e)
-        {
-            /* Log message to debug*/
-            Log.d(TAG, e.getMessage());
-        }
-    }
-
-    /**
      * Callback for UserProfileObject
      */
     @Override
@@ -142,7 +105,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
     /**
      * Dialog fragment for editing email and phone number info
      */
-    public void editFragment()
+    public void editFragment(View view)
     {
         final View editInfo = LayoutInflater.from(this.getContext()).inflate(R.layout.edit_profile, null);
 
@@ -235,7 +198,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
     /**
      * Signs out of FirebaseAuth account
      */
-    public void signOut()
+    public void signOut(View view)
     {
         /*
          * Listener for signOut button to sign user out of firebase account
