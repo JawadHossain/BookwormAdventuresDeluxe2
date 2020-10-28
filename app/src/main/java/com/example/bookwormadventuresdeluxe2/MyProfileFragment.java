@@ -104,87 +104,9 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
             switch (view.getId())
             {
                 case R.id.profile_edit:
-                    final View editInfo = LayoutInflater.from(this.getContext()).inflate(R.layout.edit_profile, null);
 
-                    /* Set up the input */
-                    EditText inputEmail = editInfo.findViewById(R.id.edit_email);
-                    EditText inputPhone = editInfo.findViewById(R.id.edit_phone);
-
-                    /* Specify the type of input expected */
-                    inputEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-                    inputPhone.setInputType(InputType.TYPE_CLASS_PHONE);
-
-                    /* Setting text to user's details */
-                    inputEmail.setText(viewUserObject.getEmail());
-                    inputPhone.setText(viewUserObject.getPhoneNumber());
-
-                    /* Create popup dialog for editing profile */
-                    final AlertDialog builder = new AlertDialog.Builder(this.getContext()).create();
-                    builder.setView(editInfo);
-
-                    /* Set up the buttons */
-                    editInfo.findViewById(R.id.edit_confirm).setOnClickListener(new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View view)
-                        {
-                            inputEmail.setError(null);
-                            inputPhone.setError(null);
-                            boolean hasValidationError = false;
-
-                            /* Checks if no changes were made */
-                            if (viewUserObject.getEmail().equals(inputEmail.getText().toString())
-                                && viewUserObject.getPhoneNumber().equals(inputPhone.getText().toString()))
-                            {
-                                builder.dismiss();
-                                return;
-                            }
-
-
-                            /* Checks if email was empty and disables confirm button */
-                            if (TextUtils.isEmpty(inputEmail.getText().toString().trim()))
-                            {
-                                EditTextValidator.isEmpty(inputEmail);
-                                hasValidationError = true;
-                            }
-
-                            /* Checks if phone number was empty and disables confirm button */
-                            if (TextUtils.isEmpty(inputPhone.getText().toString().trim()))
-                            {
-                                EditTextValidator.isEmpty(inputPhone);
-                                hasValidationError = true;
-                            }
-
-                            /* Checks if error is present and disables confirm button */
-                            if ((inputEmail.getError() != null) || hasValidationError)
-                            {
-                                return;
-                            }
-                            else
-                            {
-                                /* Attempts to write new email and phone number */
-                                FirebaseUserGetSet.changeAuthInfo(inputEmail,
-                                        inputPhone,
-                                        viewUserObject.getDocumentId());
-                                if (inputEmail.getError() != null)
-                                {
-                                    /* Closes dialog */
-                                    builder.dismiss();
-                                }
-                            }
-                        }
-                    });
-
-                    editInfo.findViewById(R.id.edit_cancel).setOnClickListener(new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View view)
-                        {
-                            builder.dismiss();
-                        }
-                    });
-
-                    builder.show();
+                    /* Initialize edit details fragment */
+                    editFragment();
                     break;
 
                 case R.id.profile_logout:
@@ -224,5 +146,92 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener,
     public void onCallback(UserProfileObject userObject)
     {
 
+    }
+
+    /**
+     * Dialog fragment for editing email and phone number info
+     */
+    public void editFragment()
+    {
+        final View editInfo = LayoutInflater.from(this.getContext()).inflate(R.layout.edit_profile, null);
+
+        /* Set up the input */
+        EditText inputEmail = editInfo.findViewById(R.id.edit_email);
+        EditText inputPhone = editInfo.findViewById(R.id.edit_phone);
+
+        /* Specify the type of input expected */
+        inputEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        inputPhone.setInputType(InputType.TYPE_CLASS_PHONE);
+
+        /* Setting text to user's details */
+        inputEmail.setText(viewUserObject.getEmail());
+        inputPhone.setText(viewUserObject.getPhoneNumber());
+
+        /* Create popup dialog for editing profile */
+        final AlertDialog builder = new AlertDialog.Builder(this.getContext()).create();
+        builder.setView(editInfo);
+
+        /* Set up the buttons */
+        editInfo.findViewById(R.id.edit_confirm).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                inputEmail.setError(null);
+                inputPhone.setError(null);
+                boolean hasValidationError = false;
+
+                /* Checks if no changes were made */
+                if (viewUserObject.getEmail().equals(inputEmail.getText().toString())
+                        && viewUserObject.getPhoneNumber().equals(inputPhone.getText().toString()))
+                {
+                    builder.dismiss();
+                    return;
+                }
+
+                /* Checks if email was empty and disables confirm button */
+                if (TextUtils.isEmpty(inputEmail.getText().toString().trim()))
+                {
+                    EditTextValidator.isEmpty(inputEmail);
+                    hasValidationError = true;
+                }
+
+                /* Checks if phone number was empty and disables confirm button */
+                if (TextUtils.isEmpty(inputPhone.getText().toString().trim()))
+                {
+                    EditTextValidator.isEmpty(inputPhone);
+                    hasValidationError = true;
+                }
+
+                /* Checks if error is present and disables confirm button */
+                if ((inputEmail.getError() != null) || hasValidationError)
+                {
+                    return;
+                }
+                else
+                {
+                    /* Attempts to write new email and phone number */
+                    FirebaseUserGetSet.changeAuthInfo(inputEmail,
+                            inputPhone,
+                            viewUserObject.getDocumentId());
+                    if (inputEmail.getError() != null)
+                    {
+                        /* Closes dialog */
+                        builder.dismiss();
+                    }
+                }
+            }
+        });
+
+        editInfo.findViewById(R.id.edit_cancel).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                builder.dismiss();
+            }
+        });
+
+        builder.show();
     }
 }
