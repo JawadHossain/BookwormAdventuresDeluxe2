@@ -49,5 +49,5 @@
     <string name="space"> </string>
     <string name="wrong_email">wrongemail</string>
     <string name="wrong_pass">wrongpassword</string>
-    <string name="short_pass">12345</string>
+    <string name="short_pass">wrong</string>
 </resources>
