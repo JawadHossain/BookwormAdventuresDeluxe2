@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 // Todo: Rename Class to ProfileFragment or rename other fragments
 
 /**
+ * MyProfile view fragment class for displaying and editing your contact details
+ *
  * A simple {@link Fragment} subclass.
  */
 public class MyProfileFragment extends Fragment implements FirebaseUserGetSet.UserCallback
@@ -43,11 +44,17 @@ public class MyProfileFragment extends Fragment implements FirebaseUserGetSet.Us
     FirebaseAuth firebaseAuth;
     UserProfileObject viewUserObject;
 
+    /**
+     * Required empty public constructor
+     */
     public MyProfileFragment()
     {
-        // Required empty public constructor
+
     }
 
+    /**
+     * onCreateView initializer
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -74,6 +81,7 @@ public class MyProfileFragment extends Fragment implements FirebaseUserGetSet.Us
         /* Theme for popup dialog fragment */
         getContext().getTheme().applyStyle(R.style.BlackTextTheme, true);
 
+        /* Getter for FirebaseAuth instance */
         firebaseAuth = FirebaseAuth.getInstance();
 
         /* Pulling UserProfileObject from database */
@@ -163,10 +171,12 @@ public class MyProfileFragment extends Fragment implements FirebaseUserGetSet.Us
                     return;
                 }
 
+                /* Attempts to edit FirebaseAuth account and Firebase info*/
                 FirebaseUserGetSet.changeAuthInfo(inputEmail,
                         inputPhone,
                         viewUserObject.getDocumentId());
 
+                /* After successful edit */
                 if (inputEmail.getError() == null)
                 {
                     /* Updating user object in Fragment*/
@@ -174,7 +184,7 @@ public class MyProfileFragment extends Fragment implements FirebaseUserGetSet.Us
                     viewUserObject.setPhoneNumber(inputPhone.getText().toString().trim());
 
                     /* Updating TextView in fragment */
-                    viewEmail.setText(inputPhone.getText().toString().trim());
+                    viewEmail.setText(inputEmail.getText().toString().trim());
                     viewPhoneNumber.setText(inputPhone.getText().toString().trim());
 
                     /* Closing dialog */
@@ -183,6 +193,7 @@ public class MyProfileFragment extends Fragment implements FirebaseUserGetSet.Us
             }
         });
 
+        /* Cancel edit */
         editInfo.findViewById(R.id.edit_cancel).setOnClickListener(new View.OnClickListener()
         {
             @Override
