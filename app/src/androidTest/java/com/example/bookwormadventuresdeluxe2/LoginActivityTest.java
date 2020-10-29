@@ -29,10 +29,7 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 public class LoginActivityTest
 {
     private Solo solo;
-    private String TAG = "LoginActivityTest";
 
-    private CollectionReference colRef;
-    private FirebaseFirestore db;
     private Context appContext;
     private Resources r;
 
@@ -59,10 +56,6 @@ public class LoginActivityTest
 
         /* Gets resource files */
         r = appContext.getResources();
-        r.getString(R.string.users_collection);
-
-        db = FirebaseFirestore.getInstance();
-        colRef = db.collection(r.getString(R.string.users_collection));
 
         emailText = (EditText) solo.getView(R.id.login_email);
         passwordText = (EditText) solo.getView(R.id.login_password);
@@ -85,7 +78,7 @@ public class LoginActivityTest
     public void createAccountButtonTest()
     {
         solo.clickOnButton(r.getString(R.string.create_account));
-        solo.assertCurrentActivity("Wrong Activity", CreateAccountActivity.class);
+        solo.assertCurrentActivity(r.getString(R.string.wrong_activity), CreateAccountActivity.class);
 
         solo.sleep(shortWait);
     }
@@ -97,7 +90,7 @@ public class LoginActivityTest
     public void emptyLoginTest()
     {
         solo.clickOnButton(r.getString(R.string.login));
-        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+        solo.assertCurrentActivity(r.getString(R.string.wrong_activity), LoginActivity.class);
 
         solo.sleep(shortWait);
     }
@@ -125,7 +118,7 @@ public class LoginActivityTest
     public void wrongPasswordTest()
     {
         solo.enterText(emailText, r.getString(R.string.test_account1_email));
-        solo.enterText(passwordText, "wrongpassword");
+        solo.enterText(passwordText, r.getString(R.string.wrong_pass));
         solo.clickOnButton(r.getString(R.string.login));
 
         solo.sleep(longWait);
@@ -139,8 +132,8 @@ public class LoginActivityTest
     @Test
     public void invalidEmailTest()
     {
-        solo.enterText(emailText, "wrongemail");
-        solo.enterText(passwordText, "wrongpassword");
+        solo.enterText(emailText, r.getString(R.string.wrong_email));
+        solo.enterText(passwordText, r.getString(R.string.wrong_pass));
         solo.clickOnButton(r.getString(R.string.login));
 
         solo.sleep(longWait);
@@ -160,7 +153,7 @@ public class LoginActivityTest
 
         solo.sleep(shortWait);
 
-        solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
+        solo.assertCurrentActivity(r.getString(R.string.wrong_activity), MyBooksActivity.class);
 
         signOut();
     }
