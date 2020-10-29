@@ -38,9 +38,6 @@ public class FirebaseUserGetSet
      */
     public static void getUser(String username, UserCallback myCallback)
     {
-        String test = Resources.getSystem().getString(R.string.users_collection);
-        Log.d("TEST", test);
-
         usersRef.whereEqualTo("username", username).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
                 {
