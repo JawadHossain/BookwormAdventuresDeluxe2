@@ -131,6 +131,7 @@ public class MyBooksFragment extends Fragment
 
             // Get the data from the new book and add it to the database
             Map<String, Object> data = new HashMap<>();
+            data.put("owner", newBook.getOwner());
             data.put("title", newBook.getTitle());
             data.put("author", newBook.getAuthor());
             data.put("description", newBook.getDescription());
