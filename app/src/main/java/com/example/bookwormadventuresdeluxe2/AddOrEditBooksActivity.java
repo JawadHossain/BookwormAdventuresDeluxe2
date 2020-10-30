@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
+import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -27,6 +29,8 @@ public class AddOrEditBooksActivity extends AppCompatActivity
     boolean editingBook = false;
     Button deleteButton;
     Book bookToEdit;
+
+    FirebaseAuth firebaseAuth;
 
     public static int ADD_BOOK = 0;
     public static int EDIT_BOOK = 1;
@@ -86,6 +90,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
      */
     public void saveBook(View view)
     {
+        firebaseAuth = FirebaseAuth.getInstance();
         String title, author, description, isbn;
 
         title = titleView.getText().toString();
@@ -112,7 +117,8 @@ public class AddOrEditBooksActivity extends AppCompatActivity
                 Intent intent = new Intent();
                 setResult(Activity.RESULT_OK, intent);
                 // status when adding book is available
-                intent.putExtra("NewBook", new Book(title, author, description, isbn, Status.Available));
+                intent.putExtra("NewBook", new Book(UserCredentialAPI.getInstance().getUsername(),
+                                                        title, author, description, isbn, Status.Available));
             }
             finish();
         }

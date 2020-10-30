@@ -19,7 +19,6 @@ import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 
-// Todo: Rename Class to ProfileFragment or rename other fragments
 
 /**
  * MyProfile view fragment class for displaying and editing your contact details

@@ -17,6 +17,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,7 +83,7 @@ public class MyBooksFragment extends Fragment
         myBooksRecyclerLayoutManager = new LinearLayoutManager(this.getContext());
         myBooksRecyclerView.setLayoutManager(myBooksRecyclerLayoutManager);
 
-        myBooksRecyclerAdapter = new BookListAdapter(this.getContext(), options);
+        myBooksRecyclerAdapter = new BookListAdapter(this.getContext(), options, R.id.my_books);
         myBooksRecyclerView.setAdapter(myBooksRecyclerAdapter);
 
         /* Initialize the filterMenu. This will update the queries using the adapter */
@@ -131,11 +133,14 @@ public class MyBooksFragment extends Fragment
 
             // Get the data from the new book and add it to the database
             Map<String, Object> data = new HashMap<>();
+            data.put("owner", newBook.getOwner());
             data.put("title", newBook.getTitle());
             data.put("author", newBook.getAuthor());
             data.put("description", newBook.getDescription());
             data.put("isbn", newBook.getIsbn());
             data.put("status", newBook.getStatus());
+            data.put("pickUpAddress", "");
+            data.put("requesters", new ArrayList<String>());
 
             FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
             rootRef.collection(getString(R.string.books_collection)).add(data);

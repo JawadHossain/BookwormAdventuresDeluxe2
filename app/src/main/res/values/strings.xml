@@ -34,6 +34,7 @@
     <string name="author">Author</string>
     <string name="take_photo">Take Photo</string>
     <string name="describe_the_book">Describe the Book</string>
+    <string name="detail_join">by</string>
     <!-- Firestore collections -->
     <string name="books_collection">Books</string>
     <string name="users_collection">Users</string>
@@ -50,4 +51,6 @@
     <string name="wrong_email">wrongemail</string>
     <string name="wrong_pass">wrongpassword</string>
     <string name="short_pass">wrong</string>
+
+    <string name="owned_by">Owned by</string>
 </resources>
