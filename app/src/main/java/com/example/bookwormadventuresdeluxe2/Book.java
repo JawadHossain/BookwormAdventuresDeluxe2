@@ -8,15 +8,20 @@ import androidx.core.content.res.ResourcesCompat;
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class Book implements Serializable
 {
     // Basic attributes for now, rest added as needed
+    private String owner;
     private String title;
     private String author;
     private String isbn;
     private String description;
     private Status status;
+    private String pickUpAddress;
+    private ArrayList<String> requesters;
 
     // BookListAdapter which is now a FirestoreRecyclerAdapter requires empty constructor
     public Book()
@@ -24,14 +29,25 @@ public class Book implements Serializable
 
     }
 
-    public Book(String title, String author, String description, String isbn, Status status)
+    public Book(String owner, String title, String author, String description, String isbn, Status status)
     {
+        this.owner = owner;
         this.title = title;
         this.author = author;
         this.description = description;
         this.isbn = isbn;
         this.description = description;
         this.status = status;
+    }
+
+    public String getOwner()
+    {
+        return owner;
+    }
+
+    public void setOwner(String owner)
+    {
+        this.owner = owner;
     }
 
     public String getTitle()
@@ -82,6 +98,36 @@ public class Book implements Serializable
     public void setStatus(Status status)
     {
         this.status = status;
+    }
+
+    public String getPickUpAddress()
+    {
+        return pickUpAddress;
+    }
+
+    public void setPickUpAddress(String pickUpAddress)
+    {
+        this.pickUpAddress = pickUpAddress;
+    }
+
+    public ArrayList<String> getRequesters()
+    {
+        return requesters;
+    }
+
+    public void setRequesters(ArrayList<String> requesters)
+    {
+        this.requesters = requesters;
+    }
+
+    public void addRequester(String requester)
+    {
+        this.requesters.add(requester);
+    }
+
+    public void deleteRequester(String requester)
+    {
+        this.requesters.remove(requester);
     }
 
     /**
