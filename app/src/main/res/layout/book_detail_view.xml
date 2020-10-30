@@ -13,77 +13,11 @@
             android:id="@+id/include"
             layout="@layout/app_header" />
 
-        <ImageView
-            android:id="@+id/book_details_image"
-            android:layout_width="185sp"
-            android:layout_height="185sp"
-            android:layout_marginTop="32dp"
-            android:background="@color/tempPhotoBackground"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include"
-            app:srcCompat="@android:drawable/ic_menu_camera" />
-
-        <TextView
-            android:id="@+id/book_details_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="center_horizontal"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
-            android:text="Book Title"
-            android:textColor="@android:color/black"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/book_details_image" />
-
-        <TextView
-            android:id="@+id/book_details_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:gravity="center_horizontal"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
-            android:text="Author Name"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/book_details_title" />
-
-        <TextView
-            android:id="@+id/book_details_description_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="28dp"
-            android:text="@string/description"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/book_details_author" />
-
-        <TextView
-            android:id="@+id/book_details_description"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="28dp"
-            android:layout_marginRight="28dp"
-            android:text="placeholder"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/book_details_description_title" />
+        <include
+            android:id="@+id/book_detail_common"
+            layout="@layout/book_detail_common"
+            app:layout_constraintBottom_toTopOf="@+id/book_details_status"
+            app:layout_constraintTop_toBottomOf="@+id/include" />
 
         <TextView
             android:id="@+id/book_details_isbn_title"
@@ -133,11 +67,11 @@
             android:layout_height="22sp"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:layout_marginBottom="12dp"
             android:src="@drawable/status_circle"
             app:layout_constraintBottom_toTopOf="@+id/book_details_isbn_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/book_details_description" />
+            app:layout_constraintTop_toBottomOf="@+id/book_detail_common" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

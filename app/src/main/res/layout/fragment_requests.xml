@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/borrow"
     tools:context=".MyProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +19,6 @@
             android:id="@+id/toggle_btn"
             android:layout_width="0dp"
             android:layout_height="60dp"
-            android:layout_marginTop="48dp"
             android:backgroundTint="@color/colorPrimary"
             android:fontFamily="sans-serif"
             android:text="@string/borrow"
@@ -27,7 +27,7 @@
             app:backgroundTint="@color/colorPrimaryDark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/current"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/include" />
 
         <TextView
             android:id="@+id/current"
@@ -50,7 +50,15 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/requests_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="120dp" />
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toggle_btn" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/borrow_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toggle_btn" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

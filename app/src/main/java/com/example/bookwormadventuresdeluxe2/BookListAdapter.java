@@ -1,6 +1,7 @@
 package com.example.bookwormadventuresdeluxe2;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bookwormadventuresdeluxe2.Utilities.DetailView;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
@@ -18,6 +20,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdapter.BookListViewHolder>
 {
     private Context context;
+    private int caller;
 
     // Reference to the views for each item
     public static class BookListViewHolder extends RecyclerView.ViewHolder
@@ -39,10 +42,11 @@ public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdap
         }
     }
 
-    public BookListAdapter(Context context, FirestoreRecyclerOptions options)
+    public BookListAdapter(Context context, FirestoreRecyclerOptions options, int caller)
     {
         super(options);
         this.context = context;
+        this.caller = caller;
     }
 
     // Create new views
@@ -54,31 +58,53 @@ public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdap
         return bookListViewHolder;
     }
 
-    @Override
-    protected void onBindViewHolder(@NonNull BookListViewHolder holder, int position, @NonNull Book book)
+    private View.OnClickListener launchDetailView(DetailView bookDetailFragment, Book book, String documentId)
     {
-        /* Set the text on the item view for each book */
-        String documentId = getSnapshots().getSnapshot(position).getId();
-        holder.title.setText(book.getTitle());
-        holder.author.setText(book.getAuthor());
-        holder.isbn.setText(book.getIsbn());
-
-        book.setStatusCircleColor(book.getStatus(), holder.statusCircle);
-
-        /* We need to continually update the onClick listener in the case of filtered queries */
-        holder.itemView.setOnClickListener(new View.OnClickListener()
-        {
+        View.OnClickListener listener = new View.OnClickListener() {
             // Handles a click on an item in the recycler view
             @Override
             public void onClick(View v)
             {
                 // Opens the book in detail view
-                MyBooksDetailViewFragment bookDetailFragment = new MyBooksDetailViewFragment();
                 bookDetailFragment.onFragmentInteraction(book, documentId);
 
                 ((MyBooksActivity) context).getSupportFragmentManager().beginTransaction()
                         .replace(R.id.frame_container, bookDetailFragment).commit();
             }
-        });
+        };
+        return listener;
+    }
+
+    @Override
+    protected void onBindViewHolder(@NonNull BookListViewHolder holder, int position, @NonNull Book book)
+    {
+        // Set the text on the item view for each book
+        String documentId = getSnapshots().getSnapshot(position).getId();
+        holder.title.setText(book.getTitle());
+        holder.author.setText(book.getAuthor());
+        holder.isbn.setText(book.getIsbn());
+        DetailView detailView;
+
+        switch (this.caller)
+        {
+            case R.id.my_books:
+                book.setStatusCircleColor(book.getStatus(), holder.statusCircle);
+                detailView = new MyBooksDetailViewFragment();
+                break;
+            case R.id.requests:
+                book.setStatusCircleColor(book.getStatus(), holder.statusCircle);
+                detailView = new RequestDetailViewFragment();
+                break;
+            case R.id.borrow:
+                book.setStatusCircleColor(book.getStatus(), holder.statusCircle);
+                detailView = new BorrowDetailViewFragment();
+                break;
+            default:
+                Log.d("Error", "Error in BookListAdapter: caller not found");
+                detailView = new MyBooksDetailViewFragment();
+        }
+
+        holder.itemView.setOnClickListener(launchDetailView(detailView, book, documentId));
+
     }
 }
