@@ -3,12 +3,14 @@ package com.example.bookwormadventuresdeluxe2;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 import android.widget.EditText;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.robotium.solo.Solo;
@@ -92,7 +94,10 @@ public class LoginActivityTest
         solo.clickOnButton(r.getString(R.string.login));
         solo.assertCurrentActivity(r.getString(R.string.wrong_activity), LoginActivity.class);
 
-        solo.sleep(shortWait);
+        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY));
+
+        Assert.assertNotNull(emailText.getError());
+        Assert.assertNotNull(passwordText.getError());
     }
 
     /**
@@ -105,7 +110,7 @@ public class LoginActivityTest
         solo.enterText(passwordText, " ");
         solo.clickOnButton(r.getString(R.string.login));
 
-        solo.sleep(shortWait);
+        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY));
 
         Assert.assertNotNull(emailText.getError());
         Assert.assertNotNull(passwordText.getError());
@@ -121,7 +126,7 @@ public class LoginActivityTest
         solo.enterText(passwordText, r.getString(R.string.wrong_pass));
         solo.clickOnButton(r.getString(R.string.login));
 
-        solo.sleep(longWait);
+        Assert.assertTrue(solo.waitForText(EditTextValidator.WRONGPASSWORD));
 
         Assert.assertNotNull(passwordText.getError());
     }
@@ -136,7 +141,7 @@ public class LoginActivityTest
         solo.enterText(passwordText, r.getString(R.string.wrong_pass));
         solo.clickOnButton(r.getString(R.string.login));
 
-        solo.sleep(longWait);
+        Assert.assertTrue(solo.waitForText(EditTextValidator.EMAILNOTFOUND));
 
         Assert.assertNotNull(emailText.getError());
     }
@@ -151,7 +156,7 @@ public class LoginActivityTest
         solo.enterText(passwordText, r.getString(R.string.test_account1_password));
         solo.clickOnButton(r.getString(R.string.login));
 
-        solo.sleep(shortWait);
+        solo.sleep(longWait);
 
         solo.assertCurrentActivity(r.getString(R.string.wrong_activity), MyBooksActivity.class);
 
