@@ -118,7 +118,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
                 setResult(Activity.RESULT_OK, intent);
                 // status when adding book is available
                 intent.putExtra("NewBook", new Book(UserCredentialAPI.getInstance().getUsername(),
-                                                            title, author, description, isbn, Status.Available));
+                                                        title, author, description, isbn, Status.Available));
             }
             finish();
         }
