@@ -35,9 +35,6 @@ public class LoginActivityTest
     private Context appContext;
     private Resources r;
 
-    private int shortWait = 1000;
-    private int longWait = 4000;
-
     private EditText emailText;
     private EditText passwordText;
 
