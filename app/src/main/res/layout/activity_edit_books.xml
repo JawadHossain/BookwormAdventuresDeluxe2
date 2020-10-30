@@ -163,7 +163,6 @@
             android:ems="10"
             android:hint="@string/isbn"
             android:inputType="number"
-            android:paddingBottom="100sp"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/isbn_text_view"
