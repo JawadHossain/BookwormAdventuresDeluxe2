@@ -81,8 +81,6 @@ public class LoginActivityTest
     {
         solo.clickOnButton(r.getString(R.string.create_account));
         solo.assertCurrentActivity(r.getString(R.string.wrong_activity), CreateAccountActivity.class);
-
-        solo.sleep(shortWait);
     }
 
     /**
@@ -156,7 +154,7 @@ public class LoginActivityTest
         solo.enterText(passwordText, r.getString(R.string.test_account1_password));
         solo.clickOnButton(r.getString(R.string.login));
 
-        solo.sleep(longWait);
+        solo.waitForText(r.getString(R.string.navbar_text_label_4));
 
         solo.assertCurrentActivity(r.getString(R.string.wrong_activity), MyBooksActivity.class);
 
@@ -170,7 +168,7 @@ public class LoginActivityTest
     {
         solo.clickOnText(r.getString(R.string.navbar_text_label_4));
 
-        solo.sleep(shortWait);
+        solo.waitForText(r.getString(R.string.sign_out));
 
         solo.clickOnButton(r.getString(R.string.sign_out));
     }
