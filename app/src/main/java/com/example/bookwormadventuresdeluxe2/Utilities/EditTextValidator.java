@@ -7,15 +7,15 @@ import android.widget.EditText;
  */
 public class EditTextValidator
 {
-    private static String EMPTY = "Cannot be left blank!";
-    private static String PASSWORDSDONTMATCH = "Passwords do not match!";
-    private static String EMAILTAKEN = "Email is already taken!";
-    private static String USERNAMETAKEN = "Username is already taken!";
-    private static String EMAILNOTFOUND = "Email not found!";
-    private static String WRONGPASSWORD = "Incorrect password!";
-    private static String WEAKPASS = "Password must be 6 characters or longer!";
-    private static String INVALIDEMAIL = "Invalid e-mail address!";
-    private static String INVALIDISBN = "Invalid ISBN!";
+    public static String EMPTY = "Cannot be left blank!";
+    public static String PASSWORDSDONTMATCH = "Passwords do not match!";
+    public static String EMAILTAKEN = "Email is already taken!";
+    public static String USERNAMETAKEN = "Username is already taken!";
+    public static String EMAILNOTFOUND = "Email not found!";
+    public static String WRONGPASSWORD = "Incorrect password!";
+    public static String WEAKPASS = "Password must be 6 characters or longer!";
+    public static String INVALIDEMAIL = "Invalid e-mail address!";
+    public static String INVALIDISBN = "Invalid ISBN!";
 
     /**
      * Set empty field error notification

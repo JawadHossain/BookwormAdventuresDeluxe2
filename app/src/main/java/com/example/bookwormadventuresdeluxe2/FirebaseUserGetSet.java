@@ -1,19 +1,17 @@
 package com.example.bookwormadventuresdeluxe2;
 
+import android.content.res.Resources;
 import android.util.Log;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
-
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;

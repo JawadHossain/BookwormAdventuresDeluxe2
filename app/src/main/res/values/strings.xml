@@ -44,5 +44,13 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="notification_title">Notifications</string>
+
+    <!-- Test input strings -->
+    <string name="wrong_activity">Wrong Activity</string>
+    <string name="space"> </string>
+    <string name="wrong_email">wrongemail</string>
+    <string name="wrong_pass">wrongpassword</string>
+    <string name="short_pass">wrong</string>
+
     <string name="owned_by">Owned by</string>
 </resources>
