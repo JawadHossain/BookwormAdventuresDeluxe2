@@ -48,8 +48,7 @@ public class CreateAccountActivity extends AppCompatActivity
     private EditText editTextPassword;
     private EditText confirmPassword;
     private ProgressBar progressBar;
-    private ImageButton visibilityButton;
-
+    private ImageButton backButton;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser currentUser;
@@ -79,12 +78,17 @@ public class CreateAccountActivity extends AppCompatActivity
         };
 
         createAccountButton = (Button) findViewById(R.id.create_acount_button_confirm);
+        backButton = findViewById(R.id.app_header_back_button);
         editTextUsername = findViewById(R.id.create_username);
         editTextEmail = findViewById(R.id.create_email);
         editTextPhoneNumber = findViewById(R.id.create_phone_number);
         editTextPassword = findViewById(R.id.create_password);
         confirmPassword = findViewById(R.id.confirm_password);
         progressBar = findViewById(R.id.create_account_progressBar);
+
+        /* Back Button Click Listener */
+        backButton.setVisibility(View.VISIBLE);
+        backButton.setOnClickListener(this::onBackClick);
 
         /* Set click listener to create account*/
         createAccountButton.setOnClickListener(new View.OnClickListener()
@@ -98,8 +102,9 @@ public class CreateAccountActivity extends AppCompatActivity
 
                 /* Check for Empty EditTexts */
                 if (!TextUtils.isEmpty(editTextEmail.getText().toString())
-                        && !TextUtils.isEmpty(editTextPassword.getText().toString())
                         && !TextUtils.isEmpty(editTextUsername.getText().toString())
+                        && !TextUtils.isEmpty(editTextPhoneNumber.getText().toString())
+                        && !TextUtils.isEmpty(editTextPassword.getText().toString())
                         && !TextUtils.isEmpty(confirmPassword.getText().toString()))
                 {
                     /* Check if passwords match */
@@ -125,6 +130,10 @@ public class CreateAccountActivity extends AppCompatActivity
                     {
                         EditTextValidator.isEmpty(editTextPassword);
                     }
+                    if (TextUtils.isEmpty(editTextPhoneNumber.getText().toString()))
+                    {
+                        EditTextValidator.isEmpty(editTextPhoneNumber);
+                    }
                     if (TextUtils.isEmpty(editTextEmail.getText().toString()))
                     {
                         EditTextValidator.isEmpty(editTextEmail);
@@ -133,9 +142,20 @@ public class CreateAccountActivity extends AppCompatActivity
                     {
                         EditTextValidator.isEmpty(editTextUsername);
                     }
+
                 }
             }
         });
+    }
+
+    /**
+     * Take user to login screen on back click
+     *
+     * @param view
+     */
+    private void onBackClick(View view)
+    {
+        super.onBackPressed();
     }
 
     /**
@@ -317,8 +337,7 @@ public class CreateAccountActivity extends AppCompatActivity
                                     }
                                     /* Hide progress bar*/
                                     progressBar.setVisibility(View.INVISIBLE);
-                                }
-                                catch (Exception e)
+                                } catch (Exception e)
                                 {
                                     /* Different type from errorCode, cannot be cast to the same object.
                                      * Sets EditText error to new type.
