@@ -81,9 +81,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginBottom="4dp"
-            android:text="user"
-            app:layout_constraintBottom_toBottomOf="@+id/book_details_status"
+            android:layout_marginBottom="12dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/book_details_isbn_title"
             app:layout_constraintStart_toEndOf="@+id/book_details_status" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

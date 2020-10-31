@@ -22,6 +22,7 @@ public class Book implements Serializable
     private Status status;
     private String pickUpAddress;
     private ArrayList<String> requesters;
+    private String borrower;
 
     // BookListAdapter which is now a FirestoreRecyclerAdapter requires empty constructor
     public Book()
@@ -128,6 +129,16 @@ public class Book implements Serializable
     public void deleteRequester(String requester)
     {
         this.requesters.remove(requester);
+    }
+
+    public String getBorrower()
+    {
+        return borrower;
+    }
+
+    public void setBorrower(String borrower)
+    {
+        this.borrower = borrower;
     }
 
     /**
