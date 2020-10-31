@@ -15,7 +15,6 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
-import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -41,7 +40,7 @@ public class MyProfileFragment extends Fragment implements FirebaseUserGetSet.Us
     View view;
 
     FirebaseAuth firebaseAuth;
-    UserProfileObject viewUserObject;
+    UserProfileObject myProfile;
 
     /**
      * Required empty public constructor
@@ -58,6 +57,10 @@ public class MyProfileFragment extends Fragment implements FirebaseUserGetSet.Us
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
+        /* Getting my profile */
+        Bundle bundle = getArguments();
+        myProfile = (UserProfileObject) bundle.getSerializable("myProfile");
+
         /* Inflate the layout for this fragment */
         view = inflater.inflate(R.layout.fragment_my_profile, container, false);
 
@@ -77,25 +80,16 @@ public class MyProfileFragment extends Fragment implements FirebaseUserGetSet.Us
         viewEmail = view.findViewById(R.id.view_email);
         viewPhoneNumber = view.findViewById(R.id.view_phone);
 
+        /* Setting TextView */
+        viewUsername.setText(myProfile.getUsername());
+        viewEmail.setText(myProfile.getEmail());
+        viewPhoneNumber.setText(myProfile.getPhoneNumber());
+
         /* Theme for popup dialog fragment */
         getContext().getTheme().applyStyle(R.style.BlackTextTheme, true);
 
         /* Getter for FirebaseAuth instance */
         firebaseAuth = FirebaseAuth.getInstance();
-
-        /* Pulling UserProfileObject from database */
-        FirebaseUserGetSet.getUser(UserCredentialAPI.getInstance().getUsername(), new FirebaseUserGetSet.UserCallback()
-        {
-            @Override
-            public void onCallback(UserProfileObject userObject)
-            {
-                viewUserObject = userObject;
-
-                viewUsername.setText(viewUserObject.getUsername());
-                viewEmail.setText(viewUserObject.getEmail());
-                viewPhoneNumber.setText(viewUserObject.getPhoneNumber());
-            }
-        });
 
         return view;
     }
@@ -125,8 +119,8 @@ public class MyProfileFragment extends Fragment implements FirebaseUserGetSet.Us
         inputPhone.setInputType(InputType.TYPE_CLASS_PHONE);
 
         /* Setting text to user's details */
-        inputEmail.setText(viewUserObject.getEmail());
-        inputPhone.setText(viewUserObject.getPhoneNumber());
+        inputEmail.setText(myProfile.getEmail());
+        inputPhone.setText(myProfile.getPhoneNumber());
 
         /* Create popup dialog for editing profile */
         final AlertDialog builder = new AlertDialog.Builder(this.getContext()).create();
@@ -143,8 +137,8 @@ public class MyProfileFragment extends Fragment implements FirebaseUserGetSet.Us
                 boolean hasValidationError = false;
 
                 /* Checks if no changes were made */
-                if (viewUserObject.getEmail().equals(inputEmail.getText().toString())
-                        && viewUserObject.getPhoneNumber().equals(inputPhone.getText().toString()))
+                if (myProfile.getEmail().equals(inputEmail.getText().toString())
+                        && myProfile.getPhoneNumber().equals(inputPhone.getText().toString()))
                 {
                     builder.dismiss();
                     return;
@@ -173,14 +167,14 @@ public class MyProfileFragment extends Fragment implements FirebaseUserGetSet.Us
                 /* Attempts to edit FirebaseAuth account and Firebase info*/
                 FirebaseUserGetSet.changeAuthInfo(inputEmail,
                         inputPhone,
-                        viewUserObject.getDocumentId());
+                        myProfile.getDocumentId());
 
                 /* After successful edit */
                 if (inputEmail.getError() == null)
                 {
                     /* Updating user object in Fragment*/
-                    viewUserObject.setEmail(inputEmail.getText().toString().trim());
-                    viewUserObject.setPhoneNumber(inputPhone.getText().toString().trim());
+                    myProfile.setEmail(inputEmail.getText().toString().trim());
+                    myProfile.setPhoneNumber(inputPhone.getText().toString().trim());
 
                     /* Updating TextView in fragment */
                     viewEmail.setText(inputEmail.getText().toString().trim());

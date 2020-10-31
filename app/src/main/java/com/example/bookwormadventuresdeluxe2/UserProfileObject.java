@@ -1,9 +1,11 @@
 package com.example.bookwormadventuresdeluxe2;
 
+import java.io.Serializable;
+
 /**
  * UserProfileObject is required to display information pulled from Firebase
  */
-public class UserProfileObject
+public class UserProfileObject implements Serializable
 {
     private String username;
     private String email;
