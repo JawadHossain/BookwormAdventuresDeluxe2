@@ -34,7 +34,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".LoginActivity" />
         </activity>
-        
+
         <activity
             android:name=".AddOrEditBooksActivity"
             android:theme="@style/AppTheme">

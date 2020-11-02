@@ -1,5 +1,12 @@
 package com.example.bookwormadventuresdeluxe2;
 
+/**
+ * MyBooksFragment holds the list of books belonging to the user who is signed in. From here,
+ * the user may click on a book to view its details in MyBooksDetailViewFragment or perform
+ * other actions such as filtering the list, scanning a book to open its details or view
+ * their notifications.
+ */
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +25,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -137,14 +143,15 @@ public class MyBooksFragment extends Fragment
 
             // Get the data from the new book and add it to the database
             Map<String, Object> data = new HashMap<>();
-            data.put("owner", newBook.getOwner());
-            data.put("title", newBook.getTitle());
-            data.put("author", newBook.getAuthor());
-            data.put("description", newBook.getDescription());
-            data.put("isbn", newBook.getIsbn());
-            data.put("status", newBook.getStatus());
-            data.put("pickUpAddress", "");
-            data.put("requesters", new ArrayList<String>());
+            data.put(getResources().getString(R.string.firestore_owner), newBook.getOwner());
+            data.put(getResources().getString(R.string.firestore_title), newBook.getTitle());
+            data.put(getResources().getString(R.string.firestore_author), newBook.getAuthor());
+            data.put(getResources().getString(R.string.firestore_description), newBook.getDescription());
+            data.put(getResources().getString(R.string.firestore_isbn), newBook.getIsbn());
+            data.put(getResources().getString(R.string.firestore_status), newBook.getStatus());
+            data.put(getResources().getString(R.string.firestore_pick_up_address), "");
+            data.put(getResources().getString(R.string.firestore_requesters), new ArrayList<String>());
+            data.put(getResources().getString(R.string.firestore_imageUrl), newBook.getImageUrl());
 
             FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
             rootRef.collection(getString(R.string.books_collection)).add(data);

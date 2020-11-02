@@ -75,16 +75,16 @@ public class FilterMenu extends Fragment implements View.OnClickListener
         switch (view.getId())
         {
             case R.id.available_button:
-                nextQuery = rootQuery.whereEqualTo(getString(R.string.status), getString(R.string.available));
+                nextQuery = rootQuery.whereEqualTo(getString(R.string.firestore_status), getString(R.string.available));
                 break;
             case R.id.requested_button:
-                nextQuery = rootQuery.whereEqualTo(getString(R.string.status), getString(R.string.requested));
+                nextQuery = rootQuery.whereEqualTo(getString(R.string.firestore_status), getString(R.string.requested));
                 break;
             case R.id.accepted_button:
-                nextQuery = rootQuery.whereEqualTo(getString(R.string.status), getString(R.string.accepted));
+                nextQuery = rootQuery.whereEqualTo(getString(R.string.firestore_status), getString(R.string.accepted));
                 break;
             case R.id.borrowed_button:
-                nextQuery = rootQuery.whereEqualTo(getString(R.string.status), getString(R.string.borrowed));
+                nextQuery = rootQuery.whereEqualTo(getString(R.string.firestore_status), getString(R.string.borrowed));
                 break;
             case R.id.all_button:
                 nextQuery = rootQuery;

@@ -1,10 +1,17 @@
 package com.example.bookwormadventuresdeluxe2.Utilities;
 
+/**
+ * DetailView is the parent view for the array of different screens which may appear when you
+ * click on a book depending on the context of where it was clicked from. It houses functionality
+ * for updating the views and passing data between the caller and the detail view.
+ */
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -65,6 +72,9 @@ public abstract class DetailView extends Fragment
 
         TextView isbn = bookDetailView.findViewById(R.id.book_details_isbn);
         isbn.setText(book.getIsbn());
+
+        ImageView bookPhoto = bookDetailView.findViewById(R.id.book_details_image);
+        book.setPhoto(book, bookPhoto);
     }
 
     /**

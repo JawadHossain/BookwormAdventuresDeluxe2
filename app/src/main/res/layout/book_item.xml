@@ -18,10 +18,11 @@
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
         android:background="@color/tempPhotoBackground"
+        android:scaleType="center"
+        android:src="@drawable/ic_camera"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_camera" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/book_item_title"

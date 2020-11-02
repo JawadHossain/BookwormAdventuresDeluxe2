@@ -130,10 +130,11 @@ public class MyBooksDetailViewFragment extends DetailView
                         .collection(getString(R.string.books_collection))
                         .document(this.selectedBookId);
 
-                bookDocument.update("title", this.selectedBook.getTitle());
-                bookDocument.update("author", this.selectedBook.getAuthor());
-                bookDocument.update("description", this.selectedBook.getDescription());
-                bookDocument.update("isbn", this.selectedBook.getIsbn());
+                bookDocument.update(getResources().getString(R.string.firestore_title), this.selectedBook.getTitle());
+                bookDocument.update(getResources().getString(R.string.firestore_author), this.selectedBook.getAuthor());
+                bookDocument.update(getResources().getString(R.string.firestore_description), this.selectedBook.getDescription());
+                bookDocument.update(getResources().getString(R.string.firestore_isbn), this.selectedBook.getIsbn());
+                bookDocument.update(getResources().getString(R.string.firestore_imageUrl), this.selectedBook.getImageUrl());
             }
             else if (resultCode == AddOrEditBooksActivity.DELETE_BOOK) /* Delete was pressed */
             {

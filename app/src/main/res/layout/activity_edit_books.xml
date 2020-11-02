@@ -12,29 +12,30 @@
 
 
         <ImageView
-            android:id="@+id/book_view"
+            android:id="@+id/book_photo"
             android:layout_width="185sp"
             android:layout_height="185sp"
             android:layout_marginTop="32dp"
             android:background="@color/tempPhotoBackground"
+            android:scaleType="center"
+            android:src="@drawable/ic_camera"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_camera" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!--TODO: Implement the camera by adding an onClick attribute-->
         <TextView
             android:id="@+id/take_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="@string/take_photo"
+            android:onClick="uploadPhoto"
+            android:text="@string/upload_photo"
             android:textColor="#548A96"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/book_view" />
+            app:layout_constraintTop_toBottomOf="@+id/book_photo" />
 
         <TextView
             android:id="@+id/title_text_view"
@@ -172,12 +173,12 @@
             android:id="@+id/scan_isbn_button"
             android:layout_width="49dp"
             android:layout_height="49dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
             android:backgroundTint="@android:color/transparent"
             android:onClick="scanIsbn"
             android:src="@drawable/ic_scan_black"
             app:layout_constraintBottom_toBottomOf="@+id/isbn_edit_text"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/isbn_edit_text"
             app:layout_constraintTop_toTopOf="@+id/isbn_edit_text"
