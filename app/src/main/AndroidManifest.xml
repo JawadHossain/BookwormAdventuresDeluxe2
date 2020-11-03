@@ -22,6 +22,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/GOOGLE_API_LIBRARY_KEY" />
 
+        <activity
+            android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
+            android:launchMode="standard"
+            tools:replace="android:launchMode" />
+
         <!--  Create Account Activity has theme BlackTextTheme which extends AppTheme.NoActionBar
               and is used to override default textColour to black
          -->

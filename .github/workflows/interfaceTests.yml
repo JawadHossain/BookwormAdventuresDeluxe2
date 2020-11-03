@@ -1,0 +1,43 @@
+"""name: UI Tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: macOS-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+
+    - name: Grant permission to the decryption script
+      run: chmod +x ./encrypted_secret/decrypt.sh
+
+    - name: Decrypt the secrets file
+      run: ./encrypted_secret/decrypt.sh
+      env:
+        ENCRYPTION_KEY_PASSWORD: ${{ secrets.ENCRYPTION_KEY_PASSWORD }}
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Build with Gradle
+      run: ./gradlew build
+
+    - name: Run UI Tests
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        arch: x86
+        profile: pixel_3a
+        emulator-build: 6855416
+        api-level: 29
+        emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -timezone Canada/Edmonton
+        script: ./gradlew connectedCheck --stacktrace"""
