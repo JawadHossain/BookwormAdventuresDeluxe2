@@ -69,12 +69,14 @@
 
         <activity
             android:name=".SetLocationActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/BlackTextTheme">
 
+        </activity>
         <activity
             android:name=".ViewLocationActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/BlackTextTheme">
 
+        </activity>
     </application>
 
 </manifest>

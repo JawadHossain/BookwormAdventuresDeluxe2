@@ -81,4 +81,8 @@
     <string name="wrong_pass">wrongpassword</string>
     <string name="short_pass">wrong</string>
 
+    <!-- Map -->
+    <string name="map_edit_text_hint">Enter Address, City or Postal Code</string>
+    <string name="set_exchange_location">Set Exchange Location</string>
+    <string name="view_location_pending_request">Pending Request</string>
 </resources>
