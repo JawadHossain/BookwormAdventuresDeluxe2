@@ -1,5 +1,13 @@
+/**
+ * EditTextValidator.java
+ *
+ * Utility class for EditText error handling. Matches target
+ * EditText and wanted output.
+ */
+
 package com.example.bookwormadventuresdeluxe2.Utilities;
 
+import android.text.TextUtils;
 import android.widget.EditText;
 
 /**
@@ -31,6 +39,8 @@ public class EditTextValidator
 
     /**
      * Set invalid ISBN error notification
+     *
+     * @param editText editText on which error is sey
      */
     public static void invalidIsbn(EditText editText)
     {
@@ -102,7 +112,7 @@ public class EditTextValidator
      */
     public static boolean passwordsMatch(EditText password1, EditText password2)
     {
-        if (password1.getText().toString().compareTo(password2.getText().toString()) == 0)
+        if (password1.getText().toString().trim().equals(password2.getText().toString().trim()))
         {
             return true;
         }
@@ -121,13 +131,15 @@ public class EditTextValidator
      *
      * @param password1 password on which error is set
      * @param password2 editText on which error is set
+     * @return boolean stating is password is long enough
      */
-    public static void weakPass(EditText password1, EditText password2)
+    public static boolean weakPass(EditText password1, EditText password2)
     {
-        if (password1.getText().toString().length() >= 6)
+        if (password1.getText().toString().trim().length() >= 6)
         {
             password1.setError(null);
             password2.setError(null);
+            return false;
         }
         else
         {
@@ -135,7 +147,52 @@ public class EditTextValidator
             password2.setError(WEAKPASS);
             password2.requestFocus();
             password1.requestFocus();
+            return true;
         }
     }
 
+    /**
+     * Checker for CreateAccountActivity empty fields
+     *
+     * @param username username EditText
+     * @param email email EditText
+     * @param phoneNumber phone number EditText
+     * @param password1 password EditText
+     * @param password2 confirm password EditText
+     * @return boolean if empties exist or not
+     */
+    public static boolean createAccountEmpties(EditText username, EditText email,
+                                               EditText phoneNumber, EditText password1,
+                                               EditText password2)
+    {
+        Boolean empties = false;
+
+        /* Set Empty EditText Error codes */
+        if (TextUtils.isEmpty(password2.getText().toString().trim()))
+        {
+            EditTextValidator.isEmpty(password2);
+            empties = true;
+        }
+        if (TextUtils.isEmpty(password1.getText().toString().trim()))
+        {
+            EditTextValidator.isEmpty(password1);
+            empties = true;
+        }
+        if (TextUtils.isEmpty(phoneNumber.getText().toString().trim()))
+        {
+            EditTextValidator.isEmpty(phoneNumber);
+            empties = true;
+        }
+        if (TextUtils.isEmpty(email.getText().toString().trim()))
+        {
+            EditTextValidator.isEmpty(email);
+            empties = true;
+        }
+        if (TextUtils.isEmpty(username.getText().toString().trim()))
+        {
+            EditTextValidator.isEmpty(username);
+            empties = true;
+        }
+        return empties;
+    }
 }

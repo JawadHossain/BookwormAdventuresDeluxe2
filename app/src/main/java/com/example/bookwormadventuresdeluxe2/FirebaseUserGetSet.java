@@ -1,6 +1,12 @@
+/**
+ * FirebaseUserGetSet.java
+ *
+ * Class for calling user profile object details from database.
+ * Also able to edit FirebaseAuth email and profile contact information
+ */
+
 package com.example.bookwormadventuresdeluxe2;
 
-import android.content.res.Resources;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -33,8 +39,8 @@ public class FirebaseUserGetSet
     /**
      * Performs query to extract UserProfileObject from database
      *
-     * @param username username of object to be called
-     * @param myCallback interface for returning object after query success
+     * @param username Username of object to be called
+     * @param myCallback Interface for returning object after query success
      */
     public static void getUser(String username, UserCallback myCallback)
     {
@@ -100,21 +106,11 @@ public class FirebaseUserGetSet
     }
 
     /**
-     * Callback for UserProfileObject
-     */
-    public interface UserCallback
-    /*
-    * Source: https://stackoverflow.com/questions/49514859/how-to-get-data-object-from-another-event-android-studio
-    * */
-    {
-        void onCallback(UserProfileObject userObject);
-    }
-
-    /**
      * Edits FirebaseAuth email and Firebase database email/phone number of user
      *
      * @param inputEmail New email to be written
      * @param inputPhone New phone number to be written
+     * @param documentID Document id of target user
      */
     public static void changeAuthInfo(EditText inputEmail, EditText inputPhone, String documentID)
     {
@@ -173,5 +169,16 @@ public class FirebaseUserGetSet
                         }
                     }
                 });
+    }
+
+    /**
+     * Callback for UserProfileObject
+     */
+    public interface UserCallback
+            /*
+             * Source: https://stackoverflow.com/questions/49514859/how-to-get-data-object-from-another-event-android-studio
+             * */
+    {
+        void onCallback(UserProfileObject userObject);
     }
 }
