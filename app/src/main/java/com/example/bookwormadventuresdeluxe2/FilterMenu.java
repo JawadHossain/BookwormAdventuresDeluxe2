@@ -8,10 +8,13 @@ import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.security.InvalidParameterException;
+import java.util.Arrays;
 
 /**
  * Fragment class for the filter menu
@@ -20,6 +23,7 @@ public class FilterMenu extends Fragment implements View.OnClickListener
 {
     private BookListAdapter bookAdapter;
     private Query rootQuery;
+    private int caller;
 
     Button availableButton;
     Button requestedButton;
@@ -27,10 +31,11 @@ public class FilterMenu extends Fragment implements View.OnClickListener
     Button borrowedButton;
     Button allButton;
 
-    public FilterMenu(BookListAdapter bookAdapter, Query rootQuery)
+    public FilterMenu(BookListAdapter bookAdapter, Query rootQuery, int caller)
     {
         this.bookAdapter = bookAdapter;
         this.rootQuery = rootQuery;
+        this.caller = caller;
     }
 
     @Override
@@ -72,26 +77,86 @@ public class FilterMenu extends Fragment implements View.OnClickListener
     public void onClick(View view)
     {
         Query nextQuery;
-        switch (view.getId())
+        switch (this.caller)
         {
-            case R.id.available_button:
-                nextQuery = rootQuery.whereEqualTo(getString(R.string.firestore_status), getString(R.string.available));
+            case R.id.my_books:
+                switch (view.getId())
+                {
+                    case R.id.available_button:
+                        nextQuery = rootQuery.whereEqualTo(getString(R.string.status), getString(R.string.available));
+                        break;
+                    case R.id.requested_button:
+                        nextQuery = rootQuery.whereEqualTo(getString(R.string.status), getString(R.string.requested));
+                        break;
+                    case R.id.accepted_button:
+                        nextQuery = rootQuery.whereEqualTo(getString(R.string.status), getString(R.string.accepted));
+                        break;
+                    case R.id.borrowed_button:
+                        nextQuery = rootQuery.whereIn(getString(R.string.status), Arrays.asList(
+                                getString(R.string.bPending),
+                                getString(R.string.borrowed),
+                                getString(R.string.rPending)));
+                        break;
+                    case R.id.all_button:
+                        nextQuery = rootQuery;
+                        break;
+                    default:
+                        throw new InvalidParameterException("Unknown ID passed into Filter Menu onClick Listener");
+                }
                 break;
-            case R.id.requested_button:
-                nextQuery = rootQuery.whereEqualTo(getString(R.string.firestore_status), getString(R.string.requested));
+            case R.id.requests:
+                switch (view.getId())
+                {
+                    case R.id.available_button:
+                        nextQuery = rootQuery.whereEqualTo(getString(R.string.status), getString(R.string.available));
+                        break;
+                    case R.id.requested_button:
+                        nextQuery = rootQuery.whereEqualTo(getString(R.string.status), getString(R.string.requested));
+                        break;
+                    case R.id.accepted_button:
+                        nextQuery = rootQuery.whereEqualTo(getString(R.string.status), getString(R.string.accepted));
+                        break;
+                    case R.id.borrowed_button:
+                        nextQuery = FirebaseFirestore.getInstance().collection(getString(R.string.books_collection)).whereEqualTo(
+                                getString(R.string.owner), UserCredentialAPI.getInstance().getUsername()).whereIn(getString(R.string.status), Arrays.asList(
+                                getString(R.string.bPending),
+                                getString(R.string.rPending)));
+                        break;
+                    case R.id.all_button:
+                        nextQuery = rootQuery;
+                        break;
+                    default:
+                        throw new InvalidParameterException("Unknown ID passed into Filter Menu onClick Listener");
+                }
                 break;
-            case R.id.accepted_button:
-                nextQuery = rootQuery.whereEqualTo(getString(R.string.firestore_status), getString(R.string.accepted));
-                break;
-            case R.id.borrowed_button:
-                nextQuery = rootQuery.whereEqualTo(getString(R.string.firestore_status), getString(R.string.borrowed));
-                break;
-            case R.id.all_button:
-                nextQuery = rootQuery;
+            case R.id.borrow:
+                switch (view.getId())
+                {
+                    case R.id.available_button:
+                        nextQuery = rootQuery.whereEqualTo(getString(R.string.status), getString(R.string.rPending));
+                        break;
+                    case R.id.requested_button:
+                        nextQuery = rootQuery.whereEqualTo(getString(R.string.status), getString(R.string.requested));
+                        break;
+                    case R.id.accepted_button:
+                        nextQuery = rootQuery.whereIn(getString(R.string.status), Arrays.asList(
+                                getString(R.string.bPending),
+                                getString(R.string.accepted)));
+                        break;
+                    case R.id.borrowed_button:
+                        nextQuery = rootQuery.whereEqualTo(getString(R.string.status), getString(R.string.borrowed));
+                        break;
+                    case R.id.all_button:
+                        nextQuery = rootQuery;
+                        break;
+                    default:
+                        throw new InvalidParameterException("Unknown ID passed into Filter Menu onClick Listener");
+                }
                 break;
             default:
-                throw new InvalidParameterException("Unknown ID passed into Filter Menu onClick Listener");
+                throw new InvalidParameterException("Unknown caller ID to FilterMenu");
         }
+
 
         /* Update the query in the recyclerView */
         FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()

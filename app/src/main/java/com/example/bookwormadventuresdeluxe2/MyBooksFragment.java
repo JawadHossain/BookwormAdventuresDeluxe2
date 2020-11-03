@@ -97,7 +97,7 @@ public class MyBooksFragment extends Fragment
         myBooksRecyclerView.setAdapter(myBooksRecyclerAdapter);
 
         /* Initialize the filterMenu. This will update the queries using the adapter */
-        this.filterMenu = new FilterMenu(myBooksRecyclerAdapter, booksOfCurrentUser);
+        this.filterMenu = new FilterMenu(myBooksRecyclerAdapter, booksOfCurrentUser, R.id.my_books);
 
         FloatingActionButton btn = (FloatingActionButton) getView().findViewById(R.id.my_books_add_button);
         btn.setOnClickListener(new View.OnClickListener()

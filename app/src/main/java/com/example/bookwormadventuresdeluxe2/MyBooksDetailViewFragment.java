@@ -6,14 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.DetailView;
 
-import androidx.fragment.app.Fragment;
-
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
+import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -65,20 +63,7 @@ public class MyBooksDetailViewFragment extends DetailView
         super.updateView(book);
 
         TextView status = bookDetailView.findViewById(R.id.book_details_status);
-        if (book.getStatus() == Status.Borrowed)
-        {
-            status.setText(book.getStatus().toString() + " " + getString(R.string.detail_join));
-            TextView user = bookDetailView.findViewById(R.id.book_details_borrower);
-            book.setBorrower("TODO"); // TODO: remove when borrower is set for real
-            user.setText(book.getBorrower());
-        }
-        else
-        {
-            status.setText(book.getStatus().toString());
-        }
-
-        ImageView statusCircle = bookDetailView.findViewById(R.id.book_details_status_circle);
-        book.setStatusCircleColor(book.getStatus(), statusCircle);
+        status.setText(book.getAugmentStatus(UserCredentialAPI.getInstance().getUsername()).toString());
     }
 
     /**

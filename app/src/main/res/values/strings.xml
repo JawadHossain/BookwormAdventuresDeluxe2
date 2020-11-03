@@ -6,6 +6,8 @@
     <string name="requested">Requested</string>
     <string name="accepted">Accepted</string>
     <string name="borrowed">Borrowed</string>
+    <string name="bPending">bPending</string>
+    <string name="rPending">rPending</string>
     <string name="email">Email</string>
     <string name="phone_number">Phone Number</string>
     <string name="edit_contact">Edit Contact Info</string>
@@ -35,12 +37,17 @@
     <string name="upload_photo">Upload Photo</string>
     <string name="select_photo">Select Photo</string>
     <string name="describe_the_book">Describe the Book</string>
-    <string name="detail_join">by</string>
+    <string name="request_detail_requested">Requested by</string>
+    <string name="request_detail_borrowed">Borrowed by</string>
+    <string name="request_detail_return">Return from</string>
     <string name="exit_confirmation_message">Are you sure you want to exit the app?</string>
     <!-- Firestore collections -->
     <string name="books_collection">Books</string>
     <string name="users_collection">Users</string>
     <!-- Firestore keywords -->
+    <string name="owner">owner</string>
+    <string name="status">status</string>
+    <string name="requesters">requesters</string>
     <string name="firestore_title">title</string>
     <string name="firestore_description">description</string>
     <string name="firestore_isbn">isbn</string>
@@ -51,10 +58,21 @@
     <string name="firestore_requesters">requesters</string>
     <string name="firestore_imageUrl">imageUrl</string>
 
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="notification_title">Notifications</string>
+    <string name="owned_by">Owned by</string>
+    <string name="accept">Accept</string>
+    <string name="deny">Deny</string>
+    <string name="exchange">Exchange Location:</string>
+    <string name="set_location_label">Set Location</string>
+    <string name="lend_book">Lend Book</string>
+    <string name="wait_borrower">Waiting for Borrower</string>
+    <string name="accept_return">Accept Return</string>
+    <string name="view_location">View Location</string>
+    <string name="scan">Scan</string>
+    <string name="return_book">Return Book</string>
+    <string name="wait_owner">Waiting for Owner</string>
 
     <!-- Test input strings -->
     <string name="wrong_activity">Wrong Activity</string>
@@ -63,5 +81,4 @@
     <string name="wrong_pass">wrongpassword</string>
     <string name="short_pass">wrong</string>
 
-    <string name="owned_by">Owned by</string>
 </resources>

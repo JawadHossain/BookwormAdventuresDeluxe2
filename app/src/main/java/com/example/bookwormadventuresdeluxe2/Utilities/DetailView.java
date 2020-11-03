@@ -73,6 +73,9 @@ public abstract class DetailView extends Fragment
         TextView isbn = bookDetailView.findViewById(R.id.book_details_isbn);
         isbn.setText(book.getIsbn());
 
+        ImageView statusCircle = bookDetailView.findViewById(R.id.book_details_status_circle);
+        book.setStatusCircleColor(statusCircle, UserCredentialAPI.getInstance().getUsername());
+
         ImageView bookPhoto = bookDetailView.findViewById(R.id.book_details_image);
         book.setPhoto(book, bookPhoto);
     }

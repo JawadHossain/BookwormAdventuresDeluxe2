@@ -73,7 +73,8 @@
             android:src="@drawable/status_circle"
             app:layout_constraintBottom_toTopOf="@+id/book_details_isbn_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/book_detail_common" />
+            app:layout_constraintTop_toBottomOf="@+id/borrowDetail_btn1" />
+
 
         <TextView
             android:id="@+id/book_request_user"
@@ -86,5 +87,72 @@
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/book_details_isbn_title"
             app:layout_constraintStart_toEndOf="@+id/book_details_status" />
+
+        <Button
+            android:id="@+id/borrowDetail_btn1"
+            android:layout_width="160dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="32dp"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/borrowDetail_btn2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/book_detail_common" />
+
+        <Button
+            android:id="@+id/borrowDetail_btn2"
+            android:layout_width="160dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginBottom="0dp"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:textAllCaps="false"
+            android:visibility="gone"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/borrowDetail_btn1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/borrowDetail_btn1" />
+
+        <TextView
+            android:id="@+id/borrow_exchange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="0dp"
+            android:text="@string/exchange"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/book_details_isbn_title" />
+
+        <TextView
+            android:id="@+id/borrow_exchange_location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text=""
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/borrow_exchange"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/borrow_exchange"
+            app:layout_constraintTop_toTopOf="@+id/borrow_exchange" />
+            app:layout_constraintTop_toBottomOf="@+id/book_detail_common" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
