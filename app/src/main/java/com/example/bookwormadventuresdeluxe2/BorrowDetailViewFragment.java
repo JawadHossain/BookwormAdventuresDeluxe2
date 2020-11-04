@@ -56,6 +56,7 @@ public class BorrowDetailViewFragment extends DetailView
 
         switch (selectedBook.getStatus())
         {
+            case Available:
             case Requested:
                 break;
 
@@ -98,6 +99,7 @@ public class BorrowDetailViewFragment extends DetailView
                 this.btn1.setTextColor(getResources().getColorStateList(R.color.colorPrimary));
 
                 this.btn1.setVisibility(View.VISIBLE);
+                break;
 
             default:
                 throw new InvalidParameterException("Bad status passed to BorrowDetailView");

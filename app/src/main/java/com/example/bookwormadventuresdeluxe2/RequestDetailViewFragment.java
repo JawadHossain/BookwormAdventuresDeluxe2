@@ -60,7 +60,6 @@ public class RequestDetailViewFragment extends DetailView
 
         switch (selectedBook.getStatus())
         {
-
             case Requested:
                 Spinner requesters = this.bookDetailView.findViewById(R.id.chose_request);
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, this.selectedBook.getRequesters());
