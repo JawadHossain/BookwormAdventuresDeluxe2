@@ -66,3 +66,4 @@ app/.idea/workspace.xml
 app/build.gradle
 app/src/main/res/values/api_keys.xml
 app/src/main/res/values/test_accounts.xml
+app/src/main/res/values/secrets.xml

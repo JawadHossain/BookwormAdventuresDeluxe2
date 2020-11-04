@@ -85,6 +85,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
         {
             this.editingBook = true;
             this.bookToEdit = (Book) getIntent().getSerializableExtra("bookToEdit");
+            bookPhotoDowloadUrl = bookToEdit.getImageUrl();
 
             if (bookToEdit != null)
             {
