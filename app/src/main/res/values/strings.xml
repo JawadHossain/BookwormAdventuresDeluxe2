@@ -19,6 +19,7 @@
     <string name="navbar_text_label_3">Requests</string>
     <string name="navbar_text_label_4">Profile</string>
     <string name="fab_content_desc">Add Book</string>
+    <string name="edit_page_delete_picture_button">Delete Picture</string>
     <string name="my_requests">My Requests</string>
     <string name="borrow">Borrow</string>
     <string name="set_location">Set Pickup Location</string>

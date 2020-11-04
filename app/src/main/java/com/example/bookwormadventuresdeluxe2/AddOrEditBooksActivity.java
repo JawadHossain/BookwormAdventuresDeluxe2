@@ -32,6 +32,7 @@ import com.example.bookwormadventuresdeluxe2.Utilities.Status;
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -50,7 +51,9 @@ public class AddOrEditBooksActivity extends AppCompatActivity
     ImageView bookPicture;
     EditText titleView, authorView, descriptionView, isbnView;
     boolean editingBook = false;
+    boolean deleteBookPictureWhenSaving = false;
     Button deleteButton;
+    FloatingActionButton deletePictureButton;
     Book bookToEdit;
     String bookPhotoDowloadUrl = "";
 
@@ -73,6 +76,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
         descriptionView = findViewById(R.id.description_edit_text);
         isbnView = findViewById(R.id.isbn_edit_text);
         deleteButton = findViewById(R.id.delete_button);
+        deletePictureButton = findViewById(R.id.delete_picture);
         bookPicture = findViewById(R.id.book_photo);
 
         /* If editing a book, prepopulate text fields with their old values */
@@ -97,10 +101,41 @@ public class AddOrEditBooksActivity extends AppCompatActivity
             }
         }
 
-        /* Hide the delete button if we are adding a book */
-        if (!this.editingBook)
+        /* When the user clicks on the delete button
+         * Remove picture from screen and hide the delete button
+         * This is necessary for when the user cancels editing the book*/
+        deletePictureButton.setOnClickListener(new View.OnClickListener()
         {
+            @Override
+            public void onClick(View view)
+            {
+                // will be checked when the user saves
+                deleteBookPictureWhenSaving = true;
+                // remove the picture from the screen
+                bookPicture.setImageResource(R.drawable.ic_camera);
+                // Hide the delete picture button
+                deletePictureButton.hide();
+            }
+        });
+
+        if (this.editingBook)
+        {
+            /* Hide delete button if the book has no image url*/
+            if (bookToEdit.getImageUrl().equals(""))
+            {
+                deletePictureButton.hide();
+            }
+            else
+            {
+                /* Only show the delete button if we are editing a book and it has an image*/
+                deletePictureButton.show();
+            }
+        }
+        else
+        {
+            /* Hide the delete button if we are adding a book */
             deleteButton.setVisibility(View.INVISIBLE);
+            deletePictureButton.hide();
         }
     }
 
@@ -119,6 +154,36 @@ public class AddOrEditBooksActivity extends AppCompatActivity
         startActivityForResult(Intent.createChooser(uploadPhotoIntent, getResources().getString(R.string.select_photo)), REQUEST_IMAGE_UPLOAD);
     }
 
+    /**
+     * Deletes the picture associated with the book being edited
+     */
+    private void deletePhoto()
+    {
+        String imageUrl;
+        if (editingBook)
+        {
+            imageUrl = this.bookToEdit.getImageUrl();
+            // remove association of book to the image url
+            this.bookToEdit.setImageUrl("");
+        }
+        else
+        {
+            /* This will occur when a user uploads a picture
+             * when adding a new book then deletes it before saving the new book*/
+            imageUrl = this.bookPhotoDowloadUrl;
+        }
+
+        /* This should never be called when the book does not have an image*/
+        if (imageUrl.equals(""))
+        {
+            throw new IllegalStateException("deletePhoto should not have been called!");
+        }
+
+        // Remove the association to the book object
+        this.bookPhotoDowloadUrl = "";
+        // Delete image from firebase
+        this.deletePhotoFromFirebase(imageUrl);
+    }
 
     /**
      * Returns the new or edited book to the activity that called EditBooksActivity
@@ -137,6 +202,12 @@ public class AddOrEditBooksActivity extends AppCompatActivity
 
         if (fieldsValid())
         {
+            if (this.deleteBookPictureWhenSaving)
+            {
+                // commit the changes to Firebase and the book object
+                this.deletePhoto();
+            }
+
             if (editingBook)
             {
                 // Update the book and send it back to the calling fragment, MyBooksDetailViewFragment
@@ -257,6 +328,9 @@ public class AddOrEditBooksActivity extends AppCompatActivity
         if (requestCode == REQUEST_IMAGE_UPLOAD && resultCode == RESULT_OK)
         {
             uploadPhoto(intent.getData());
+            deletePictureButton.show();
+            // if the user uploads a picture, reassign this to false
+            this.deleteBookPictureWhenSaving = false;
         }
         else
         {
@@ -323,6 +397,34 @@ public class AddOrEditBooksActivity extends AppCompatActivity
     }
 
     /**
+     * Deletes the linked photo from Firebase
+     *
+     * @param imageUrl
+     */
+    private void deletePhotoFromFirebase(String imageUrl)
+    {
+        // https://stackoverflow.com/questions/45103085/deleting-file-from-firebase-storage-using-url
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference currentBookPhoto = storage.getReferenceFromUrl(imageUrl);
+        currentBookPhoto.delete().addOnSuccessListener(new OnSuccessListener<Void>()
+        {
+            @Override
+            public void onSuccess(Void aVoid)
+            {
+                // File deleted successfully
+            }
+        }).addOnFailureListener(new OnFailureListener()
+        {
+            @Override
+            public void onFailure(@NonNull Exception exception)
+            {
+                /* Should delete manually from firebase */
+                Log.v("uploadPhoto", "Old photo was not deleted");
+            }
+        });
+    }
+
+    /**
      * Uploads the selected image to FireStorage and updates the view with the
      * chosen image on success
      *
@@ -336,24 +438,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
         /* If the book already has a photo, we want to delete it before adding a new one */
         if (this.bookToEdit != null && this.bookToEdit.getImageUrl().compareTo("") != 0)
         {
-            StorageReference currentBookPhoto = storage.getReferenceFromUrl(this.bookToEdit.getImageUrl());
-            // https://stackoverflow.com/questions/45103085/deleting-file-from-firebase-storage-using-url
-            currentBookPhoto.delete().addOnSuccessListener(new OnSuccessListener<Void>()
-            {
-                @Override
-                public void onSuccess(Void aVoid)
-                {
-                    // File deleted successfully
-                }
-            }).addOnFailureListener(new OnFailureListener()
-            {
-                @Override
-                public void onFailure(@NonNull Exception exception)
-                {
-                    /* Should delete manually from firebase */
-                    Log.v("uploadPhoto", "Old photo was not deleted");
-                }
-            });
+            this.deletePhotoFromFirebase(this.bookToEdit.getImageUrl());
         }
 
         // https://code.tutsplus.com/tutorials/image-upload-to-firebase-in-android-application--cms-29934
