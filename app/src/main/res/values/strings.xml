@@ -78,9 +78,13 @@
 
     <!-- Test input strings -->
     <string name="wrong_activity">Wrong Activity</string>
-    <string name="space"> </string>
+    <string name="space">\u0020</string>
     <string name="wrong_email">wrongemail</string>
     <string name="wrong_pass">wrongpassword</string>
+    <string name="short_pass">short</string>
+
+    <string name="test_create_account_username">createtest</string>
+    <string name="test_create_account_email">createtest@gmail.com</string>
     <string name="short_pass">wrong</string>
     <string name="test_book_title">Test Book</string>
     <string name="test_book_author">Test Author</string>

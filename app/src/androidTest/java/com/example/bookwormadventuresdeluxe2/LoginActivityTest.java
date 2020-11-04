@@ -1,3 +1,11 @@
+/**
+ * LoginActivityTest.java
+ *
+ * Android tests for LoginActivity, tests multiple input
+ * combinations and buttons. Also tests a successful login
+ * and signout.
+ */
+
 package com.example.bookwormadventuresdeluxe2;
 
 import android.content.Context;
@@ -22,7 +30,8 @@ import static com.example.bookwormadventuresdeluxe2.TestUtils.signIn;
 import static com.example.bookwormadventuresdeluxe2.TestUtils.signOut;
 
 /**
- * Tests for login screen
+ * Tests for login screen, cannot be run more than 6 times in 5 minutes
+ * or device will be blocked for too many login attempts
  */
 @RunWith(AndroidJUnit4.class)
 public class LoginActivityTest
@@ -90,8 +99,8 @@ public class LoginActivityTest
     @Test
     public void spacesLoginTest()
     {
-        solo.enterText(emailText, " ");
-        solo.enterText(passwordText, " ");
+        solo.enterText(emailText, resources.getString(R.string.space));
+        solo.enterText(passwordText, resources.getString(R.string.space));
         solo.clickOnButton(resources.getString(R.string.login));
 
         Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY));
