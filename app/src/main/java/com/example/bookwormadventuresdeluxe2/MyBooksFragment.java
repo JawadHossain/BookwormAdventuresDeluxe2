@@ -10,26 +10,32 @@ package com.example.bookwormadventuresdeluxe2;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 
 /**
  * A {@link Fragment} subclass for navbar menu item 1.
@@ -43,6 +49,9 @@ public class MyBooksFragment extends Fragment
 
     ImageButton notificationButton;
     ImageButton filterButton;
+    ImageButton scanButton;
+
+    Query booksOfCurrentUser;
 
     public MyBooksFragment()
     {
@@ -65,7 +74,10 @@ public class MyBooksFragment extends Fragment
         this.filterButton.setVisibility(View.VISIBLE);
         this.filterButton.setOnClickListener(this::onFilterClick);
 
-        // TODO: Setup scan button
+        /* Setup Filter button */
+        this.scanButton = myBooksView.findViewById(R.id.app_header_scan_button);
+        this.scanButton.setVisibility(View.VISIBLE);
+        this.scanButton.setOnClickListener(this::onScanClick);
 
         /* Setup notification button */
         this.notificationButton = myBooksView.findViewById(R.id.app_header_notification_button);
@@ -81,7 +93,7 @@ public class MyBooksFragment extends Fragment
     {
         FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
         UserCredentialAPI userCredentialApi = UserCredentialAPI.getInstance();
-        Query booksOfCurrentUser = rootRef.collection(getString(R.string.books_collection)).whereEqualTo("owner", userCredentialApi.getUsername());
+        booksOfCurrentUser = rootRef.collection(getString(R.string.books_collection)).whereEqualTo("owner", userCredentialApi.getUsername());
 
         FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(booksOfCurrentUser, Book.class)
@@ -99,8 +111,8 @@ public class MyBooksFragment extends Fragment
         /* Initialize the filterMenu. This will update the queries using the adapter */
         this.filterMenu = new FilterMenu(myBooksRecyclerAdapter, booksOfCurrentUser, R.id.my_books);
 
-        FloatingActionButton btn = (FloatingActionButton) getView().findViewById(R.id.my_books_add_button);
-        btn.setOnClickListener(new View.OnClickListener()
+        FloatingActionButton addBookButton = (FloatingActionButton) getView().findViewById(R.id.my_books_add_button);
+        addBookButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -157,6 +169,75 @@ public class MyBooksFragment extends Fragment
             rootRef.collection(getString(R.string.books_collection)).add(data);
             myBooksRecyclerAdapter.notifyDataSetChanged();
         }
+        else if (requestCode == IntentIntegrator.REQUEST_CODE)
+        {
+            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intentData);
+            if (result != null)
+            {
+                if (result.getContents() != null)
+                {
+                    String barcode = result.getContents();
+                    processIsbnScan(barcode);
+                }
+            }
+        }
+    }
+
+    /**
+     * Queries Firebase for the user's books with the same isbn as the one scanned
+     * https://stackoverflow.com/questions/50650224/wait-until-firestore-data-is-retrieved-to-launch-an-activity/50680352
+     *
+     * @param barcode
+     */
+    private void processIsbnScan(String barcode)
+    {
+        Query query = booksOfCurrentUser.whereEqualTo("isbn", barcode);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+        {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task)
+            {
+                // The key is the documentID, value is the Book object
+                HashMap<String, Book> results = new HashMap<String, Book>();
+                if (task.isSuccessful())
+                {
+                    // get every book that matches the isbn
+                    for (QueryDocumentSnapshot document : task.getResult())
+                    {
+                        results.put(document.getId(), document.toObject(Book.class));
+                    }
+
+                    switch (results.size())
+                    {
+                        case 0:
+                            Toast.makeText(getActivity(), "No books match the scanned ISBN.", Toast.LENGTH_LONG).show();
+                            break;
+                        case 1:
+                            String documentId = results.keySet().iterator().next();
+                            Book bookToView = results.get(documentId);
+                            MyBooksDetailViewFragment bookDetailFragment = new MyBooksDetailViewFragment();
+
+                            // Open the detailed view if the book exists
+                            bookDetailFragment.onFragmentInteraction(bookToView, documentId);
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.frame_container, bookDetailFragment).commit();
+                            break;
+                        default:
+                            /*
+                             * https://eclass.srv.ualberta.ca/mod/forum/discuss.php?d=1504014
+                             * The link states that the user will only have one copy per book
+                             * So this option does not have to be addressed yet.
+                             * Potential TODO: make a popup that allows the user to pick the book they want to open
+                             */
+                            Toast.makeText(getActivity(), "Multiple books found.", Toast.LENGTH_LONG).show();
+                    }
+                }
+                else
+                {
+                    Toast.makeText(getActivity(), "Scan failed. Please try again.", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private void onNotificationClick(View view)
@@ -164,6 +245,19 @@ public class MyBooksFragment extends Fragment
         NotificationFragment notificationFragment = new NotificationFragment();
         getFragmentManager().beginTransaction().replace(R.id.frame_container, notificationFragment).commit();
     }
+
+    /**
+     * Method is called when the user clicks on the scan icon in the MyBooks fragment
+     *
+     * @param view
+     */
+    private void onScanClick(View view)
+    {
+        IntentIntegrator integrator = new IntentIntegrator(getActivity());
+        integrator.setBeepEnabled(false);
+        integrator.initiateScan();
+    }
+
 
     /**
      * Launch the filter menu fragment when the filter button is clicked
