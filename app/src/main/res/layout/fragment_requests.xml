@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/borrow"
-    tools:context=".MyProfileFragment">
+    tools:context=".ProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/requests"

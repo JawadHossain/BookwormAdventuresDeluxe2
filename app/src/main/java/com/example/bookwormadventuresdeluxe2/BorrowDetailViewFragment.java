@@ -1,30 +1,27 @@
 package com.example.bookwormadventuresdeluxe2;
 
-/**
- * Holds the view for seeing details on a book in the borrowed tab
- * The user will be able to interact with borrow options on the book
- */
-
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.DetailView;
+import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.security.InvalidParameterException;
 
+/**
+ * Holds the view for seeing details on a book in the borrowed tab
+ * The user will be able to interact with borrow options on the book
+ */
 public class BorrowDetailViewFragment extends DetailView
 {
     private Button btn1;
@@ -32,7 +29,7 @@ public class BorrowDetailViewFragment extends DetailView
     private TextView exchange;
     private DocumentReference bookDocument;
 
-    private static int SetLocationActivityResultCode = 7;
+    private String source = "";
 
     public BorrowDetailViewFragment()
     {
@@ -50,8 +47,15 @@ public class BorrowDetailViewFragment extends DetailView
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
+        /* Grabbing source fragment of book item after click*/
+        Bundle bundle = getArguments();
+        if (bundle != null)
+        {
+            source = (String) bundle.getString(getString(R.string.book_click_source_fragment));
+        }
+
         this.bookDetailView = inflater.inflate(R.layout.fragment_borrow_detail_view, null, false);
-        ((TextView) bookDetailView.findViewById(R.id.app_header_title)).setText(R.string.borrow);
+        ((TextView) bookDetailView.findViewById(R.id.app_header_title)).setText(source);
 
         // setup back button
         super.onCreateView(inflater, container, savedInstanceState);
@@ -64,6 +68,14 @@ public class BorrowDetailViewFragment extends DetailView
         {
             case Available:
             case Requested:
+                if ((!selectedBook.getRequesters().contains(UserCredentialAPI.getInstance().getUsername())))
+                {
+                    this.btn1.setText(getString(R.string.request_book));
+
+                    this.btn1.setOnClickListener(this::btnRequestBook);
+
+                    this.btn1.setVisibility(View.VISIBLE);
+                }
                 break;
 
             case Accepted:
@@ -89,18 +101,11 @@ public class BorrowDetailViewFragment extends DetailView
                 this.btn1.setText(getString(R.string.set_location));
                 this.btn2.setText(getString(R.string.return_book));
 
-                if (this.selectedBook.getPickUpAddress().equals(""))
-                {
-                    this.btn2.setBackgroundTintList(getResources().getColorStateList(R.color.tempPhotoBackground));
-                    this.btn2.setTextColor(getResources().getColorStateList(R.color.colorPrimary));
-                }
-                else
-                {
-                    this.btn2.setOnClickListener(this::btnReturnBook);
-//                    this.bookDetailView.findViewById(R.id.borrow_exchange).setVisibility(View.VISIBLE);
-                }
+                //TODO: get pickup location from book
+//        this.bookDetailView.findViewById(R.id.borrow_exchange).setVisibility(View.VISIBLE);
 
                 this.btn1.setOnClickListener(this::btnSetLocation);
+                this.btn2.setOnClickListener(this::btnReturnBook);
 
                 this.btn1.setVisibility(View.VISIBLE);
                 this.btn2.setVisibility(View.VISIBLE);
@@ -126,10 +131,23 @@ public class BorrowDetailViewFragment extends DetailView
         return bookDetailView;
     }
 
+    /**
+     * Send request to book owner
+     *
+     * @param view The view that was clicked on
+     */
+    private void btnRequestBook(View view)
+    {
+        this.bookDocument.update(getString(R.string.requesters),
+                FieldValue.arrayUnion(UserCredentialAPI.getInstance().getUsername()));
+        this.bookDocument.update(getString(R.string.status), getString(R.string.requested));
+        onBackClick(view);
+    }
+
     private void btnSetLocation(View view)
     {
-        Intent setLocationActivityIntent = new Intent(getActivity(), SetLocationActivity.class);
-        startActivityForResult(setLocationActivityIntent, SetLocationActivityResultCode);
+        //TODO: actually do the stuff
+        // launch SetLocation
     }
 
     /**
@@ -161,9 +179,8 @@ public class BorrowDetailViewFragment extends DetailView
 
     private void btnViewLocation(View view)
     {
-        Intent viewLocationIntent = new Intent(getActivity(), ViewLocationActivity.class);
-        viewLocationIntent.putExtra("location", this.selectedBook.getPickUpAddress());
-        startActivity(viewLocationIntent);
+        //TODO: actually do the stuff
+        // launch ViewLocation
     }
 
     /**
@@ -180,7 +197,44 @@ public class BorrowDetailViewFragment extends DetailView
         status.setText(getString(R.string.owned_by));
 
         TextView user = bookDetailView.findViewById(R.id.book_request_user);
-        user.setText("TODO: get owner");
+        user.setText(book.getOwner());
+
+        clickUsername(user, book.getOwner());
+    }
+
+    /**
+     * Opens user profile on TextView click
+     *
+     * @param textView TextView in view
+     * @param username Book owner's username
+     */
+    public void clickUsername(TextView textView, String username)
+    {
+        textView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                /* Pulling UserProfileObject from database */
+                FirebaseUserGetSet.getUser(username, new FirebaseUserGetSet.UserCallback()
+                {
+                    @Override
+                    public void onCallback(UserProfileObject userObject)
+                    {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(getString(R.string.profile_object), userObject);
+                        ProfileFragment profileFragment = new ProfileFragment();
+                        profileFragment.setArguments(bundle);
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                                .replace(R.id.frame_container, profileFragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                });
+            }
+        });
     }
 
     /**
@@ -190,33 +244,20 @@ public class BorrowDetailViewFragment extends DetailView
      */
     public void onBackClick(View v)
     {
-        RequestsFragment fragment = new RequestsFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        args.putBoolean(getString(R.string.borrow), true);
-        getFragmentManager().beginTransaction().replace(R.id.frame_container, fragment).commit();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
-    {
-        if (requestCode == SetLocationActivityResultCode)
+        /* Source fragment was Search, return to search books*/
+        if (source.equals(getString(R.string.search_title)))
         {
-            if (resultCode == Activity.RESULT_OK)
-            {
-                String pickUpLocation = data.getStringExtra("pickUpLocation");
-                this.bookDocument.update(getString(R.string.firestore_pick_up_address), pickUpLocation);
-                this.selectedBook.setPickUpAddress(pickUpLocation);
-            }
-            if (resultCode == Activity.RESULT_CANCELED)
-            {
-                this.bookDocument.update(getString(R.string.firestore_pick_up_address), "");
-                this.selectedBook.setPickUpAddress("");
-            }
+            SearchFragment fragment = new SearchFragment();
+            getFragmentManager().beginTransaction().replace(R.id.frame_container, fragment).commit();
         }
-
-        BorrowDetailViewFragment fragment = new BorrowDetailViewFragment();
-        fragment.onFragmentInteraction(this.selectedBook, this.selectedBookId);
-        getFragmentManager().beginTransaction().replace(R.id.frame_container, fragment).commit();
+        /* Source fragment was Borrow, return to Borrow */
+        else if (source.equals(getString(R.string.borrow)))
+        {
+            RequestsFragment fragment = new RequestsFragment();
+            Bundle args = new Bundle();
+            fragment.setArguments(args);
+            args.putBoolean(getString(R.string.borrow), true);
+            getFragmentManager().beginTransaction().replace(R.id.frame_container, fragment).commit();
+        }
     }
 }
