@@ -1,5 +1,11 @@
 package com.example.bookwormadventuresdeluxe2;
 
+/**
+ * This fragment holds the view for viewing the details of a book after it is clicked
+ * on from the RecyclerView in MyBooks. From here, the user can view the details of their
+ * book and edit it from a button in the header.
+ */
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,11 +21,6 @@ import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-/**
- * This fragment holds the view for viewing the details of a book after it is clicked
- * on from the RecyclerView in MyBooks. From here, the user can view the details of their
- * book and edit it from a button in the header.
- */
 public class MyBooksDetailViewFragment extends DetailView
 {
     ImageButton editButton;

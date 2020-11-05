@@ -1,5 +1,11 @@
 package com.example.bookwormadventuresdeluxe2;
 
+/**
+ * NotificationListAdapter is a FirestoreRecycler data which acts as middleware between the notifications
+ * on Firestore and the UI that displays them by providing view updaters and onClickListeners
+ * for items in the RecyclerView.
+ */
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -13,11 +19,6 @@ import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 
 import java.util.ArrayList;
 
-/**
- * NotificationListAdapter is a FirestoreRecycler data which acts as middleware between the notifications
- * on Firestore and the UI that displays them by providing view updaters and onClickListeners
- * for items in the RecyclerView.
- */
 public class NotificationListAdapter extends RecyclerView.Adapter<NotificationListAdapter.NotificationListViewHolder>
 {
     private ArrayList<Notification> notifications;

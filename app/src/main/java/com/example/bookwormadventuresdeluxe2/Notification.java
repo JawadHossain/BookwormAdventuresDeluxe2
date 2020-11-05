@@ -1,5 +1,8 @@
 package com.example.bookwormadventuresdeluxe2;
 
+/**
+ * Class holding information and methods for notifications
+ */
 public class Notification
 {
     private Book book;

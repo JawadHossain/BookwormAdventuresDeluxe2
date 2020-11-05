@@ -21,11 +21,6 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Book holds all of the relevant information pertaining to a book in the library. It has
- * a set of private fields which define its attributes along with corresponding getters
- * and setters to retrieve and manipulate the information.
- */
 public class Book implements Serializable
 {
     // Basic attributes for now, rest added as needed
@@ -209,6 +204,7 @@ public class Book implements Serializable
      * Returns the status of the book the given user should see
      *
      * @param user The string of the user looking at the book
+     * @return status the status the user should see
      */
     public Status getAugmentStatus(String user)
     {

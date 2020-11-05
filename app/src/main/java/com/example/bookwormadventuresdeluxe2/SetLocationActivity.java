@@ -256,7 +256,6 @@ public class SetLocationActivity extends AppCompatActivity implements OnMapReady
                 @Override
                 public void onFailure(@NonNull Exception e)
                 {
-                    Toast.makeText(SetLocationActivity.this, "On failure", Toast.LENGTH_LONG).show();
                     if (e instanceof ResolvableApiException)
                     {
                         // Location settings are not satisfied, but this can be fixed

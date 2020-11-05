@@ -1,5 +1,11 @@
 package com.example.bookwormadventuresdeluxe2;
 
+/**
+ * Holds the view for displaying a list of notifications
+ * Users will not be able to interact with the notifications
+ * The list will clear on close
+ */
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,9 +22,6 @@ import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 
-/**
- *
- */
 public class NotificationFragment extends Fragment
 {
     private RecyclerView notificationRecyclerView;
@@ -72,6 +75,10 @@ public class NotificationFragment extends Fragment
         notificationRecyclerView.setAdapter(notificationRecyclerAdapter);
     }
 
+    /**
+     * Returns to MyBooks fragment and clears the notification list
+     * @param v the view clicked on
+     */
     public void onBackClick(View v)
     {
         //TODO: remove notifications
