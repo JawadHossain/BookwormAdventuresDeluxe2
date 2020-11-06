@@ -42,12 +42,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener
 {
     private static final String TAG = "LoginActivity";
-    EditText editTextEmail;
-    EditText editTextPassword;
-    Button loginButton;
-    Button createAccountButton;
-    ImageButton visibilityButton;
-    ProgressBar progressBar;
+    private EditText editTextEmail;
+    private EditText editTextPassword;
+    private Button loginButton;
+    private Button createAccountButton;
+    private ImageButton visibilityButton;
+    private ProgressBar progressBar;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -224,7 +224,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * @param email    Email of the user in the format joe@sample.com
      * @param password Password of the user
      */
-    public void loginUser(String email, String password)
+    private void loginUser(String email, String password)
     {
         editTextEmail.setError(null);
         editTextPassword.setError(null);
