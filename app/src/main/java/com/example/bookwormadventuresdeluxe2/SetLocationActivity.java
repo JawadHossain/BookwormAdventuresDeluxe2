@@ -1,5 +1,12 @@
 package com.example.bookwormadventuresdeluxe2;
 
+/**
+ * Allows user to pick an exchange location by placing a marker on a map.
+ * Upon setting a location the activity returns the location to the parent activity
+ * through an intent.
+ * part of code taken from: https://developer.android.com/training/location/retrieve-current
+ */
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -10,20 +17,13 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Looper;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,12 +32,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
@@ -57,31 +55,8 @@ import com.google.android.gms.tasks.Task;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-/**
- * Allows user to pick an exchange location by placing a marker on a map
- * source: https://developer.android.com/training/location/retrieve-current
- * Usage:
- * <p>
- * Inside calling fragment or activity add the following to start this activity for result
- * Intent setLocationActivityIntent = new Intent(getActivity(), SetLocationActivity.class);
- * startActivityForResult(setLocationActivityIntent, SetLocationActivityResultCode);
- * <p>
- * And override method onActivityResult and add the following:
- * if (requestCode == SetLocationActivityResultCode)
- * {
- * if (resultCode == Activity.RESULT_OK)
- * {
- * String pickUpLocation = data.getStringExtra("pickUpLocation");
- * Toast.makeText(getContext(), pickUpLocation, Toast.LENGTH_LONG).show();
- * }
- * if (resultCode == Activity.RESULT_CANCELED)
- * {
- * //Write your code if there's no result
- * }
- * }
- */
+
 public class SetLocationActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleMap.OnMapClickListener, GoogleMap.OnMarkerDragListener, SearchView.OnQueryTextListener
 {
@@ -110,7 +85,7 @@ public class SetLocationActivity extends AppCompatActivity implements OnMapReady
     private String pickUpLocation;
 
     /* Called when there is a change in the user location */
-    LocationCallback locationCallback = new LocationCallback()
+    private LocationCallback locationCallback = new LocationCallback()
     {
     };
 
@@ -162,7 +137,7 @@ public class SetLocationActivity extends AppCompatActivity implements OnMapReady
     }
 
     /**
-     * Return pick up location to parent
+     * Return pick up location to parent through an intent.
      *
      * @param view
      */
@@ -184,7 +159,7 @@ public class SetLocationActivity extends AppCompatActivity implements OnMapReady
     }
 
     /**
-     * Take user to parent activity
+     * Take user to parent activity on back button click.
      *
      * @param view
      */
@@ -221,7 +196,8 @@ public class SetLocationActivity extends AppCompatActivity implements OnMapReady
     }
 
     /**
-     * Starts location updates when user has GPS on
+     * Start location updates if user has GPS turned on.
+     * Otherwise, request to turn on GPS
      */
     private void checkSettingsAndStartLocationUpdates()
     {
@@ -298,7 +274,7 @@ public class SetLocationActivity extends AppCompatActivity implements OnMapReady
     }
 
     /**
-     * Detach location change listener
+     * Detach location update listener
      */
     private void stopLocationUpdates()
     {
@@ -316,7 +292,10 @@ public class SetLocationActivity extends AppCompatActivity implements OnMapReady
     }
 
     /**
-     * Gets last location if all permissions have been granted
+     * If all permissions were granted start location updates.
+     * Otherwise show dialog with option to confirm location permission requests denial or
+     * provide permissions.
+     * Set on map ready callback.
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
@@ -368,7 +347,8 @@ public class SetLocationActivity extends AppCompatActivity implements OnMapReady
     }
 
     /**
-     * Process when map ready
+     * When map is ready set listener to add or move marker.
+     * Moves map camera to the default location
      *
      * @param googleMap
      */
@@ -411,10 +391,10 @@ public class SetLocationActivity extends AppCompatActivity implements OnMapReady
     }
 
     /**
-     * Returns a list of permissions not granted from a list of permissions passed in
+     * Returns a list of permissions not granted from a list of permissions passed in.
      *
-     * @param wantedPermissions the list of permssions required
-     * @return list of permissions requiring approval
+     * @param wantedPermissions the list of permissions required
+     * @return list of permissions not yet approved
      */
     private ArrayList<String> permissionsToRequest(ArrayList<String> wantedPermissions)
     {
@@ -434,7 +414,7 @@ public class SetLocationActivity extends AppCompatActivity implements OnMapReady
 
     /**
      * Can check if permission was previously accepted on SDK > M
-     * On sdk < M user must have accepted before download
+     * On sdk < M user must have accepted before downloading application.
      */
     private boolean hasPermission(String perm)
     {
@@ -489,7 +469,7 @@ public class SetLocationActivity extends AppCompatActivity implements OnMapReady
     }
 
     /**
-     * Required to implement GoogleMap.OnMarkerDragListener
+     * Required to implement GoogleMap.OnMarkerDragListener.
      *
      * @param marker
      */
@@ -499,7 +479,7 @@ public class SetLocationActivity extends AppCompatActivity implements OnMapReady
     }
 
     /**
-     * Required to implement GoogleMap.OnMarkerDragListener
+     * Required to implement GoogleMap.OnMarkerDragListener.
      *
      * @param marker
      */
@@ -509,7 +489,7 @@ public class SetLocationActivity extends AppCompatActivity implements OnMapReady
     }
 
     /**
-     * Update marker when it is dropped after move
+     * Update marker when it is dropped after position change.
      *
      * @param marker
      */
@@ -535,7 +515,7 @@ public class SetLocationActivity extends AppCompatActivity implements OnMapReady
     }
 
     /**
-     * Search View On Location entered
+     * Add marker on location entered on the search view
      */
     @Override
     public boolean onQueryTextSubmit(String s)

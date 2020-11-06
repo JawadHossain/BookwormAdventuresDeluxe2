@@ -47,17 +47,17 @@ import java.util.UUID;
 
 public class AddOrEditBooksActivity extends AppCompatActivity
 {
-    TextView takePhoto;
-    ImageView bookPicture;
-    EditText titleView, authorView, descriptionView, isbnView;
-    boolean editingBook = false;
-    boolean deleteBookPictureWhenSaving = false;
-    Button deleteButton;
-    FloatingActionButton deletePictureButton;
-    Book bookToEdit;
-    String bookPhotoDowloadUrl = "";
+    private TextView takePhoto;
+    private ImageView bookPicture;
+    private EditText titleView, authorView, descriptionView, isbnView;
+    private boolean editingBook = false;
+    private boolean deleteBookPictureWhenSaving = false;
+    private Button deleteButton;
+    private FloatingActionButton deletePictureButton;
+    private Book bookToEdit;
+    private String bookPhotoDownloadUrl = "";
 
-    FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth;
 
     public static int ADD_BOOK = 0;
     public static int EDIT_BOOK = 1;
@@ -89,7 +89,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
         {
             this.editingBook = true;
             this.bookToEdit = (Book) getIntent().getSerializableExtra("bookToEdit");
-            bookPhotoDowloadUrl = bookToEdit.getImageUrl();
+            bookPhotoDownloadUrl = bookToEdit.getImageUrl();
 
             if (bookToEdit != null)
             {
@@ -170,7 +170,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
         {
             /* This will occur when a user uploads a picture
              * when adding a new book then deletes it before saving the new book*/
-            imageUrl = this.bookPhotoDowloadUrl;
+            imageUrl = this.bookPhotoDownloadUrl;
         }
 
         /* This should never be called when the book does not have an image*/
@@ -180,7 +180,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
         }
 
         // Remove the association to the book object
-        this.bookPhotoDowloadUrl = "";
+        this.bookPhotoDownloadUrl = "";
         // Delete image from firebase
         this.deletePhotoFromFirebase(imageUrl);
     }
@@ -215,7 +215,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
                 this.bookToEdit.setAuthor(authorView.getText().toString());
                 this.bookToEdit.setDescription(descriptionView.getText().toString());
                 this.bookToEdit.setIsbn(isbnView.getText().toString());
-                this.bookToEdit.setImageUrl(bookPhotoDowloadUrl);
+                this.bookToEdit.setImageUrl(bookPhotoDownloadUrl);
 
                 Intent intent = new Intent();
                 setResult(this.EDIT_BOOK, intent);
@@ -227,7 +227,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
                 setResult(Activity.RESULT_OK, intent);
                 // status when adding book is available
                 intent.putExtra("NewBook", new Book(UserCredentialAPI.getInstance().getUsername(),
-                        title, author, description, isbn, Status.Available, bookPhotoDowloadUrl));
+                        title, author, description, isbn, Status.Available, bookPhotoDownloadUrl));
 
             }
             finish();
@@ -478,7 +478,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
                                 @Override
                                 public void onSuccess(Uri downloadUrl)
                                 {
-                                    bookPhotoDowloadUrl = downloadUrl.toString();
+                                    bookPhotoDownloadUrl = downloadUrl.toString();
                                 }
                             });
                         }

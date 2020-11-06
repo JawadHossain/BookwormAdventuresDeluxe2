@@ -47,11 +47,11 @@ public class MyBooksFragment extends Fragment
     private RecyclerView.LayoutManager myBooksRecyclerLayoutManager;
     private FilterMenu filterMenu;
 
-    ImageButton notificationButton;
-    ImageButton filterButton;
-    ImageButton scanButton;
+    private ImageButton notificationButton;
+    private ImageButton filterButton;
+    private ImageButton scanButton;
 
-    Query booksOfCurrentUser;
+    private Query booksOfCurrentUser;
 
     public MyBooksFragment()
     {

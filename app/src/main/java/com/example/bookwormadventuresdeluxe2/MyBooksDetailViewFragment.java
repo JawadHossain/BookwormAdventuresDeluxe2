@@ -23,7 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MyBooksDetailViewFragment extends DetailView
 {
-    ImageButton editButton;
+    private ImageButton editButton;
 
     public MyBooksDetailViewFragment()
     {

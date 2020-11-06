@@ -15,11 +15,11 @@ import com.google.zxing.integration.android.IntentIntegrator;
 public class MyBooksActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener
 {
 
-    BottomNavigationView navbar;
-    MyBooksFragment myBooksFragment = new MyBooksFragment();
-    SearchFragment searchFragment = new SearchFragment();
-    RequestsFragment requestsFragment = new RequestsFragment();
-    ProfileFragment profileFragment = new ProfileFragment();
+    private BottomNavigationView navbar;
+    private MyBooksFragment myBooksFragment = new MyBooksFragment();
+    private SearchFragment searchFragment = new SearchFragment();
+    private RequestsFragment requestsFragment = new RequestsFragment();
+    private ProfileFragment profileFragment = new ProfileFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

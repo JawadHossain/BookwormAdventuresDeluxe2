@@ -1,5 +1,14 @@
 package com.example.bookwormadventuresdeluxe2;
 
+/**
+ * Holds a list of books that the current user owns that require require action
+ * to proceed with the borrow/return process, and another list of books that the
+ * user has requested or are currently in the process of borrowing. From here the
+ * user may click on the books to view status specific tasks
+ * <p>
+ * A {@link Fragment} subclass for navbar menu item 2.
+ */
+
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -27,14 +36,6 @@ import com.google.firebase.firestore.Query;
 import java.io.FileFilter;
 import java.util.Arrays;
 
-/**
- * Holds a list of books that the current user owns that require require action
- * to proceed with the borrow/return process, and another list of books that the
- * user has requested or are currently in the process of borrowing. From here the
- * user may click on the books to view status specific tasks
- *
- * A {@link Fragment} subclass for navbar menu item 2.
- */
 public class RequestsFragment extends Fragment implements View.OnClickListener
 {
     private RecyclerView requestsRecyclerView;
@@ -47,11 +48,11 @@ public class RequestsFragment extends Fragment implements View.OnClickListener
     private FilterMenu borrowFilterMenu;
     private FilterMenu requestFilterMenu;
 
-    View view;
-    Button toggle;
-    ImageButton filterButton;
-    TextView current;
-    MaterialTextView appHeaderText;
+    private View view;
+    private Button toggle;
+    private ImageButton filterButton;
+    private TextView current;
+    private MaterialTextView appHeaderText;
     boolean borrow;
 
     public RequestsFragment()

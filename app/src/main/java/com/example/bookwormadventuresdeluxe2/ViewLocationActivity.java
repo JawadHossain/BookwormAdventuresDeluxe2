@@ -1,5 +1,10 @@
 package com.example.bookwormadventuresdeluxe2;
 
+/**
+ * Allows borrower to view a pickup location
+ * The pickup location is provided through an intent when this activity is started.
+ */
+
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -23,16 +28,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Allows borrower to view a pickup location
- * <p>
- * Usage:
- * Pass in pickUpLocation as String in the format "latitude,longitude"
- * eg:
- * Intent viewLocationIntent = new Intent(getActivity(), ViewLocationActivity.class);
- * viewLocationIntent.putExtra("location", "53.510787,-113.5140128");
- * startActivity(viewLocationIntent);
- */
 public class ViewLocationActivity extends AppCompatActivity implements OnMapReadyCallback
 {
     private static final String TAG = "ViewLocationActivity";
@@ -89,7 +84,7 @@ public class ViewLocationActivity extends AppCompatActivity implements OnMapRead
     }
 
     /**
-     * Add marker at pickUpLocation when map isready
+     * Add a marker at the pick up location when map is ready
      *
      * @param googleMap
      */
