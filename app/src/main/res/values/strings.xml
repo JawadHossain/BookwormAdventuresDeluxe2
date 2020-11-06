@@ -94,9 +94,14 @@
     <string name="test_book_author">Test Author</string>
     <string name="test_book_isbn">1111111111</string>
     <string name="test_book_description">Test Description</string>
+    <string name="test_book_edit_title">Test Book Edit</string>
+    <string name="test_book_edit_author">Test Author Edit</string>
+    <string name="test_book_edit_description">Test Description Edit</string>
+    <string name="test_book_edit_isbn">2222222222</string>
 
     <!-- Map -->
     <string name="map_edit_text_hint">Enter Address, City or Postal Code</string>
     <string name="set_exchange_location">Set Exchange Location</string>
     <string name="view_location_pending_request">Pending Request</string>
+
 </resources>

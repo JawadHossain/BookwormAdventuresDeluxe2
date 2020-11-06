@@ -80,15 +80,15 @@ public class TestUtils
     }
 
     /**
-     * Deletes the test book created by createTestBook. Assumes we are in the MyBooksActtivity
+     * Deletes the test book with the given title. Assumes we are in the MyBooksActivity
      */
-    public static void deleteTestBook(Solo solo, Resources resources)
+    public static void deleteTestBook(Solo solo, Resources resources, int title)
     {
         /* Assert we are in the MyBooks activity */
         solo.assertCurrentActivity(resources.getString(R.string.wrong_activity), MyBooksActivity.class);
 
         /* Click on the book title text to enter the books details */
-        solo.clickOnText(resources.getString(R.string.test_book_title));
+        solo.clickOnText(resources.getString(title));
 
         /* Wait until we enter the my books fragment */
         solo.waitForFragmentById(R.layout.fragment_my_books_detail_view, (int) SHORT_WAIT);
