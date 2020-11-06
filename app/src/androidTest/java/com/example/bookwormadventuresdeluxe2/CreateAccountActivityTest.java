@@ -1,12 +1,10 @@
+package com.example.bookwormadventuresdeluxe2;
+
 /**
- * CreateAccountActivityTest.java
- *
  * Android tests for CreateAccountActivity, tests multiple
  * input combinations and create account button. Also tests successfully
  * creating an account.
  */
-
-package com.example.bookwormadventuresdeluxe2;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,5 +1,10 @@
 package com.example.bookwormadventuresdeluxe2;
 
+/**
+ * Fragment class for the filter menu. This fragment is responsible for handling events related
+ * to clicking buttons inside the "filter by" dropdown menu.
+ */
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +21,6 @@ import com.google.firebase.firestore.Query;
 import java.security.InvalidParameterException;
 import java.util.Arrays;
 
-/**
- * Fragment class for the filter menu
- */
 public class FilterMenu extends Fragment implements View.OnClickListener
 {
     private BookListAdapter bookAdapter;
@@ -31,6 +33,13 @@ public class FilterMenu extends Fragment implements View.OnClickListener
     private Button borrowedButton;
     private Button allButton;
 
+    /**
+     * Public constructor for the menu
+     *
+     * @param bookAdapter The bookAdapter that we will need to update with the specialized query
+     * @param rootQuery   The rootQuery to build our query off of
+     * @param caller      The resource id that called this constructor
+     */
     public FilterMenu(BookListAdapter bookAdapter, Query rootQuery, int caller)
     {
         this.bookAdapter = bookAdapter;
@@ -69,7 +78,7 @@ public class FilterMenu extends Fragment implements View.OnClickListener
     }
 
     /**
-     * Handle click on Profile Edit and SignOut button
+     * Handle clicking on any of the buttons in the FilterMenu
      *
      * @param view View containing layout resources
      */

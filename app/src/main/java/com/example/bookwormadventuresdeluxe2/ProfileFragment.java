@@ -24,10 +24,6 @@ import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ProfileFragment extends Fragment
 {
     private static final String TAG = "MyProfileFragment";
@@ -134,6 +130,8 @@ public class ProfileFragment extends Fragment
 
     /**
      * Dialog fragment for editing email and phone number info
+     *
+     * @param view The view this is called from
      */
     public void editFragment(View view)
     {
@@ -230,6 +228,8 @@ public class ProfileFragment extends Fragment
 
     /**
      * Signs out of FirebaseAuth account
+     *
+     * @param view The view this is called from
      */
     public void signOut(View view)
     {

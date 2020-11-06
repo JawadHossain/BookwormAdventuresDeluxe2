@@ -1,5 +1,9 @@
 package com.example.bookwormadventuresdeluxe2;
 
+/**
+ * Subclass of the Application class which is required to get context statically.
+ */
+
 import android.app.Application;
 import android.content.Context;
 

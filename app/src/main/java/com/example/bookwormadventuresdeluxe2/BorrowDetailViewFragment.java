@@ -42,12 +42,6 @@ public class BorrowDetailViewFragment extends DetailView
         // Required empty public constructor
     }
 
-    public static BorrowDetailViewFragment newInstance(String param1, String param2)
-    {
-        BorrowDetailViewFragment fragment = new BorrowDetailViewFragment();
-        return fragment;
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

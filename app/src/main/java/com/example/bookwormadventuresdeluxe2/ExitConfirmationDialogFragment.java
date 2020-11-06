@@ -1,5 +1,10 @@
 package com.example.bookwormadventuresdeluxe2;
 
+/**
+ * This class opens a dialog box that allows the user to exit the app or cancel
+ * https://developer.android.com/guide/topics/ui/dialogs
+ */
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -7,10 +12,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
 
-/**
- * This opens a dialog box that allows the user to exit the app or cancel
- * https://developer.android.com/guide/topics/ui/dialogs
- */
 public class ExitConfirmationDialogFragment extends DialogFragment
 {
     @Override

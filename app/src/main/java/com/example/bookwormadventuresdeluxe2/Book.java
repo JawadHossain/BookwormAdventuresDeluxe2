@@ -7,23 +7,19 @@ package com.example.bookwormadventuresdeluxe2;
  */
 
 import android.graphics.PorterDuff;
-import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.DownloadImageTask;
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
-import com.google.firebase.firestore.auth.User;
 
 import java.io.Serializable;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Book implements Serializable
 {
-    // Basic attributes for now, rest added as needed
     private String owner;
     private String title;
     private String author;
@@ -35,12 +31,23 @@ public class Book implements Serializable
     private String borrower;
     private String imageUrl = "";
 
-    // BookListAdapter which is now a FirestoreRecyclerAdapter requires empty constructor
+    /* BookListAdapter which is a FirestoreRecyclerAdapter requires empty constructor */
     public Book()
     {
 
     }
 
+    /**
+     * Constructor for the object representing a book
+     *
+     * @param owner       The book's owner
+     * @param title       The book's title
+     * @param author      The book's author
+     * @param description The book's description
+     * @param isbn        The books 10 or 13 digit isbn
+     * @param status      The status of the book (available, borrowed, etc.)
+     * @param imageUrl    A URL to the book's image
+     */
     public Book(String owner, String title, String author, String description, String isbn, Status status, String imageUrl)
     {
         this.owner = owner;
@@ -201,7 +208,7 @@ public class Book implements Serializable
     }
 
     /**
-     * Returns the status of the book the given user should see
+     * Returns the book's status that a given user should see
      *
      * @param user The string of the user looking at the book
      * @return status the status the user should see
@@ -259,10 +266,10 @@ public class Book implements Serializable
     }
 
     /**
-     * Sets the photo corresponding to the given imageView with the image url of the given book
+     * Sets the book's corresponding imageView to that of the book's image URL
      *
-     * @param book
-     * @param imageView
+     * @param book      The book with the image URL
+     * @param imageView The imageView to show the book's picture in
      */
     public void setPhoto(Book book, ImageView imageView)
     {

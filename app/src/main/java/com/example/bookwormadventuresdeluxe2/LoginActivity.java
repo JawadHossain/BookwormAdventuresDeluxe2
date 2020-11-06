@@ -1,12 +1,11 @@
+package com.example.bookwormadventuresdeluxe2;
+
 /**
- * LoginActivity.java
- *
  * Activity for login. Requires valid account input. Opens MyBooksActivity
  * on successful login and redirects to MyBooksActivity automatically
  * if login session is still valid.
  */
 
-package com.example.bookwormadventuresdeluxe2;
 
 import android.content.Intent;
 import android.os.Bundle;

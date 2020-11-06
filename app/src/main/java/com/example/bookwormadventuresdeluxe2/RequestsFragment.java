@@ -19,7 +19,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
@@ -28,12 +27,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import java.io.FileFilter;
 import java.util.Arrays;
 
 public class RequestsFragment extends Fragment implements View.OnClickListener
@@ -139,7 +136,9 @@ public class RequestsFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    // For listening to firebase for updates to the books list
+    /**
+     * Start listening to firebase for updates to the book list
+     */
     @Override
     public void onStart()
     {
@@ -148,7 +147,9 @@ public class RequestsFragment extends Fragment implements View.OnClickListener
         borrowRecyclerAdapter.startListening();
     }
 
-    // Stops listening to the firebase on completion
+    /**
+     * Stop listening to firebase for updates
+     */
     @Override
     public void onStop()
     {
@@ -195,6 +196,12 @@ public class RequestsFragment extends Fragment implements View.OnClickListener
     }
 
     // User wants to change tab, swap the lists and labels
+
+    /**
+     * Listener for when the user presses the "My Requests" or "Borrow" tab
+     *
+     * @param view
+     */
     @Override
     public void onClick(View view)
     {

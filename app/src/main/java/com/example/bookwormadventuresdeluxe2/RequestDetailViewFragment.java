@@ -9,7 +9,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.DetailView;
-import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -42,12 +40,6 @@ public class RequestDetailViewFragment extends DetailView
     public RequestDetailViewFragment()
     {
         // Required empty public constructor
-    }
-
-    public static RequestDetailViewFragment newInstance(String param1, String param2)
-    {
-        RequestDetailViewFragment fragment = new RequestDetailViewFragment();
-        return fragment;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

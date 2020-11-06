@@ -1,5 +1,13 @@
 package com.example.bookwormadventuresdeluxe2;
 
+/**
+ * MyBooksActivity is the "main menu" activity required to launch the majority of the other
+ * activities and fragments. Fromt this activity, users and enter the "My Books" fragment, the
+ * "Search" fragment, the "Requests/Borrows" fragment, and the "Profile" fragment via the
+ * navigation fragment. Additionally, users can enter the notifications fragment, scan book
+ * fragment, or the add book fragment.
+ */
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -91,11 +99,14 @@ public class MyBooksActivity extends AppCompatActivity implements BottomNavigati
         exitConfirmation.show(getSupportFragmentManager(), "ConfirmExit");
     }
 
+    /**
+     * Update fragment Container with new fragment
+     * Use fade in and fade out for transition
+     *
+     * @param fragment The fragment to replace this one with
+     */
     public void replaceFragment(Fragment fragment)
     {
-        /* Update fragment Container with new fragment
-         * Use fade in and fade out for transition
-         * */
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.frame_container, fragment).commit();
     }
 

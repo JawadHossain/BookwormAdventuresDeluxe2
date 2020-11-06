@@ -1,21 +1,19 @@
 package com.example.bookwormadventuresdeluxe2;
 
 /**
- * Holds the view for displaying a list of notifications
- * Users will not be able to interact with the notifications
- * The list will clear on close
+ * Fragment responsible for showing the notifications that a user has received and allowing them
+ * to interact with said notifications.
  */
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
 import com.google.android.material.textview.MaterialTextView;
@@ -32,6 +30,9 @@ public class NotificationFragment extends Fragment
     private MaterialTextView appHeaderText;
     private ImageButton backButton;
 
+    /**
+     * Constructor for the fragment responsible for displaying notifications
+     */
     public NotificationFragment()
     {
         this.notificationList = new ArrayList<Notification>();
@@ -76,8 +77,9 @@ public class NotificationFragment extends Fragment
     }
 
     /**
-     * Returns to MyBooks fragment and clears the notification list
-     * @param v the view clicked on
+     * Listener for when the back button is clicked
+     *
+     * @param v The view this is called from
      */
     public void onBackClick(View v)
     {

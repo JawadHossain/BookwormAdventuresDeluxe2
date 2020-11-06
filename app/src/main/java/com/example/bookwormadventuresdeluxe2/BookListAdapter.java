@@ -24,11 +24,6 @@ import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-/**
- * BookListAdapter is a FirestoreRecycler data which acts as middleware between the books
- * on Firestore and the UI that displays them by providing view updaters and onClickListeners
- * for items in the RecyclerView.
- */
 // https://stackoverflow.com/questions/49277797/how-to-display-data-from-firestore-in-a-recyclerview-with-android
 public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdapter.BookListViewHolder>
 {
@@ -45,6 +40,11 @@ public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdap
         public ImageView bookPhoto;
         public ConstraintLayout bookItemLayout;
 
+        /**
+         * A viewHolder for the books
+         *
+         * @param bookItemLayout The layout to reference
+         */
         public BookListViewHolder(ConstraintLayout bookItemLayout)
         {
             super(bookItemLayout);
@@ -64,7 +64,7 @@ public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdap
         this.caller = caller;
     }
 
-    // Create new views
+    /* Inflates the layout for individual items */
     public BookListAdapter.BookListViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         ConstraintLayout bookItem = (ConstraintLayout) LayoutInflater.from(parent.getContext())
@@ -73,15 +73,25 @@ public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdap
         return bookListViewHolder;
     }
 
+    /**
+     * Launches the detail view for the item that was selected from the list. The layout of the detail
+     * view depends on the context from which screen it was clicked so the function takes the view
+     * as a parameter as well as the details of the book which was clicked
+     *
+     * @param bookDetailFragment
+     * @param book
+     * @param documentId
+     * @return
+     */
     private View.OnClickListener launchDetailView(DetailView bookDetailFragment, Book book, String documentId)
     {
         View.OnClickListener listener = new View.OnClickListener()
         {
-            // Handles a click on an item in the recycler view
+            /* Handles a click on an item in the recycler view */
             @Override
             public void onClick(View v)
             {
-                // Opens the book in detail view
+                /* Opens the book in detail view */
                 bookDetailFragment.onFragmentInteraction(book, documentId);
 
                 ((MyBooksActivity) context).getSupportFragmentManager().beginTransaction()
@@ -94,7 +104,7 @@ public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdap
     @Override
     protected void onBindViewHolder(@NonNull BookListViewHolder holder, int position, @NonNull Book book)
     {
-        // Set the text on the item view for each book
+        // Set the text, status and photo on the item view for each book
         String documentId = getSnapshots().getSnapshot(position).getId();
         holder.title.setText(book.getTitle());
         holder.author.setText(book.getAuthor());
@@ -105,6 +115,7 @@ public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdap
         book.setPhoto(book, holder.bookPhoto);
         Bundle source = new Bundle();
 
+        /* Set the onClickListener for the item depending on the context of the list */
         switch (this.caller)
         {
             case R.id.my_books:
@@ -128,6 +139,5 @@ public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdap
         }
 
         holder.itemView.setOnClickListener(launchDetailView(detailView, book, documentId));
-
     }
 }

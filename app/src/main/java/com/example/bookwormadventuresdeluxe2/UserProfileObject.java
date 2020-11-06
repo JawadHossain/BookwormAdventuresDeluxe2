@@ -1,10 +1,11 @@
 package com.example.bookwormadventuresdeluxe2;
 
+/**
+ * UserProfileObject models a user and stores the user details pulled from firestore.
+ */
+
 import java.io.Serializable;
 
-/**
- * UserProfileObject is required to display information pulled from Firebase
- */
 public class UserProfileObject implements Serializable
 {
     private String username;

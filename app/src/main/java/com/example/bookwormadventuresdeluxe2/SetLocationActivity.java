@@ -56,7 +56,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class SetLocationActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleMap.OnMapClickListener, GoogleMap.OnMarkerDragListener, SearchView.OnQueryTextListener
 {
@@ -296,6 +295,10 @@ public class SetLocationActivity extends AppCompatActivity implements OnMapReady
      * Otherwise show dialog with option to confirm location permission requests denial or
      * provide permissions.
      * Set on map ready callback.
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
@@ -415,6 +418,8 @@ public class SetLocationActivity extends AppCompatActivity implements OnMapReady
     /**
      * Can check if permission was previously accepted on SDK > M
      * On sdk < M user must have accepted before downloading application.
+     *
+     * @param perm The permission to check if we have
      */
     private boolean hasPermission(String perm)
     {
@@ -515,7 +520,9 @@ public class SetLocationActivity extends AppCompatActivity implements OnMapReady
     }
 
     /**
-     * Add marker on location entered on the search view
+     * Add marker on location entered through the search view
+     *
+     * @param s Required but unused string parameter
      */
     @Override
     public boolean onQueryTextSubmit(String s)

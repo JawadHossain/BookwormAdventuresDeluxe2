@@ -103,7 +103,8 @@ public class AddOrEditBooksActivity extends AppCompatActivity
 
         /* When the user clicks on the delete button
          * Remove picture from screen and hide the delete button
-         * This is necessary for when the user cancels editing the book*/
+         * This is necessary for when the user cancels editing the book
+         */
         deletePictureButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -274,12 +275,11 @@ public class AddOrEditBooksActivity extends AppCompatActivity
     }
 
     /**
-     * This method was added so that
-     * Tapping the back button ends this activity
-     * Not start a new MyBooksActivity
+     * This method modifies the back button functionality to end this activity
+     * instead of starting a new MyBooksActivity.
      *
-     * @param item
-     * @return
+     * @param item The MenuItem that was clicked
+     * @return true
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
@@ -304,7 +304,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
     /**
      * Opens the barcode scanning functionality
      *
-     * @param v
+     * @param v The view that this is called from
      */
     public void scanIsbn(View v)
     {
@@ -359,7 +359,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
      * Listener for the delete button
      * When the delete button is pressed, remove the current book from the db
      *
-     * @param view
+     * @param view The view that this is called from
      */
     public void onDeleteButtonClick(View view)
     {
@@ -397,9 +397,9 @@ public class AddOrEditBooksActivity extends AppCompatActivity
     }
 
     /**
-     * Deletes the linked photo from Firebase
+     * Deletes a linked photo from Firebase
      *
-     * @param imageUrl
+     * @param imageUrl A string containing the URL to the image to delete
      */
     private void deletePhotoFromFirebase(String imageUrl)
     {

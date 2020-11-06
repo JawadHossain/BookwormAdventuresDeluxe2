@@ -240,6 +240,11 @@ public class MyBooksFragment extends Fragment
         });
     }
 
+    /**
+     * Listener for when the notification button is clicked
+     *
+     * @param view
+     */
     private void onNotificationClick(View view)
     {
         NotificationFragment notificationFragment = new NotificationFragment();

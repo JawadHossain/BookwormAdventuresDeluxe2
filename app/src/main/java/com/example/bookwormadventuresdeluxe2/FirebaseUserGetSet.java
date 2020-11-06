@@ -1,11 +1,9 @@
+package com.example.bookwormadventuresdeluxe2;
+
 /**
- * FirebaseUserGetSet.java
- *
  * Class for calling user profile object details from database.
  * Also able to edit FirebaseAuth email and profile contact information
  */
-
-package com.example.bookwormadventuresdeluxe2;
 
 import android.util.Log;
 import android.widget.EditText;

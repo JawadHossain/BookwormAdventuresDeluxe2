@@ -1,12 +1,10 @@
+package com.example.bookwormadventuresdeluxe2;
+
 /**
- * LoginActivityTest.java
- *
  * Android tests for LoginActivity, tests multiple input
  * combinations and buttons. Also tests a successful login
  * and signout.
  */
-
-package com.example.bookwormadventuresdeluxe2;
 
 import android.content.Context;
 import android.content.res.Resources;

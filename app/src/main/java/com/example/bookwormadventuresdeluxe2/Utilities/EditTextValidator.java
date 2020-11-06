@@ -1,11 +1,9 @@
+package com.example.bookwormadventuresdeluxe2.Utilities;
+
 /**
- * EditTextValidator.java
- *
  * Utility class for EditText error handling. Matches target
  * EditText and wanted output.
  */
-
-package com.example.bookwormadventuresdeluxe2.Utilities;
 
 import android.text.TextUtils;
 import android.widget.EditText;

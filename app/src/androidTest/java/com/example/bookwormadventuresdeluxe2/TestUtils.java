@@ -1,13 +1,14 @@
 package com.example.bookwormadventuresdeluxe2;
 
+/**
+ * A collection of utilities to be used across all tests
+ */
+
 import android.content.res.Resources;
 import android.widget.EditText;
 
 import com.robotium.solo.Solo;
 
-/**
- * A collection of utilities to be used across all tests
- */
 public class TestUtils
 {
     /* Default Robotium delay is wayyyyy too long. Use this one to speed up tests */

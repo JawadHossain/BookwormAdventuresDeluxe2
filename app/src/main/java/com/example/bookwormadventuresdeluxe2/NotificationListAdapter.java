@@ -34,6 +34,11 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
         public TextView isbn;
         public ImageView statusCircle;
 
+        /**
+         * A viewHolder for notifications
+         *
+         * @param notificationItemLayout The layout to reference
+         */
         public NotificationListViewHolder(ConstraintLayout notificationItemLayout)
         {
             super(notificationItemLayout);
@@ -45,13 +50,24 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
         }
     }
 
+    /**
+     * A list adapter for the notifications
+     *
+     * @param notifications the list of notifications
+     * @param context the context
+     */
     public NotificationListAdapter(ArrayList<Notification> notifications, Context context)
     {
         this.notifications = notifications;
         this.context = context;
     }
 
-    // Create new views
+    /**
+     * method to get the ViewHolder for the notification list adapter
+     * @param parent used to get the context
+     * @param viewType unused
+     * @return the ViewHolder
+     */
     public NotificationListAdapter.NotificationListViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         ConstraintLayout notificationItem = (ConstraintLayout) LayoutInflater.from(parent.getContext())
@@ -61,12 +77,20 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
         return NotificationListViewHolder;
     }
 
+    /**
+     * method to return the ViewHolder for this list adapter
+     * @return the ViewHolder
+     */
     public NotificationListAdapter.NotificationListViewHolder getViewHolder()
     {
         return this.NotificationListViewHolder;
     }
 
-    // Replace the contents of the view with the appropriate data
+    /**
+     * method to fill out the notifications
+     * @param NotificationListViewHolder the ViewHolder for the notification list
+     * @param position the position of the notification in the list
+     */
     public void onBindViewHolder(NotificationListAdapter.NotificationListViewHolder NotificationListViewHolder, int position)
     {
         NotificationListViewHolder.message.setText(notifications.get(position).getMessage());

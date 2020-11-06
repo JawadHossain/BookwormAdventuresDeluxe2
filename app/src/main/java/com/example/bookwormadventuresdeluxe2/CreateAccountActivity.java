@@ -1,14 +1,12 @@
+package com.example.bookwormadventuresdeluxe2;
+
 /**
- * CreateAccountActivity.java
- *
  * Activity for creating account. Requires all fields filled in,
  * matching passwords and password length greater than 6
  * characters to successfully create an account. Cannot overwrite
  * an account username or email that already exists. After account
  * creation, it automatically opens MyBooksActivity.
  */
-
-package com.example.bookwormadventuresdeluxe2;
 
 import android.content.Intent;
 import android.os.Bundle;

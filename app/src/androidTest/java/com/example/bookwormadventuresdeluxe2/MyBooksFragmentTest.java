@@ -1,5 +1,10 @@
 package com.example.bookwormadventuresdeluxe2;
 
+/**
+ * Tests related to the MyBooksFragment. This includes tests related to adding, editting, deleting,
+ * or filtering for books in the MyBooksFragment.
+ */
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.widget.EditText;
@@ -24,9 +29,6 @@ import static com.example.bookwormadventuresdeluxe2.TestUtils.deleteTestBook;
 import static com.example.bookwormadventuresdeluxe2.TestUtils.signIn;
 import static com.example.bookwormadventuresdeluxe2.TestUtils.signOut;
 
-/**
- * Tests for the MyBooksFragment
- */
 @RunWith(AndroidJUnit4.class)
 
 public class MyBooksFragmentTest
