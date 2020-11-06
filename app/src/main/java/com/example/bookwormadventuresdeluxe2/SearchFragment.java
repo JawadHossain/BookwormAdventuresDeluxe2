@@ -3,6 +3,9 @@ package com.example.bookwormadventuresdeluxe2;
 /**
  * A {@link Fragment} subclass for navbar menu search item. This fragment is responsible for
  * allowing the user to search for books.
+ *
+ * Outstanding Issues: Does not filter out owner's books and still displays all
+ *                      borrowed and accepted books. Cannot search for a book
  */
 
 import android.os.Bundle;
@@ -15,14 +18,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bookwormadventuresdeluxe2.Utilities.Status;
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-
-import java.util.Arrays;
 
 public class SearchFragment extends Fragment
 {

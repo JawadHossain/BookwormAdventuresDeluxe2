@@ -5,6 +5,7 @@ package com.example.bookwormadventuresdeluxe2;
  * Also able to edit FirebaseAuth email and profile contact information
  */
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -31,8 +32,9 @@ import static android.content.ContentValues.TAG;
  */
 public class FirebaseUserGetSet
 {
+    private static Context context = GlobalApplication.getAppContext();
     private static FirebaseFirestore firebase = FirebaseFirestore.getInstance();
-    private static CollectionReference usersRef = firebase.collection("Users");
+    private static CollectionReference usersRef = firebase.collection(context.getString(R.string.users_collection));
 
     /**
      * Performs query to extract UserProfileObject from database
@@ -54,10 +56,10 @@ public class FirebaseUserGetSet
                             {
                                 /* Extracting userObject from document */
                                 UserProfileObject userObject = new UserProfileObject(
-                                                    document.getData().get("username").toString(),
-                                                    document.getData().get("email").toString(),
-                                                    document.getData().get("phoneNumber").toString(),
-                                                    document.getData().get("userId").toString(),
+                                                    document.getData().get(context.getString(R.string.firestore_username)).toString(),
+                                                    document.getData().get(context.getString(R.string.firestore_email)).toString(),
+                                                    document.getData().get(context.getString(R.string.firestore_phoneNumber)).toString(),
+                                                    document.getData().get(context.getString(R.string.firestore_userId)).toString(),
                                                     document.getId()
                                                     );
 
@@ -83,7 +85,7 @@ public class FirebaseUserGetSet
     {
         Map<String, Object> data = new HashMap<>();
 
-        data.put("email", newEmail);
+        data.put(context.getString(R.string.firestore_email), newEmail);
 
         usersRef.document(docId).update(data);
     }
@@ -98,7 +100,7 @@ public class FirebaseUserGetSet
     {
         Map<String, Object> data = new HashMap<>();
 
-        data.put("phoneNumber", newPhone);
+        data.put(context.getString(R.string.firestore_phoneNumber), newPhone);
 
         usersRef.document(docId).update(data);
     }

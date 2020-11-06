@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     /* Get Current User information from firestore */
                     collectionReference
-                            .whereEqualTo("userId", currentUserId)
+                            .whereEqualTo(getString(R.string.firestore_userId), currentUserId)
                             .addSnapshotListener(new EventListener<QuerySnapshot>()
                             {
                                 @Override
@@ -94,8 +94,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots)
                                     {
                                         UserCredentialAPI userCredentialAPI = UserCredentialAPI.getInstance();
-                                        userCredentialAPI.setUserId(snapshot.getString("userId"));
-                                        userCredentialAPI.setUsername(snapshot.getString("username"));
+                                        userCredentialAPI.setUserId(snapshot.getString(getString(R.string.firestore_userId)));
+                                        userCredentialAPI.setUsername(snapshot.getString(getString(R.string.firestore_username)));
                                         Intent myBooksIntent = new Intent(LoginActivity.this, MyBooksActivity.class);
                                         startActivity(myBooksIntent);
 
@@ -246,7 +246,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                 /* Get User information from firestore and take to MyBooksActivity */
                                 collectionReference
-                                        .whereEqualTo("userId", currentUserId)
+                                        .whereEqualTo(getString(R.string.firestore_userId), currentUserId)
                                         .addSnapshotListener(new EventListener<QuerySnapshot>()
                                         {
                                             @Override
@@ -262,8 +262,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                     {
                                                         /* Add to UserCredentialAPI to be accessible throughout app */
                                                         UserCredentialAPI userCredentialAPI = UserCredentialAPI.getInstance();
-                                                        userCredentialAPI.setUsername(snapshot.getString("username"));
-                                                        userCredentialAPI.setUserId(snapshot.getString("userId"));
+                                                        userCredentialAPI.setUsername(snapshot.getString(getString(R.string.firestore_username)));
+                                                        userCredentialAPI.setUserId(snapshot.getString(getString(R.string.firestore_userId)));
                                                     }
                                                     progressBar.setVisibility(View.INVISIBLE);
 

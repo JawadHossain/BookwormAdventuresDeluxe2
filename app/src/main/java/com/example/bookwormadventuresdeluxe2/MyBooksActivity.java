@@ -6,6 +6,8 @@ package com.example.bookwormadventuresdeluxe2;
  * "Search" fragment, the "Requests/Borrows" fragment, and the "Profile" fragment via the
  * navigation fragment. Additionally, users can enter the notifications fragment, scan book
  * fragment, or the add book fragment.
+ *
+ * Outstanding Issues: Crashes when clicking between nav bar items rapidly
  */
 
 import android.content.Intent;

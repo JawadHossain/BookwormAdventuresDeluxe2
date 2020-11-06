@@ -3,6 +3,8 @@ package com.example.bookwormadventuresdeluxe2;
 /**
  * Holds the view for seeing details on a book in the borrowed tab
  * The user will be able to interact with borrow options on the book
+ *
+ * Outstanding Issues: Still requires ISBN scan for handoff
  */
 
 import android.app.Activity;

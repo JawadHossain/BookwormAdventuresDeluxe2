@@ -64,6 +64,11 @@
     <string name="firestore_requesters">requesters</string>
     <string name="firestore_imageUrl">imageUrl</string>
 
+    <string name="firestore_username">username</string>
+    <string name="firestore_email">email</string>
+    <string name="firestore_phoneNumber">phoneNumber</string>
+    <string name="firestore_userId">userId</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="notification_title">Notifications</string>

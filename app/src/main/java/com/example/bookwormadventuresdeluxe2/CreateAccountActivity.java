@@ -164,8 +164,8 @@ public class CreateAccountActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
 
         /* Query to find username match*/
-        Query userNameQuery = collectionReference.whereEqualTo("username", username);
-        Query emailQuery = collectionReference.whereEqualTo("email", email);
+        Query userNameQuery = collectionReference.whereEqualTo(getString(R.string.firestore_username), username);
+        Query emailQuery = collectionReference.whereEqualTo(getString(R.string.firestore_email), email);
 
         final boolean[] isUsernameInUse = {false};  // Declared final as it is accessed in inner class
         final boolean[] isEmailInUse = {false};
@@ -323,10 +323,10 @@ public class CreateAccountActivity extends AppCompatActivity
     {
         /* Create new User object with credentials */
         Map<String, String> newUser = new HashMap<>();
-        newUser.put("userId", userId);
-        newUser.put("email", editTextEmail.getText().toString().trim());
-        newUser.put("username", editTextUsername.getText().toString().trim());
-        newUser.put("phoneNumber", editTextPhoneNumber.getText().toString());
+        newUser.put(getString(R.string.firestore_userId), userId);
+        newUser.put(getString(R.string.firestore_email), editTextEmail.getText().toString().trim());
+        newUser.put(getString(R.string.firestore_username), editTextUsername.getText().toString().trim());
+        newUser.put(getString(R.string.firestore_phoneNumber), editTextPhoneNumber.getText().toString());
 
         /* Save new user to Firestore */
         collectionReference.add(newUser);

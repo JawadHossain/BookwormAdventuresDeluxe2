@@ -93,7 +93,7 @@ public class MyBooksFragment extends Fragment
     {
         FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
         UserCredentialAPI userCredentialApi = UserCredentialAPI.getInstance();
-        booksOfCurrentUser = rootRef.collection(getString(R.string.books_collection)).whereEqualTo("owner", userCredentialApi.getUsername());
+        booksOfCurrentUser = rootRef.collection(getString(R.string.books_collection)).whereEqualTo(getString(R.string.firestore_owner), userCredentialApi.getUsername());
 
         FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(booksOfCurrentUser, Book.class)
