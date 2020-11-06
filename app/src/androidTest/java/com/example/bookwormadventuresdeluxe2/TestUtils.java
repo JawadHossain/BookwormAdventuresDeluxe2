@@ -53,6 +53,26 @@ public class TestUtils
     }
 
     /**
+     * Signs in with the given test account. Assumes we are in the LoginActivity.
+     */
+    public static void signIn(Solo solo, Resources resources, String email, String password)
+    {
+        /* Assert we are in the LoginIn activity */
+        solo.assertCurrentActivity(resources.getString(R.string.wrong_activity), LoginActivity.class);
+
+        /* Get the email and password EditTexts */
+        EditText emailText = (EditText) solo.getView(R.id.login_email);
+        EditText passwordText = (EditText) solo.getView(R.id.login_password);
+
+        solo.enterText(emailText, email);
+        solo.enterText(passwordText, password);
+        solo.clickOnButton(resources.getString(R.string.login));
+
+        /* Wait for the MyBooks activity after signing in */
+        solo.waitForActivity(MyBooksActivity.class, (int) SHORT_WAIT);
+    }
+
+    /**
      * Creates a new book using the test account. Assumes we are in the MyBooksActivity.
      */
     public static void createTestBook(Solo solo, Resources resources)
