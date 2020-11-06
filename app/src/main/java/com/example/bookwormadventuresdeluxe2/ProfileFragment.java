@@ -32,21 +32,20 @@ public class ProfileFragment extends Fragment
 {
     private static final String TAG = "MyProfileFragment";
 
-    Button edit;
-    Button signOutButton;
+    private Button edit;
+    private Button signOutButton;
 
-    MaterialTextView appHeaderText;
+    private MaterialTextView appHeaderText;
 
-    TextView viewUsername;
-    TextView viewEmail;
-    TextView viewPhoneNumber;
+    private TextView viewUsername;
+    private TextView viewEmail;
+    private TextView viewPhoneNumber;
 
-    View view;
+    private View view;
+    private ImageButton backButton;
 
-    FirebaseAuth firebaseAuth;
-    UserProfileObject profile;
-
-    ImageButton backButton;
+    private FirebaseAuth firebaseAuth;
+    private UserProfileObject profile;
 
     /**
      * Required empty public constructor

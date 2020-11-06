@@ -28,8 +28,8 @@ public class SearchFragment extends Fragment
     private BookListAdapter searchBooksRecyclerAdapter;
     private RecyclerView.LayoutManager searchBooksRecyclerLayoutManager;
 
-    MaterialTextView appHeaderText;
-    SearchView searchView;
+    private MaterialTextView appHeaderText;
+    private SearchView searchView;
 
     public SearchFragment()
     {
