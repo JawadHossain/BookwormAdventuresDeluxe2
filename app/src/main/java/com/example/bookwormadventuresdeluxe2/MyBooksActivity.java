@@ -6,8 +6,6 @@ package com.example.bookwormadventuresdeluxe2;
  * "Search" fragment, the "Requests/Borrows" fragment, and the "Profile" fragment via the
  * navigation fragment. Additionally, users can enter the notifications fragment, scan book
  * fragment, or the add book fragment.
- *
- * Outstanding Issues: Crashes when clicking between nav bar items rapidly
  */
 
 import android.content.Intent;
@@ -104,12 +102,18 @@ public class MyBooksActivity extends AppCompatActivity implements BottomNavigati
     /**
      * Update fragment Container with new fragment
      * Use fade in and fade out for transition
+     * addToBackStack( optional name or null ) remembers transition and reverses operation when popped off stack
+     * source: https://developer.android.com/training/basics/fragments/animate
      *
      * @param fragment The fragment to replace this one with
      */
     public void replaceFragment(Fragment fragment)
     {
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.frame_container, fragment).commit();
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                .replace(R.id.frame_container, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     /**

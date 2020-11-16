@@ -53,9 +53,11 @@
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation" />
 
+        <!-- source: https://stackoverflow.com/questions/456211/activity-restart-on-rotation-android -->
         <activity
             android:name=".MyBooksActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
 
         <activity
             android:name=".LoginActivity"
