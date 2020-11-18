@@ -104,6 +104,22 @@
     <string name="test_book_edit_description">Test Description Edit</string>
     <string name="test_book_edit_isbn">2222222222</string>
 
+    <string name="test_book_available_title">Available Title</string>
+    <string name="test_book_available_author">Available Author</string>
+    <string name="test_book_available_description">Available Description</string>
+
+    <string name="test_book_accepted_title">Accepted Title</string>
+    <string name="test_book_accepted_author">Accepted Author</string>
+    <string name="test_book_accepted_description">Accepted Description</string>
+
+    <string name="test_book_requested_title">Requested Title</string>
+    <string name="test_book_requested_author">Requested Author</string>
+    <string name="test_book_requested_description">Requested Description</string>
+
+    <string name="test_book_borrowed_title">Borrowed Title</string>
+    <string name="test_book_borrowed_author">Borrowed Author</string>
+    <string name="test_book_borrowed_description">Borrowed Description</string>
+
     <!-- Map -->
     <string name="map_edit_text_hint">Enter Address, City or Postal Code</string>
     <string name="set_exchange_location">Set Exchange Location</string>

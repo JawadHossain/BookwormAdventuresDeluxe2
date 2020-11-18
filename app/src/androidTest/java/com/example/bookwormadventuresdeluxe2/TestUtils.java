@@ -7,6 +7,9 @@ package com.example.bookwormadventuresdeluxe2;
 import android.content.res.Resources;
 import android.widget.EditText;
 
+import com.example.bookwormadventuresdeluxe2.Utilities.Status;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.robotium.solo.Solo;
 
 public class TestUtils
@@ -125,4 +128,105 @@ public class TestUtils
         /* Wait for the MyBooks activity after deleting the book */
         solo.waitForActivity(MyBooksActivity.class, (int) SHORT_WAIT);
     }
+
+    public static class BookManager
+    {
+        private Book availableBook;
+        private Book acceptedBook;
+        private Book requestedBook;
+        private Book borrowedBook;
+        private Resources resources;
+        private Solo solo;
+
+        public BookManager(Solo solo, Resources resources)
+        {
+            this.solo = solo;
+            this.resources = resources;
+
+            /* Private book objects so we can easily add and remove from firebase */
+            availableBook = new Book(resources.getString(R.string.test_account1_username),
+                    resources.getString(R.string.test_book_available_title),
+                    resources.getString(R.string.test_book_available_author),
+                    resources.getString(R.string.test_book_available_description),
+                    resources.getString(R.string.test_book_isbn),
+                    Status.Available,
+                    "");
+            acceptedBook = new Book(resources.getString(R.string.test_account1_username),
+                    resources.getString(R.string.test_book_accepted_title),
+                    resources.getString(R.string.test_book_accepted_author),
+                    resources.getString(R.string.test_book_accepted_description),
+                    resources.getString(R.string.test_book_isbn),
+                    Status.Accepted,
+                    "");
+            /* Set the first test account as the borrower */
+            acceptedBook.addRequester(resources.getString(R.string.test_account1_username));
+            requestedBook = new Book(resources.getString(R.string.test_account1_username),
+                    resources.getString(R.string.test_book_requested_title),
+                    resources.getString(R.string.test_book_requested_author),
+                    resources.getString(R.string.test_book_requested_description),
+                    resources.getString(R.string.test_book_isbn),
+                    Status.Requested,
+                    "");
+            /* Set the second test account as the requested */
+            requestedBook.addRequester(resources.getString(R.string.test_account2_username));
+
+            borrowedBook = new Book(resources.getString(R.string.test_account1_username),
+                    resources.getString(R.string.test_book_borrowed_title),
+                    resources.getString(R.string.test_book_borrowed_author),
+                    resources.getString(R.string.test_book_borrowed_description),
+                    resources.getString(R.string.test_book_isbn),
+                    Status.Borrowed,
+                    "");
+            /* Set the first test account as the borrower */
+            borrowedBook.addRequester(resources.getString(R.string.test_account1_username));
+        }
+
+        /**
+         * Insert one book of each status into firebase.
+         */
+        public void addTestBooks()
+        {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            final CollectionReference collectionReference = db.collection(resources.getString(R.string.books_collection));
+            collectionReference.add(this.availableBook);
+            collectionReference.add(this.acceptedBook);
+            collectionReference.add(this.requestedBook);
+            collectionReference.add(this.borrowedBook);
+
+            /* Sleep a small amount of time to let the UI update */
+            solo.sleep((int) SHORT_WAIT);
+        }
+
+        /**
+         * Remove one book of each status from firebase
+         */
+        public void deleteTestBooks()
+        {
+            /* We need to go through the UI because we can't actually get the documentID directly */
+            deleteTestBook(this.solo, this.resources, R.string.test_book_available_title);
+            deleteTestBook(this.solo, this.resources, R.string.test_book_accepted_title);
+            deleteTestBook(this.solo, this.resources, R.string.test_book_requested_title);
+            deleteTestBook(this.solo, this.resources, R.string.test_book_borrowed_title);
+        }
+
+        /**
+         * Insert the requested book into firebase
+         */
+        public void addRequestedBook()
+        {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            final CollectionReference collectionReference = db.collection(resources.getString(R.string.books_collection));
+            collectionReference.add(this.requestedBook);
+        }
+
+        /**
+         * Delete the requested book from firebase
+         */
+        public void deleteRequestedBook()
+        {
+            /* We need to go through the UI because we can't actually get the documentID directly */
+            deleteTestBook(this.solo, this.resources, R.string.test_book_requested_title);
+        }
+    }
+
 }

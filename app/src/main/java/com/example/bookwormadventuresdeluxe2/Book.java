@@ -55,7 +55,6 @@ public class Book implements Serializable
         this.author = author;
         this.description = description;
         this.isbn = isbn;
-        this.description = description;
         this.status = status;
         this.requesters = new ArrayList<String>();
         this.imageUrl = imageUrl;

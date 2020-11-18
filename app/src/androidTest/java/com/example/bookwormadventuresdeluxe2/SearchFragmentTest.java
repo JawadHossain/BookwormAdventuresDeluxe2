@@ -7,19 +7,16 @@ package com.example.bookwormadventuresdeluxe2;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.widget.EditText;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
-import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -173,7 +170,7 @@ public class SearchFragmentTest
 
         /* Sign back into the secondary test account and delete the added book */
         signIn(solo, resources, resources.getString(R.string.test_account2_email), resources.getString(R.string.test_account2_password));
-        deleteTestBook(solo, resources);
+        deleteTestBook(solo, resources, R.string.test_book_title);
         signOut(solo, resources);
 
         solo.finishOpenedActivities();
