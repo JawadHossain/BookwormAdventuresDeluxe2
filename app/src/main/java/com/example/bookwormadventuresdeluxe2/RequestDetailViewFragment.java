@@ -67,6 +67,11 @@ public class RequestDetailViewFragment extends DetailView
                 requesters.setVisibility(View.VISIBLE);
                 bookDetailView.findViewById(R.id.book_request_user).setVisibility(View.GONE);
 
+                /* Enables viewing profile of selected requester*/
+                Button viewProfileBtn = bookDetailView.findViewById(R.id.view_profile_button);
+                viewProfileBtn.setVisibility(View.VISIBLE);
+                sliderProfileButton(viewProfileBtn, requesters);
+
                 this.btn1.setText(getString(R.string.accept));
                 this.btn2.setText(getString(R.string.deny));
 
@@ -214,6 +219,9 @@ public class RequestDetailViewFragment extends DetailView
         // Set the content based on the book that was selected
         super.updateView(book);
 
+        TextView user = bookDetailView.findViewById(R.id.book_request_user);
+        user.setText(this.selectedBook.getRequesters().get(0));
+
         TextView status = bookDetailView.findViewById(R.id.book_details_status);
         switch (book.getStatus())
         {
@@ -231,9 +239,79 @@ public class RequestDetailViewFragment extends DetailView
             default:
                 throw new InvalidParameterException("Invalid book status in RequestDetailView updateView");
         }
+        
+        /* Enables clicking of requester profile*/
+        clickUsername(user, book.getRequesters().get(0));
+    }
 
-        TextView user = bookDetailView.findViewById(R.id.book_request_user);
-        user.setText(this.selectedBook.getRequesters().get(0));
+    /**
+     * Opens selected user profile on Button click
+     *
+     * @param viewProfileButton TextView in view
+     * @param spinner Spinner for selecting requester
+     */
+    private void sliderProfileButton(Button viewProfileButton, Spinner spinner)
+    {
+        viewProfileButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                /* Pulling UserProfileObject from database */
+                FirebaseUserGetSet.getUser(spinner.getSelectedItem().toString(), new FirebaseUserGetSet.UserCallback()
+                {
+                    @Override
+                    public void onCallback(UserProfileObject userObject)
+                    {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(getString(R.string.profile_object), userObject);
+                        ProfileFragment profileFragment = new ProfileFragment();
+                        profileFragment.setArguments(bundle);
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                                .replace(R.id.frame_container, profileFragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Opens user profile on TextView click
+     *
+     * @param textView TextView in view
+     * @param username Requester's username
+     */
+    private void clickUsername(TextView textView, String username)
+    {
+        textView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                /* Pulling UserProfileObject from database */
+                FirebaseUserGetSet.getUser(username, new FirebaseUserGetSet.UserCallback()
+                {
+                    @Override
+                    public void onCallback(UserProfileObject userObject)
+                    {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(getString(R.string.profile_object), userObject);
+                        ProfileFragment profileFragment = new ProfileFragment();
+                        profileFragment.setArguments(bundle);
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                                .replace(R.id.frame_container, profileFragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                });
+            }
+        });
     }
 
     /**

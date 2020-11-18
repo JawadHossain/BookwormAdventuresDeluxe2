@@ -169,5 +169,18 @@
             app:layout_constraintStart_toStartOf="@+id/book_request_user"
             app:layout_constraintTop_toTopOf="@+id/book_details_status" />
 
+        <Button
+            android:id="@+id/view_profile_button"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/view_profile"
+            android:textSize="10dp"
+            android:visibility="gone"
+            android:backgroundTint="@color/colorPrimaryDark"
+            app:layout_constraintBottom_toTopOf="@+id/request_exchange_location"
+            app:layout_constraintEnd_toEndOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

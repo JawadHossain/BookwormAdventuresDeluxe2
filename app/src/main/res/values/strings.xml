@@ -85,6 +85,7 @@
     <string name="return_book">Return Book</string>
     <string name="wait_owner">Waiting for Owner</string>
     <string name="request_book">Request Book</string>
+    <string name="view_profile">View Profile</string>
 
     <!-- Test input strings -->
     <string name="wrong_activity">Wrong Activity</string>
