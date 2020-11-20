@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -140,6 +141,7 @@ public class ProfileFragment extends Fragment
         /* Set up the input */
         EditText inputEmail = editInfo.findViewById(R.id.edit_email);
         EditText inputPhone = editInfo.findViewById(R.id.edit_phone);
+        ProgressBar progressBar = editInfo.findViewById(R.id.edit_progressBar);
 
         /* Specify the type of input expected */
         inputEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
@@ -192,24 +194,32 @@ public class ProfileFragment extends Fragment
                 }
 
                 /* Attempts to edit FirebaseAuth account and Firebase info*/
+                progressBar.setVisibility(View.VISIBLE);
                 FirebaseUserGetSet.changeAuthInfo(inputEmail,
                         inputPhone,
-                        profile.getDocumentId());
+                        profile.getDocumentId(),
+                        new FirebaseUserGetSet.EditCallback()
+                        {
+                            @Override
+                            public void onCallback(Boolean result)
+                            {
+                                /* After successful edit */
+                                if (inputEmail.getError() == null)
+                                {
+                                    /* Updating user object in Fragment*/
+                                    profile.setEmail(inputEmail.getText().toString().trim());
+                                    profile.setPhoneNumber(inputPhone.getText().toString().trim());
 
-                /* After successful edit */
-                if (inputEmail.getError() == null)
-                {
-                    /* Updating user object in Fragment*/
-                    profile.setEmail(inputEmail.getText().toString().trim());
-                    profile.setPhoneNumber(inputPhone.getText().toString().trim());
+                                    /* Updating TextView in fragment */
+                                    viewEmail.setText(inputEmail.getText().toString().trim());
+                                    viewPhoneNumber.setText(inputPhone.getText().toString().trim());
 
-                    /* Updating TextView in fragment */
-                    viewEmail.setText(inputEmail.getText().toString().trim());
-                    viewPhoneNumber.setText(inputPhone.getText().toString().trim());
-
-                    /* Closing dialog */
-                    builder.dismiss();
-                }
+                                    /* Closing dialog */
+                                    builder.dismiss();
+                                }
+                                progressBar.setVisibility(View.INVISIBLE);
+                            }
+                        });
             }
         });
 
