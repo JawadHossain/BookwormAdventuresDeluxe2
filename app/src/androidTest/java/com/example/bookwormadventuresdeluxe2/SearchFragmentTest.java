@@ -21,6 +21,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static com.example.bookwormadventuresdeluxe2.TestUtils.NO_WAIT;
 import static com.example.bookwormadventuresdeluxe2.TestUtils.SHORT_WAIT;
 import static com.example.bookwormadventuresdeluxe2.TestUtils.createTestBook;
 import static com.example.bookwormadventuresdeluxe2.TestUtils.deleteTestBook;
@@ -81,8 +82,8 @@ public class SearchFragmentTest
 
         /* Check that all the text for the newly added book is found */
         Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_book_title), 1, SHORT_WAIT));
-        Assert.assertTrue(solo.searchText(resources.getString(R.string.test_book_author)));
-        Assert.assertTrue(solo.searchText(resources.getString(R.string.test_book_isbn)));
+        Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_book_author), 1, NO_WAIT));
+        Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_book_isbn), 1, NO_WAIT));
 
         /* Go back to detail view */
         solo.clickOnView(solo.getView(R.id.app_header_back_button));
@@ -105,8 +106,8 @@ public class SearchFragmentTest
         solo.clickOnText(resources.getString(R.string.test_book_title));
 
         /* Ensure the book displays the proper owner and owned by text */
-        Assert.assertTrue(solo.searchText(resources.getString(R.string.owned_by)));
-        Assert.assertTrue(solo.searchText(resources.getString(R.string.test_account2_username)));
+        Assert.assertTrue(solo.waitForText(resources.getString(R.string.owned_by), 1, SHORT_WAIT));
+        Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_account2_username), 1, NO_WAIT));
     }
 
     /**
@@ -150,8 +151,8 @@ public class SearchFragmentTest
 
         /* Check that all the text is found for the accounts details */
         Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_account2_username), 1, SHORT_WAIT));
-        Assert.assertTrue(solo.searchText(resources.getString(R.string.test_account2_email)));
-        Assert.assertTrue(solo.searchText(resources.getString(R.string.test_account2_phone)));
+        Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_account2_email), 1, NO_WAIT));
+        Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_account2_phone), 1, NO_WAIT));
 
         /* Return to the MyBooksActivity */
         solo.clickOnView(solo.getView(R.id.app_header_back_button));

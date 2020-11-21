@@ -16,6 +16,7 @@ public class TestUtils
 {
     /* Default Robotium delay is wayyyyy too long. Use this one to speed up tests */
     public static long SHORT_WAIT = 5000;
+    public static long NO_WAIT = 0;
 
     /**
      * Signs out of test account after login. Assumes we are in the MyBooksActivity.

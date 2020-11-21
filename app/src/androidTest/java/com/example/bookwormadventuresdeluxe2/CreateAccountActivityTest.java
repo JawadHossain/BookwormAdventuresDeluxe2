@@ -34,6 +34,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.example.bookwormadventuresdeluxe2.TestUtils.NO_WAIT;
+import static com.example.bookwormadventuresdeluxe2.TestUtils.SHORT_WAIT;
 
 /**
  * Tests for create account screen
@@ -102,7 +104,7 @@ public class CreateAccountActivityTest
     {
         solo.clickOnButton(resources.getString(R.string.create_account));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY, 1, SHORT_WAIT));
 
         Assert.assertNotNull(usernameText.getError());
         Assert.assertNotNull(emailText.getError());
@@ -125,7 +127,7 @@ public class CreateAccountActivityTest
 
         solo.clickOnButton(resources.getString(R.string.create_account));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY, 1, SHORT_WAIT));
 
         Assert.assertNotNull(usernameText.getError());
         Assert.assertNotNull(emailText.getError());
@@ -147,7 +149,7 @@ public class CreateAccountActivityTest
 
         solo.clickOnButton(resources.getString(R.string.create_account));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY, 1, SHORT_WAIT));
         Assert.assertNotNull(usernameText.getError());
 
         Assert.assertNull(emailText.getError());
@@ -159,7 +161,7 @@ public class CreateAccountActivityTest
 
         solo.clickOnButton(resources.getString(R.string.create_account));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY, 1, SHORT_WAIT));
         Assert.assertNotNull(usernameText.getError());
 
         Assert.assertNull(emailText.getError());
@@ -181,7 +183,7 @@ public class CreateAccountActivityTest
 
         solo.clickOnButton(resources.getString(R.string.create_account));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY, 1, SHORT_WAIT));
         Assert.assertNotNull(emailText.getError());
 
         Assert.assertNull(usernameText.getError());
@@ -193,7 +195,7 @@ public class CreateAccountActivityTest
 
         solo.clickOnButton(resources.getString(R.string.create_account));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY, 1, SHORT_WAIT));
         Assert.assertNotNull(emailText.getError());
 
         Assert.assertNull(usernameText.getError());
@@ -215,7 +217,7 @@ public class CreateAccountActivityTest
 
         solo.clickOnButton(resources.getString(R.string.create_account));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY, 1, SHORT_WAIT));
         Assert.assertNotNull(phoneNumberText.getError());
 
         Assert.assertNull(usernameText.getError());
@@ -236,7 +238,7 @@ public class CreateAccountActivityTest
 
         solo.clickOnButton(resources.getString(R.string.create_account));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY, 1, SHORT_WAIT));
         Assert.assertNotNull(password1Text.getError());
         Assert.assertNotNull(password2Text.getError());
 
@@ -249,7 +251,7 @@ public class CreateAccountActivityTest
 
         solo.clickOnButton(resources.getString(R.string.create_account));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY, 1, SHORT_WAIT));
         Assert.assertNotNull(password1Text.getError());
         Assert.assertNotNull(password2Text.getError());
 
@@ -273,7 +275,7 @@ public class CreateAccountActivityTest
 
         solo.clickOnButton(resources.getString(R.string.create_account));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.USERNAMETAKEN));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.USERNAMETAKEN, 1, SHORT_WAIT));
 
         Assert.assertNotNull(usernameText.getError());
 
@@ -298,7 +300,7 @@ public class CreateAccountActivityTest
 
         solo.clickOnButton(resources.getString(R.string.create_account));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.EMAILTAKEN));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.EMAILTAKEN, 1, SHORT_WAIT));
 
         Assert.assertNotNull(emailText.getError());
 
@@ -324,7 +326,7 @@ public class CreateAccountActivityTest
 
         solo.clickOnButton(resources.getString(R.string.create_account));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.INVALIDEMAIL));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.INVALIDEMAIL, 1, SHORT_WAIT));
 
         Assert.assertNotNull(emailText.getError());
 
@@ -349,8 +351,8 @@ public class CreateAccountActivityTest
 
         solo.clickOnButton(resources.getString(R.string.create_account));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.USERNAMETAKEN));
-        Assert.assertTrue(solo.waitForText(EditTextValidator.EMAILTAKEN));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.USERNAMETAKEN, 1, SHORT_WAIT));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.EMAILTAKEN, 1, NO_WAIT));
 
         Assert.assertNotNull(usernameText.getError());
         Assert.assertNotNull(emailText.getError());
@@ -375,8 +377,8 @@ public class CreateAccountActivityTest
 
         solo.clickOnButton(resources.getString(R.string.create_account));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.USERNAMETAKEN));
-        Assert.assertTrue(solo.waitForText(EditTextValidator.INVALIDEMAIL));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.USERNAMETAKEN, 1, SHORT_WAIT));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.INVALIDEMAIL, 1, NO_WAIT));
 
         Assert.assertNotNull(usernameText.getError());
         Assert.assertNotNull(emailText.getError());
@@ -401,7 +403,7 @@ public class CreateAccountActivityTest
 
         solo.clickOnButton(resources.getString(R.string.create_account));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.PASSWORDSDONTMATCH));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.PASSWORDSDONTMATCH, 1, SHORT_WAIT));
 
         Assert.assertNotNull(password1Text.getError());
         Assert.assertNotNull(password2Text.getError());
@@ -425,7 +427,7 @@ public class CreateAccountActivityTest
 
         solo.clickOnButton(resources.getString(R.string.create_account));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.WEAKPASS));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.WEAKPASS, 1, SHORT_WAIT));
 
         Assert.assertNotNull(password1Text.getError());
         Assert.assertNotNull(password2Text.getError());
@@ -449,7 +451,7 @@ public class CreateAccountActivityTest
 
         solo.clickOnButton(resources.getString(R.string.create_account));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.WEAKPASS));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.WEAKPASS, 1, SHORT_WAIT));
 
         Assert.assertNotNull(password1Text.getError());
         Assert.assertNotNull(password2Text.getError());
@@ -486,7 +488,7 @@ public class CreateAccountActivityTest
     {
         solo.clickOnText(resources.getString(R.string.navbar_text_label_4));
 
-        solo.waitForText(resources.getString(R.string.sign_out));
+        solo.waitForText(resources.getString(R.string.sign_out), 1, SHORT_WAIT);
 
         deleteCreateTestAccount();
 

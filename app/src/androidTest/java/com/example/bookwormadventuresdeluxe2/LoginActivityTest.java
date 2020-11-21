@@ -24,6 +24,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static com.example.bookwormadventuresdeluxe2.TestUtils.SHORT_WAIT;
 import static com.example.bookwormadventuresdeluxe2.TestUtils.signIn;
 import static com.example.bookwormadventuresdeluxe2.TestUtils.signOut;
 
@@ -85,7 +86,7 @@ public class LoginActivityTest
         solo.clickOnButton(resources.getString(R.string.login));
         solo.assertCurrentActivity(resources.getString(R.string.wrong_activity), LoginActivity.class);
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY, 1, SHORT_WAIT));
 
         Assert.assertNotNull(emailText.getError());
         Assert.assertNotNull(passwordText.getError());
@@ -101,7 +102,7 @@ public class LoginActivityTest
         solo.enterText(passwordText, resources.getString(R.string.space));
         solo.clickOnButton(resources.getString(R.string.login));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.EMPTY, 1, SHORT_WAIT));
 
         Assert.assertNotNull(emailText.getError());
         Assert.assertNotNull(passwordText.getError());
@@ -117,7 +118,7 @@ public class LoginActivityTest
         solo.enterText(passwordText, resources.getString(R.string.wrong_pass));
         solo.clickOnButton(resources.getString(R.string.login));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.WRONGPASSWORD));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.WRONGPASSWORD, 1, SHORT_WAIT));
 
         Assert.assertNotNull(passwordText.getError());
     }
@@ -132,7 +133,7 @@ public class LoginActivityTest
         solo.enterText(passwordText, resources.getString(R.string.wrong_pass));
         solo.clickOnButton(resources.getString(R.string.login));
 
-        Assert.assertTrue(solo.waitForText(EditTextValidator.EMAILNOTFOUND));
+        Assert.assertTrue(solo.waitForText(EditTextValidator.EMAILNOTFOUND, 1, SHORT_WAIT));
 
         Assert.assertNotNull(emailText.getError());
     }

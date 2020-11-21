@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static com.example.bookwormadventuresdeluxe2.TestUtils.NO_WAIT;
 import static com.example.bookwormadventuresdeluxe2.TestUtils.SHORT_WAIT;
 import static com.example.bookwormadventuresdeluxe2.TestUtils.signIn;
 
@@ -68,9 +69,9 @@ public class MyProfileFragmentTest
 
         solo.clickOnText(resources.getString(R.string.navbar_text_label_4));
 
-        Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_account1_username)));
-        Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_account1_email)));
-        Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_account1_phone)));
+        Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_account1_username), 1, SHORT_WAIT));
+        Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_account1_email), 1, NO_WAIT));
+        Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_account1_phone), 1, NO_WAIT));
 
         solo.clickOnButton(resources.getString(R.string.sign_out));
 
