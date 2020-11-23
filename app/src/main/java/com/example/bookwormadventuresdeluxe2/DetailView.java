@@ -1,4 +1,4 @@
-package com.example.bookwormadventuresdeluxe2.Utilities;
+package com.example.bookwormadventuresdeluxe2;
 
 /**
  * DetailView is the parent view for the array of different screens which may appear when you
@@ -17,7 +17,11 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.bookwormadventuresdeluxe2.Book;
+import com.example.bookwormadventuresdeluxe2.FirebaseUserGetSet;
+import com.example.bookwormadventuresdeluxe2.ProfileFragment;
 import com.example.bookwormadventuresdeluxe2.R;
+import com.example.bookwormadventuresdeluxe2.UserProfileObject;
+import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 
 /**
  * abstract class representing all the DetailView fragments
@@ -97,4 +101,39 @@ public abstract class DetailView extends Fragment
      * @param v The view that was clicked on
      */
     abstract public void onBackClick(View v);
+
+    /**
+     * Opens user profile on TextView click
+     *
+     * @param textView TextView in view
+     * @param username Requester's username
+     */
+    public void clickUsername(TextView textView, String username)
+    {
+        textView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                /* Pulling UserProfileObject from database */
+                FirebaseUserGetSet.getUser(username, new FirebaseUserGetSet.UserCallback()
+                {
+                    @Override
+                    public void onCallback(UserProfileObject userObject)
+                    {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(getString(R.string.profile_object), userObject);
+                        ProfileFragment profileFragment = new ProfileFragment();
+                        profileFragment.setArguments(bundle);
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                                .replace(R.id.frame_container, profileFragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                });
+            }
+        });
+    }
 }

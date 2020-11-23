@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="42dp"
             android:paddingBottom="18sp"
             android:text="@string/isbn"
             android:textColor="@android:color/black"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="42dp"
             android:paddingBottom="18sp"
             android:text="978-1--23-123456-3"
             android:textColor="@android:color/black"
@@ -55,12 +55,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="32dp"
             android:text="@string/available"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/book_details_isbn_title"
-            app:layout_constraintStart_toEndOf="@+id/book_details_status_circle" />
+            app:layout_constraintStart_toEndOf="@+id/book_details_status_circle"
+            app:layout_constraintTop_toBottomOf="@+id/requestDetail_btn1" />
 
         <ImageView
             android:id="@+id/book_details_status_circle"
@@ -75,19 +77,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/requestDetail_btn1" />
 
-
-        <TextView
-            android:id="@+id/book_request_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginBottom="12dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/book_details_isbn_title"
-            app:layout_constraintStart_toEndOf="@+id/book_details_status" />
-
         <Button
             android:id="@+id/requestDetail_btn1"
             android:layout_width="160dp"
@@ -100,7 +89,6 @@
             android:backgroundTint="@color/colorPrimaryDark"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textAllCaps="false"
             android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/requestDetail_btn2"
             app:layout_constraintStart_toStartOf="parent"
@@ -114,11 +102,9 @@
             android:layout_marginLeft="32dp"
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
-            android:layout_marginBottom="0dp"
             android:backgroundTint="@color/colorPrimaryDark"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textAllCaps="false"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/requestDetail_btn1"
             app:layout_constraintEnd_toEndOf="parent"
@@ -130,8 +116,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
-            android:layout_marginTop="0dp"
             android:text="@string/exchange"
+            android:textAllCaps="true"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -145,6 +131,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
+            android:textAllCaps="true"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/request_exchange"
@@ -152,35 +139,63 @@
             app:layout_constraintStart_toEndOf="@+id/request_exchange"
             app:layout_constraintTop_toTopOf="@+id/request_exchange" />
 
-        <Spinner
-            android:id="@+id/chose_request"
+        <TextView
+            android:id="@+id/book_request_user"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="4dp"
-            android:spinnerMode="dropdown"
-            android:background="@color/colorPrimaryDark"
-            android:popupBackground="@color/colorPrimaryDark"
-            app:layout_constraintBottom_toBottomOf="@+id/book_details_status"
-            app:layout_constraintStart_toStartOf="@+id/book_request_user"
-            app:layout_constraintTop_toTopOf="@+id/book_details_status" />
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/book_details_status"
-            app:layout_constraintStart_toStartOf="@+id/book_request_user"
-            app:layout_constraintTop_toTopOf="@+id/book_details_status" />
-
-        <Button
-            android:id="@+id/view_profile_button"
-            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="@string/view_profile"
-            android:textSize="10dp"
-            android:visibility="gone"
-            android:backgroundTint="@color/colorPrimaryDark"
-            app:layout_constraintBottom_toTopOf="@+id/request_exchange_location"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="32dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/book_details_isbn_title"
+            app:layout_constraintStart_toEndOf="@+id/book_details_status"
+            app:layout_constraintTop_toBottomOf="@+id/requestDetail_btn1" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dropdown_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="50dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/book_details_status"
+            app:layout_constraintStart_toEndOf="@+id/book_details_status"
+            app:layout_constraintStart_toStartOf="@+id/book_request_user"
+            app:layout_constraintTop_toBottomOf="@+id/requestDetail_btn1">
+
+            <FrameLayout
+                android:id="@+id/spinner_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/drop_shadow"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <Spinner
+                    android:id="@+id/chose_request"
+                    android:layout_width="160dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="4dp"
+                    android:dropDownWidth="160dp" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/view_profile_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:text="@string/view_profile"
+                android:textColor="@color/colorPrimaryDark"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/spinner_container" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

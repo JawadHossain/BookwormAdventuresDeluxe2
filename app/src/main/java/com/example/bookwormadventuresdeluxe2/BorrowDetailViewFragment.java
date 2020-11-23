@@ -3,7 +3,7 @@ package com.example.bookwormadventuresdeluxe2;
 /**
  * Holds the view for seeing details on a book in the borrowed tab
  * The user will be able to interact with borrow options on the book
- *
+ * <p>
  * Outstanding Issues: Still requires ISBN scan for handoff
  */
 
@@ -20,7 +20,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import com.example.bookwormadventuresdeluxe2.Utilities.DetailView;
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
@@ -54,7 +53,9 @@ public class BorrowDetailViewFragment extends DetailView
         if (bundle != null)
         {
             source = bundle.getString(getString(R.string.book_click_source_fragment));
-        } else {
+        }
+        else
+        {
             source = getString(R.string.borrow);
         }
 
@@ -220,41 +221,6 @@ public class BorrowDetailViewFragment extends DetailView
         user.setText(book.getOwner());
 
         clickUsername(user, book.getOwner());
-    }
-
-    /**
-     * Opens user profile on TextView click
-     *
-     * @param textView TextView in view
-     * @param username Book owner's username
-     */
-    private void clickUsername(TextView textView, String username)
-    {
-        textView.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                /* Pulling UserProfileObject from database */
-                FirebaseUserGetSet.getUser(username, new FirebaseUserGetSet.UserCallback()
-                {
-                    @Override
-                    public void onCallback(UserProfileObject userObject)
-                    {
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable(getString(R.string.profile_object), userObject);
-                        ProfileFragment profileFragment = new ProfileFragment();
-                        profileFragment.setArguments(bundle);
-                        getActivity().getSupportFragmentManager()
-                                .beginTransaction()
-                                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                                .replace(R.id.frame_container, profileFragment)
-                                .addToBackStack(null)
-                                .commit();
-                    }
-                });
-            }
-        });
     }
 
     /**

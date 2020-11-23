@@ -14,10 +14,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.bookwormadventuresdeluxe2.Utilities.DetailView;
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.security.InvalidParameterException;
 
 public class MyBooksDetailViewFragment extends DetailView
 {
@@ -63,6 +64,37 @@ public class MyBooksDetailViewFragment extends DetailView
 
         TextView status = bookDetailView.findViewById(R.id.book_details_status);
         status.setText(book.getAugmentStatus(UserCredentialAPI.getInstance().getUsername()).toString());
+
+        TextView user = bookDetailView.findViewById(R.id.book_details_borrower);
+
+        /* Set the status text to display the borrower if it is borrowed or accepted */
+        switch (book.getStatus())
+        {
+            case Available:
+                status.setText(getString(R.string.available));
+                break;
+            case Requested:
+                status.setText(getString(R.string.requested));
+                break;
+            case Accepted:
+                status.setText(getString(R.string.request_detail_requested));
+                user.setText(this.selectedBook.getRequesters().get(0));
+                clickUsername(user, book.getRequesters().get(0));
+                break;
+            case bPending:
+            case Borrowed:
+                status.setText(getString(R.string.request_detail_borrowed));
+                user.setText(this.selectedBook.getRequesters().get(0));
+                clickUsername(user, book.getRequesters().get(0));
+                break;
+            case rPending:
+                status.setText(getString(R.string.request_detail_return));
+                user.setText(this.selectedBook.getRequesters().get(0));
+                clickUsername(user, book.getRequesters().get(0));
+                break;
+            default:
+                throw new InvalidParameterException("Invalid book status in RequestDetailView updateView");
+        }
     }
 
     /**

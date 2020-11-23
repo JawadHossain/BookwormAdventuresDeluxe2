@@ -14,23 +14,28 @@
             android:id="@+id/include"
             layout="@layout/app_header" />
 
-        <ImageView
+        <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/my_profile_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_marginTop="120dp"
+            android:src="@drawable/ic_profile"
+            app:civ_shadow="true"
+            app:civ_shadow_color="#BDBDBD"
+            app:civ_shadow_radius="10"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/view_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Todo: get and set user info"
-            android:textSize="18dp"
+            android:layout_marginTop="12dp"
+            android:textColor="@android:color/black"
+            android:textSize="22dp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/my_profile_image" />
