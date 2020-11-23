@@ -87,6 +87,16 @@
     <string name="request_book">Request Book</string>
     <string name="view_profile">View Profile</string>
 
+    <!-- Fragment tags -->
+    <string name="requests_fragment">requestsFragment</string>
+    <string name="search_fragment">searchFragment</string>
+    <string name="book_detail_fragment">bookDetailFragment</string>
+    <string name="other_profile_fragment">otherUserProfileFragment</string>
+    <string name="profile_fragment">profileFragment</string>
+    <string name="notification_fragment">notificationFragment</string>
+    <string name="my_books_fragment">myBooksFragment</string>
+    <string name="filter_menu_fragment">filterMenu</string>
+
     <!-- Test input strings -->
     <string name="wrong_activity">Wrong Activity</string>
     <string name="space">\u0020</string>

@@ -16,11 +16,6 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.bookwormadventuresdeluxe2.Book;
-import com.example.bookwormadventuresdeluxe2.FirebaseUserGetSet;
-import com.example.bookwormadventuresdeluxe2.ProfileFragment;
-import com.example.bookwormadventuresdeluxe2.R;
-import com.example.bookwormadventuresdeluxe2.UserProfileObject;
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 
 /**
@@ -108,7 +103,7 @@ public abstract class DetailView extends Fragment
      * @param textView TextView in view
      * @param username Requester's username
      */
-    public void clickUsername(TextView textView, String username)
+    public void clickUsername(TextView textView, String username, Fragment currentFragment)
     {
         textView.setOnClickListener(new View.OnClickListener()
         {
@@ -128,8 +123,8 @@ public abstract class DetailView extends Fragment
                         getActivity().getSupportFragmentManager()
                                 .beginTransaction()
                                 .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                                .replace(R.id.frame_container, profileFragment)
-                                .addToBackStack(null)
+                                .add(R.id.frame_container, profileFragment, getString(R.string.other_profile_fragment))
+                                .hide(currentFragment)
                                 .commit();
                     }
                 });

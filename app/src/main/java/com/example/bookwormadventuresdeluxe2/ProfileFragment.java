@@ -267,6 +267,11 @@ public class ProfileFragment extends Fragment
      */
     public void onBackClick(View v)
     {
-        getActivity().getSupportFragmentManager().popBackStack();
+        Fragment otherUserProfileFragment = getFragmentManager().findFragmentByTag(getString(R.string.other_profile_fragment));
+        /* Remove this fragment and show the bookDetailFragment that was hidden beneath this */
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .remove(otherUserProfileFragment)
+                .show(getFragmentManager().findFragmentByTag(getString(R.string.book_detail_fragment)))
+                .commit();
     }
 }

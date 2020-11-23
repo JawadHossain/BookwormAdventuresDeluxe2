@@ -84,7 +84,7 @@ public class NotificationFragment extends Fragment
     public void onBackClick(View v)
     {
         //TODO: remove notifications
-        MyBooksFragment myBooksFragment = new MyBooksFragment();
-        getFragmentManager().beginTransaction().replace(R.id.frame_container, myBooksFragment).commit();
+        Fragment myBooksFragment = getFragmentManager().findFragmentByTag(getString(R.string.my_books_fragment));
+        getFragmentManager().beginTransaction().hide(this).show(ActiveFragmentTracker.activeFragment).commit();
     }
 }

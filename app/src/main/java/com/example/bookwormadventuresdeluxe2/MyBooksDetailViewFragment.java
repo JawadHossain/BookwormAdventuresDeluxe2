@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -79,18 +81,18 @@ public class MyBooksDetailViewFragment extends DetailView
             case Accepted:
                 status.setText(getString(R.string.request_detail_requested));
                 user.setText(this.selectedBook.getRequesters().get(0));
-                clickUsername(user, book.getRequesters().get(0));
+                clickUsername(user, book.getRequesters().get(0), this);
                 break;
             case bPending:
             case Borrowed:
                 status.setText(getString(R.string.request_detail_borrowed));
                 user.setText(this.selectedBook.getRequesters().get(0));
-                clickUsername(user, book.getRequesters().get(0));
+                clickUsername(user, book.getRequesters().get(0), this);
                 break;
             case rPending:
                 status.setText(getString(R.string.request_detail_return));
                 user.setText(this.selectedBook.getRequesters().get(0));
-                clickUsername(user, book.getRequesters().get(0));
+                clickUsername(user, book.getRequesters().get(0), this);
                 break;
             default:
                 throw new InvalidParameterException("Invalid book status in RequestDetailView updateView");
@@ -104,11 +106,11 @@ public class MyBooksDetailViewFragment extends DetailView
      */
     public void onBackClick(View v)
     {
-        MyBooksFragment myBooksFragment = new MyBooksFragment();
+        Fragment myBooksFragment = ActiveFragmentTracker.activeFragment;
         Bundle args = new Bundle();
         args.putSerializable("editedBook", this.selectedBook);
         myBooksFragment.setArguments(args);
-        getFragmentManager().beginTransaction().replace(R.id.frame_container, myBooksFragment).commit();
+        getFragmentManager().beginTransaction().remove(this).show(myBooksFragment).commit();
     }
 
     /**

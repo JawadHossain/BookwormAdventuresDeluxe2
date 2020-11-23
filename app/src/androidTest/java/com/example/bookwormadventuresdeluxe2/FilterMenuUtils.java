@@ -15,6 +15,8 @@ import static com.example.bookwormadventuresdeluxe2.TestUtils.SHORT_WAIT;
  */
 public class FilterMenuUtils
 {
+    private static int FILTER_MENU_BUTTON_INDEX = 0;
+
     /**
      * Opens the filter menu and filters by available books, then verifies that the available
      * test book is shown and none of the other test books are shown.
@@ -22,7 +24,7 @@ public class FilterMenuUtils
     public static void verifyAvailableFilter(Solo solo, Resources resources)
     {
         /* Open the filter menu */
-        solo.clickOnView(solo.getView(R.id.app_header_filter_button));
+        solo.clickOnImageButton(FILTER_MENU_BUTTON_INDEX);
         solo.waitForFragmentById(R.layout.fragment_filter_menu, (int) SHORT_WAIT);
 
         /* Press the available button */
@@ -51,7 +53,7 @@ public class FilterMenuUtils
     public static void verifyAcceptedFilter(Solo solo, Resources resources)
     {
         /* Open the filter menu */
-        solo.clickOnView(solo.getView(R.id.app_header_filter_button));
+        solo.clickOnImageButton(FILTER_MENU_BUTTON_INDEX);
         solo.waitForFragmentById(R.layout.fragment_filter_menu, (int) SHORT_WAIT);
 
         /* Press the accepted button */
@@ -80,7 +82,7 @@ public class FilterMenuUtils
     public static void verifyRequestedFilter(Solo solo, Resources resources)
     {
         /* Open the filter menu */
-        solo.clickOnView(solo.getView(R.id.app_header_filter_button));
+        solo.clickOnImageButton(FILTER_MENU_BUTTON_INDEX);
         solo.waitForFragmentById(R.layout.fragment_filter_menu, (int) SHORT_WAIT);
 
         /* Press the requested button */
@@ -109,7 +111,7 @@ public class FilterMenuUtils
     public static void verifyBorrowedFilter(Solo solo, Resources resources)
     {
         /* Open the filter menu */
-        solo.clickOnView(solo.getView(R.id.app_header_filter_button));
+        solo.clickOnImageButton(FILTER_MENU_BUTTON_INDEX);
         solo.waitForFragmentById(R.layout.fragment_filter_menu, (int) SHORT_WAIT);
 
         /* Press the borrowed button */
@@ -138,7 +140,7 @@ public class FilterMenuUtils
     public static void verifyAllFilter(Solo solo, Resources resources)
     {
         /* Open the filter menu */
-        solo.clickOnView(solo.getView(R.id.app_header_filter_button));
+        solo.clickOnImageButton(FILTER_MENU_BUTTON_INDEX);
         solo.waitForFragmentById(R.layout.fragment_filter_menu, (int) SHORT_WAIT);
 
         /* Press the available button */
@@ -150,17 +152,25 @@ public class FilterMenuUtils
         Assert.assertFalse(solo.waitForText(resources.getString(R.string.test_book_requested_title), 1, NO_WAIT));
         Assert.assertFalse(solo.waitForText(resources.getString(R.string.test_book_borrowed_title), 1, NO_WAIT));
 
-        /* Open the filter menu */
-        solo.clickOnView(solo.getView(R.id.app_header_filter_button));
-        solo.waitForFragmentById(R.layout.fragment_filter_menu, (int) SHORT_WAIT);
-
-        /* Press the all button */
-        solo.clickOnView(solo.getView(R.id.all_button));
+        filterByAll(solo);
 
         /* Check that all the books are shown */
         Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_book_available_title), 1, SHORT_WAIT));
         Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_book_accepted_title), 1, NO_WAIT));
         Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_book_requested_title), 1, NO_WAIT));
         Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_book_borrowed_title), 1, NO_WAIT));
+    }
+
+    /**
+     * Filters by all
+     */
+    public static void filterByAll(Solo solo)
+    {
+        /* Open the filter menu */
+        solo.clickOnImageButton(FILTER_MENU_BUTTON_INDEX);
+        solo.waitForFragmentById(R.layout.fragment_filter_menu, (int) SHORT_WAIT);
+
+        /* Press the all button */
+        solo.clickOnView(solo.getView(R.id.all_button));
     }
 }

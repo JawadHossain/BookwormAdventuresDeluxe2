@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static com.example.bookwormadventuresdeluxe2.FilterMenuUtils.filterByAll;
 import static com.example.bookwormadventuresdeluxe2.FilterMenuUtils.verifyAcceptedFilter;
 import static com.example.bookwormadventuresdeluxe2.FilterMenuUtils.verifyAllFilter;
 import static com.example.bookwormadventuresdeluxe2.FilterMenuUtils.verifyAvailableFilter;
@@ -33,6 +34,8 @@ public class MyBooksFilterMenuTests
     private Resources resources;
 
     private TestUtils.BookManager bookManager;
+
+    private int BACK_BUTTON_INDEX = 0;
 
     @Rule
     public ActivityTestRule<LoginActivity> rule =
@@ -77,8 +80,10 @@ public class MyBooksFilterMenuTests
         verifyAvailableFilter(this.solo, this.resources);
 
         /* Click back button to return to my books recycler view fragment */
-        solo.clickOnView(solo.getView(R.id.app_header_back_button));
+        solo.clickOnImageButton(BACK_BUTTON_INDEX);
         solo.waitForFragmentById(R.layout.fragment_my_books, (int) SHORT_WAIT);
+
+        filterByAll(solo);
     }
 
     /**
@@ -91,8 +96,10 @@ public class MyBooksFilterMenuTests
         verifyAcceptedFilter(this.solo, this.resources);
 
         /* Click back button to return to my books recycler view fragment */
-        solo.clickOnView(solo.getView(R.id.app_header_back_button));
+        solo.clickOnImageButton(BACK_BUTTON_INDEX);
         solo.waitForFragmentById(R.layout.fragment_my_books, (int) SHORT_WAIT);
+
+        filterByAll(solo);
     }
 
     /**
@@ -105,8 +112,10 @@ public class MyBooksFilterMenuTests
         verifyRequestedFilter(this.solo, this.resources);
 
         /* Click back button to return to my books recycler view fragment */
-        solo.clickOnView(solo.getView(R.id.app_header_back_button));
+        solo.clickOnImageButton(BACK_BUTTON_INDEX);
         solo.waitForFragmentById(R.layout.fragment_my_books, (int) SHORT_WAIT);
+
+        filterByAll(solo);
     }
 
     /**
@@ -119,8 +128,10 @@ public class MyBooksFilterMenuTests
         verifyBorrowedFilter(this.solo, this.resources);
 
         /* Click back button to return to my books recycler view fragment */
-        solo.clickOnView(solo.getView(R.id.app_header_back_button));
+        solo.clickOnImageButton(BACK_BUTTON_INDEX);
         solo.waitForFragmentById(R.layout.fragment_my_books, (int) SHORT_WAIT);
+
+        filterByAll(solo);
     }
 
     /**
@@ -139,6 +150,7 @@ public class MyBooksFilterMenuTests
      * @throws Exception
      */
     @After
+
     public void tearDown() throws Exception
     {
         bookManager.deleteTestBooks();

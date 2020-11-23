@@ -17,6 +17,7 @@ public class TestUtils
     /* Default Robotium delay is wayyyyy too long. Use this one to speed up tests */
     public static long SHORT_WAIT = 5000;
     public static long NO_WAIT = 0;
+    private static int EDIT_BUTTON_INDEX = 1;
 
     /**
      * Signs out of test account after login. Assumes we are in the MyBooksActivity.
@@ -118,7 +119,7 @@ public class TestUtils
         solo.waitForFragmentById(R.layout.fragment_my_books_detail_view, (int) SHORT_WAIT);
 
         /* Click the edit button */
-        solo.clickOnView(solo.getView(R.id.app_header_edit_button));
+        solo.clickOnImageButton(EDIT_BUTTON_INDEX);
 
         /* Wait until we enter the edit books activity */
         solo.waitForActivity(AddOrEditBooksActivity.class, (int) SHORT_WAIT);

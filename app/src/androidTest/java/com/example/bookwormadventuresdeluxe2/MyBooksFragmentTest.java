@@ -39,6 +39,13 @@ public class MyBooksFragmentTest
     private Context appContext;
     private Resources resources;
 
+    private int BACK_BUTTON_INDEX = 0;
+    /* In the edit book fragment the index is different because android is stupid and picks
+     * arbitrary numbers
+     */
+    private int BACK_BUTTON_EDIT_BOOK_INDEX = 2;
+    private int EDIT_BOOK_BUTTON_INDEX = 1;
+
     @Rule
     public ActivityTestRule<LoginActivity> rule =
             new ActivityTestRule<>(LoginActivity.class, true, true);
@@ -96,7 +103,7 @@ public class MyBooksFragmentTest
         Assert.assertTrue(solo.searchText(resources.getString(R.string.available)));
 
         /* Return to the MyBooksActivity */
-        solo.clickOnView(solo.getView(R.id.app_header_back_button));
+        solo.clickOnImageButton(BACK_BUTTON_INDEX);
 
         /* Check that we returned to the MyBooks Activity */
         solo.assertCurrentActivity(resources.getString(R.string.wrong_activity), MyBooksActivity.class);
@@ -137,7 +144,7 @@ public class MyBooksFragmentTest
         solo.enterText((EditText) solo.getView(R.id.isbn_edit_text), resources.getString(R.string.test_book_isbn));
 
         /* Return to the MyBooksActivity */
-        solo.clickOnView(solo.getView(R.id.app_header_back_button));
+        solo.clickOnImageButton(BACK_BUTTON_EDIT_BOOK_INDEX);
 
         /* Wait for the MyBooks Activity */
         solo.waitForActivity(AddOrEditBooksActivity.class, (int) SHORT_WAIT);
@@ -188,7 +195,7 @@ public class MyBooksFragmentTest
         solo.waitForFragmentById(R.layout.fragment_my_books_detail_view, (int) SHORT_WAIT);
 
         /* Click on edit book icon to launch Edit book activity*/
-        solo.clickOnView(solo.getView(R.id.app_header_edit_button));
+        solo.clickOnImageButton(EDIT_BOOK_BUTTON_INDEX);
         solo.waitForActivity(AddOrEditBooksActivity.class, (int) SHORT_WAIT);
 
         /* Get the 4 edit texts */
@@ -248,7 +255,7 @@ public class MyBooksFragmentTest
         solo.waitForFragmentById(R.layout.fragment_my_books_detail_view, (int) SHORT_WAIT);
 
         /* Click on edit book icon to launch Edit book activity*/
-        solo.clickOnView(solo.getView(R.id.app_header_edit_button));
+        solo.clickOnImageButton(EDIT_BOOK_BUTTON_INDEX);
         solo.waitForActivity(AddOrEditBooksActivity.class, (int) SHORT_WAIT);
 
         /* Get the 4 edit texts */
@@ -297,7 +304,7 @@ public class MyBooksFragmentTest
         solo.waitForFragmentById(R.layout.fragment_my_books_detail_view, (int) SHORT_WAIT);
 
         /* Click on edit book icon to launch Edit book activity*/
-        solo.clickOnView(solo.getView(R.id.app_header_edit_button));
+        solo.clickOnImageButton(EDIT_BOOK_BUTTON_INDEX);
         solo.waitForActivity(AddOrEditBooksActivity.class, (int) SHORT_WAIT);
 
         /* Get ISBN text */

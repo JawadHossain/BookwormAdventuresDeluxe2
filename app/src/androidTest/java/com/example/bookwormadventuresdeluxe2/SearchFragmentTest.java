@@ -41,6 +41,8 @@ public class SearchFragmentTest
     public ActivityTestRule<LoginActivity> rule =
             new ActivityTestRule<>(LoginActivity.class, true, true);
 
+    private static int BACK_BUTTON_INDEX = 0;
+
     /**
      * Runs before each test and creates solo instance.
      *
@@ -84,9 +86,6 @@ public class SearchFragmentTest
         Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_book_title), 1, SHORT_WAIT));
         Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_book_author), 1, NO_WAIT));
         Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_book_isbn), 1, NO_WAIT));
-
-        /* Go back to detail view */
-        solo.clickOnView(solo.getView(R.id.app_header_back_button));
     }
 
     /**
@@ -155,7 +154,7 @@ public class SearchFragmentTest
         Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_account2_phone), 1, NO_WAIT));
 
         /* Return to the MyBooksActivity */
-        solo.clickOnView(solo.getView(R.id.app_header_back_button));
+        solo.clickOnImageButton(BACK_BUTTON_INDEX);
     }
 
     /**

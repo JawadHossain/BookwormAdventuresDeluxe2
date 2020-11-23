@@ -9,7 +9,6 @@ package com.example.bookwormadventuresdeluxe2;
  * A {@link Fragment} subclass for navbar menu item 2.
  */
 
-import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -186,7 +185,7 @@ public class RequestsFragment extends Fragment implements View.OnClickListener
         if (fragmentRootView == null)
         {
             /* Fragment was hidden, show it */
-            getFragmentManager().beginTransaction().add(R.id.frame_container, filterMenu).commit();
+            getFragmentManager().beginTransaction().add(R.id.frame_container, filterMenu, getString(R.string.filter_menu_fragment)).commit();
         }
         else
         {

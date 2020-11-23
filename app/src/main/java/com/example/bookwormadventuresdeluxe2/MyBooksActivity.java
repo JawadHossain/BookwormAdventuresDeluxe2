@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -22,12 +23,11 @@ import com.google.zxing.integration.android.IntentIntegrator;
 
 public class MyBooksActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener
 {
-
-    private BottomNavigationView navbar;
     private MyBooksFragment myBooksFragment = new MyBooksFragment();
     private SearchFragment searchFragment = new SearchFragment();
     private RequestsFragment requestsFragment = new RequestsFragment();
     private ProfileFragment profileFragment = new ProfileFragment();
+    private final FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -35,16 +35,68 @@ public class MyBooksActivity extends AppCompatActivity implements BottomNavigati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_books);
 
-        navbar = findViewById(R.id.bottom_navbar);
+        addFragments();
+
+        BottomNavigationView navbar = findViewById(R.id.bottom_navbar);
         navbar.setOnNavigationItemSelectedListener(this);
         navbar.setSelectedItemId(R.id.my_books_menu_item); // Set My Books as default
-
     }
 
-    // Todo : Fix Profile Avatar visibility issue
+    /**
+     * Add all fragments using the fragment manager, but hide all except for the myBooksFragment
+     */
+    private void addFragments()
+    {
+        fragmentManager.beginTransaction().add(R.id.frame_container, searchFragment, getString(R.string.search_fragment)).hide(searchFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.frame_container, requestsFragment, getString(R.string.requests_fragment)).hide(requestsFragment).commit();
+        /* Get the profile from firebase then add the profileFragment */
+        FirebaseUserGetSet.getUser(UserCredentialAPI.getInstance().getUsername(), new FirebaseUserGetSet.UserCallback()
+        {
+            @Override
+            public void onCallback(UserProfileObject userObject)
+            {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(getString(R.string.profile_object), userObject);
+                profileFragment.setArguments(bundle);
+                fragmentManager.beginTransaction().add(R.id.frame_container, profileFragment, getString(R.string.profile_fragment)).hide(profileFragment).commit();
+            }
+        });
+        fragmentManager.beginTransaction().add(R.id.frame_container, myBooksFragment, getString(R.string.my_books_fragment)).commit();
+        ActiveFragmentTracker.activeFragment = myBooksFragment;
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
+        /* If another user's profileFragment is open, close it */
+        Fragment otherUserProfileFragment = fragmentManager.findFragmentByTag(getString(R.string.other_profile_fragment));
+        if (otherUserProfileFragment != null)
+        {
+            fragmentManager.beginTransaction().remove(otherUserProfileFragment).commit();
+        }
+
+        /* If a myBooksDetailFragment is open, close it */
+        Fragment bookDetailFragment = fragmentManager.findFragmentByTag(getString(R.string.book_detail_fragment));
+        if (bookDetailFragment != null)
+        {
+            fragmentManager.beginTransaction().remove(bookDetailFragment).commit();
+        }
+
+        /* If a FilterMenu is open, close it */
+        Fragment filterMenu = fragmentManager.findFragmentByTag(getString(R.string.filter_menu_fragment));
+        if (filterMenu != null)
+        {
+            fragmentManager.beginTransaction().remove(filterMenu).commit();
+        }
+
+        /* If a notification Fragment is open, close it */
+        Fragment notificationFragment = fragmentManager.findFragmentByTag(getString(R.string.notification_fragment));
+
+        if (notificationFragment != null)
+        {
+            fragmentManager.beginTransaction().remove(notificationFragment).commit();
+        }
+
         /* Override to open a new Fragment*/
         switch (item.getItemId())
         {
@@ -65,22 +117,8 @@ public class MyBooksActivity extends AppCompatActivity implements BottomNavigati
                 break;
             case R.id.profile_menu_item:
                 /* Respond to  Profile click*/
-
-                /* Pulling UserProfileObject from database */
-                FirebaseUserGetSet.getUser(UserCredentialAPI.getInstance().getUsername(), new FirebaseUserGetSet.UserCallback()
-                {
-                    @Override
-                    public void onCallback(UserProfileObject userObject)
-                    {
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable(getString(R.string.profile_object), userObject);
-                        profileFragment.setArguments(bundle);
-
-                        /* Opening MyProfileFragment */
-                        replaceFragment(profileFragment);
-                        setTitle("Profile");
-                    }
-                });
+                replaceFragment(profileFragment);
+                setTitle("Profile");
                 break;
             default:
                 /* We would not expect any other id */
@@ -100,20 +138,28 @@ public class MyBooksActivity extends AppCompatActivity implements BottomNavigati
     }
 
     /**
-     * Update fragment Container with new fragment
-     * Use fade in and fade out for transition
-     * addToBackStack( optional name or null ) remembers transition and reverses operation when popped off stack
-     * source: https://developer.android.com/training/basics/fragments/animate
+     * Update fragment Container with new fragment.
+     * Use fade in and fade out for transition.
+     * This simply hides the active fragment and shows the new fragment
      *
      * @param fragment The fragment to replace this one with
      */
     public void replaceFragment(Fragment fragment)
     {
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                .replace(R.id.frame_container, fragment)
-                .addToBackStack(null)
-                .commit();
+        if (ActiveFragmentTracker.activeFragment != fragment)
+        {
+            /* Hide the current active fragment and show the new one */
+            fragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                    .hide(ActiveFragmentTracker.activeFragment)
+                    .show(fragment)
+                    .commit();
+
+            /* Set the new active fragment */
+            ActiveFragmentTracker.activeFragment = fragment;
+        }
+
+        /* Do nothing if we are clicking the same fragment twice */
     }
 
     /**
