@@ -38,6 +38,12 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'com.android.support:multidex:1.0.3'
 
+    // Firebase Cloud Messaging
+    implementation 'com.google.firebase:firebase-messaging:21.0.0'
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+
     // Tests
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

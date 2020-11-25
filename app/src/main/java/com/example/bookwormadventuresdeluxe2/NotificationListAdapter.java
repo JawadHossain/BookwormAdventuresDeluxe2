@@ -33,6 +33,8 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
         public TextView author;
         public TextView isbn;
         public ImageView statusCircle;
+        public ImageView bookPhoto;
+
 
         /**
          * A viewHolder for notifications
@@ -47,6 +49,7 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
             this.author = (TextView) (notificationItemLayout.getViewById(R.id.book_item)).findViewById(R.id.book_item_author);
             this.isbn = (TextView) (notificationItemLayout.getViewById(R.id.book_item)).findViewById(R.id.book_item_isbn);
             this.statusCircle = (ImageView) (notificationItemLayout.getViewById(R.id.book_item)).findViewById(R.id.book_item_status);
+            this.bookPhoto = (ImageView) (notificationItemLayout.getViewById(R.id.book_item)).findViewById(R.id.book_item_image);
         }
     }
 
@@ -98,8 +101,13 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
         NotificationListViewHolder.author.setText(notifications.get(position).getBook().getAuthor());
         NotificationListViewHolder.isbn.setText(notifications.get(position).getBook().getIsbn());
 
-        notifications.get(position).getBook().setStatusCircleColor(
-                NotificationListViewHolder.statusCircle, UserCredentialAPI.getInstance().getUsername());
+        Book book = notifications.get(position).getBook();
+        /* Set book status colour*/
+        book.setStatusCircleColor(
+                NotificationListViewHolder.statusCircle,
+                UserCredentialAPI.getInstance().getUsername());
+        /* Set book photo */
+        book.setPhoto(book, NotificationListViewHolder.bookPhoto);
     }
 
     @Override

@@ -8,15 +8,19 @@ package com.example.bookwormadventuresdeluxe2;
  */
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,7 +30,12 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -42,9 +51,11 @@ import java.util.Map;
  */
 public class MyBooksFragment extends Fragment
 {
+    public static final String TAG = "MyBooksFragment";
     private RecyclerView myBooksRecyclerView;
     private BookListAdapter myBooksRecyclerAdapter;
     private RecyclerView.LayoutManager myBooksRecyclerLayoutManager;
+    private TextView notificationIconBadge;
     private FilterMenu filterMenu;
 
     private ImageButton notificationButton;
@@ -69,6 +80,12 @@ public class MyBooksFragment extends Fragment
         myBooksView.findViewById(R.id.app_header_filter_button).setVisibility(View.VISIBLE);
         myBooksView.findViewById(R.id.app_header_scan_button).setVisibility(View.VISIBLE);
 
+        /* Listen changes on user firestore document */
+        addFirestoreUserNotificationCountListener();
+        /* Set visibility of notification icon badge if notifications present*/
+        notificationIconBadge = myBooksView.findViewById(R.id.notification_icon_badge);
+        updateNotificationBadge();
+
         /* Setup Filter button */
         this.filterButton = myBooksView.findViewById(R.id.app_header_filter_button);
         this.filterButton.setVisibility(View.VISIBLE);
@@ -85,6 +102,66 @@ public class MyBooksFragment extends Fragment
         this.notificationButton.setOnClickListener(this::onNotificationClick);
 
         return myBooksView;
+    }
+
+    /**
+     * Listen for changes to user notification count
+     */
+    private void addFirestoreUserNotificationCountListener()
+    {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        UserCredentialAPI userCredentialAPI = UserCredentialAPI.getInstance();
+        Long currentNotificationCount = userCredentialAPI.getNotificationCount();
+
+        db
+                .collection(getString(R.string.users_collection))
+                .document(userCredentialAPI.getUserId())
+                .addSnapshotListener(new EventListener<DocumentSnapshot>()
+                {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException error)
+                    {
+                        if (error != null)
+                        {
+                            Log.d(TAG, "Listen failed. " + error.getMessage());
+                        }
+
+                        if (snapshot != null && snapshot.exists())
+                        {
+                            Context context = GlobalApplication.getAppContext(); // need to access string resource when fragment not in view
+                            Long snapshotNotificationCount = (Long) snapshot.get(context.getString(R.string.firestore_user_notification_count_field));
+                            if (snapshotNotificationCount != null && !snapshotNotificationCount.equals(currentNotificationCount))
+                            {
+                                userCredentialAPI.setNotificationCount(snapshotNotificationCount);
+                                /* check if fragment in view */
+                                View fragmentRootView = MyBooksFragment.this.getView();
+                                if (fragmentRootView != null)
+                                {
+                                    updateNotificationBadge();
+                                }
+                            }
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Update notification badge count and visibility on change
+     */
+    public void updateNotificationBadge()
+    {
+        Long notificationCount = UserCredentialAPI.getInstance().getNotificationCount();
+
+        if (notificationCount != null && notificationCount > 0)
+        {
+            notificationIconBadge.setVisibility(View.VISIBLE);
+            notificationIconBadge.setText(String.valueOf(notificationCount));
+        }
+        else
+        {
+            notificationIconBadge.setText("0");
+            notificationIconBadge.setVisibility(View.GONE);
+        }
     }
 
     // https://stackoverflow.com/questions/6495898/findviewbyid-in-fragment#:~:text=Use%20getView%20%28%29%20or%20the%20View%20parameter%20from,method%29.%20With%20this%20you%20can%20call%20findViewById%20%28%29.
@@ -143,6 +220,7 @@ public class MyBooksFragment extends Fragment
             myBooksRecyclerAdapter.stopListening();
         }
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intentData)
@@ -259,7 +337,7 @@ public class MyBooksFragment extends Fragment
         {
             /* If the fragment does not exist create and add it */
             notificationFragment = new NotificationFragment();
-            getFragmentManager().beginTransaction().add(R.id.frame_container, notificationFragment, getString(R.string.notification_fragment)).commit();
+            getFragmentManager().beginTransaction().add(R.id.frame_container, notificationFragment, getString(R.string.notification_fragment)).hide(ActiveFragmentTracker.activeFragment).commit();
         }
     }
 

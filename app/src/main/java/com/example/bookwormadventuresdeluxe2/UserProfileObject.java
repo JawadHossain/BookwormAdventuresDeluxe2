@@ -13,6 +13,7 @@ public class UserProfileObject implements Serializable
     private String phoneNumber;
     private String userId;
     private String documentId;
+    private String FCMtoken;
 
     public UserProfileObject()
     {
@@ -21,19 +22,21 @@ public class UserProfileObject implements Serializable
 
     /**
      * Default constructor for UserProfileObject
-     * @param username username pulled from database
-     * @param email email pulled from database
+     *
+     * @param username    username pulled from database
+     * @param email       email pulled from database
      * @param phoneNumber phone number pulled from database
-     * @param userId userId pulled from database, unique to FirebaseAuth account
-     * @param documentId documentId pulled from database, used to target object
+     * @param userId      userId pulled from database, unique to FirebaseAuth account
+     * @param documentId  documentId pulled from database, used to target object
      */
-    public UserProfileObject(String username, String email, String phoneNumber, String userId, String documentId)
+    public UserProfileObject(String username, String email, String phoneNumber, String userId, String documentId, String FCMtoken)
     {
         this.username = username;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.userId = userId;
         this.documentId = documentId;
+        this.FCMtoken = FCMtoken;
     }
 
     public String getUsername()
@@ -84,5 +87,15 @@ public class UserProfileObject implements Serializable
     public void setDocumentId(String documentId)
     {
         this.documentId = documentId;
+    }
+
+    public String getFCMtoken()
+    {
+        return FCMtoken;
+    }
+
+    public void setFCMtoken(String FCMtoken)
+    {
+        this.FCMtoken = FCMtoken;
     }
 }

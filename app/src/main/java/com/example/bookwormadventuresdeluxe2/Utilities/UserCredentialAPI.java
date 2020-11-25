@@ -11,6 +11,7 @@ public class UserCredentialAPI extends Application
     private static UserCredentialAPI instance;
     private String username;
     private String userId;
+    private Long notificationCount;
 
     /**
      * Get the instance of the UserCredentialAPI
@@ -51,6 +52,16 @@ public class UserCredentialAPI extends Application
     public void setUserId(String userId)
     {
         this.userId = userId;
+    }
+
+    public Long getNotificationCount()
+    {
+        return notificationCount;
+    }
+
+    public void setNotificationCount(Long notificationCount)
+    {
+        this.notificationCount = notificationCount;
     }
 
 }

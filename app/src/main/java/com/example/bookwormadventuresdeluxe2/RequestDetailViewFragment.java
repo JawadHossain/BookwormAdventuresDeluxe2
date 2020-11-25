@@ -25,11 +25,14 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import com.example.bookwormadventuresdeluxe2.NotificationUtility.NotificationHandler;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RequestDetailViewFragment extends DetailView
 {
@@ -147,6 +150,11 @@ public class RequestDetailViewFragment extends DetailView
         return bookDetailView;
     }
 
+    /**
+     * Start view location Activity to allow user to view a marked location
+     *
+     * @param view
+     */
     private void btnViewLocation(View view)
     {
         Intent viewLocationIntent = new Intent(getActivity(), ViewLocationActivity.class);
@@ -222,7 +230,28 @@ public class RequestDetailViewFragment extends DetailView
 
         this.bookDocument.update(getString(R.string.requesters), borrower);
         this.bookDocument.update(getString(R.string.status), getString(R.string.accepted));
+
+        String borrowerUsername = borrower.get(0);
+        // Send In-app and Push notification to Borrower
+        sendRequestAcceptedNotification(borrowerUsername);
         onBackClick(view);
+    }
+
+    /**
+     * Create hash map with notification info and  pass to Notification Handler process notification
+     */
+    private void sendRequestAcceptedNotification(String borrowerUsername)
+    {
+
+        /* Create notification for firestore collection */
+        String message = "Borrow request accepted by: "
+                + selectedBook.getOwner();
+        HashMap<String, String> inAppNotification = new HashMap<>();
+        inAppNotification.put(getString(R.string.firestore_user_notification_bookId_field), selectedBookId);
+        inAppNotification.put(getString(R.string.firestore_user_notification_message_field), message);
+        inAppNotification.put(getString(R.string.firestore_user_notification_timestamp_field), String.valueOf(Timestamp.now().getSeconds())); // to sort by latest
+        /* Call notification handler to process notification */
+        NotificationHandler.sendNotification("Request Accepted", message, borrowerUsername, inAppNotification);
     }
 
     /**

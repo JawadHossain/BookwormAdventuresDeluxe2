@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +23,15 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.example.bookwormadventuresdeluxe2.NotificationUtility.NotificationHandler;
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.security.InvalidParameterException;
+import java.util.HashMap;
 
 public class BorrowDetailViewFragment extends DetailView
 {
@@ -160,7 +164,7 @@ public class BorrowDetailViewFragment extends DetailView
     }
 
     /**
-     * Send request to book owner
+     * Send notification and request to book owner
      *
      * @param view The view that was clicked on
      */
@@ -169,9 +173,33 @@ public class BorrowDetailViewFragment extends DetailView
         this.bookDocument.update(getString(R.string.requesters),
                 FieldValue.arrayUnion(UserCredentialAPI.getInstance().getUsername()));
         this.bookDocument.update(getString(R.string.status), getString(R.string.requested));
+
+        // Send In-app and Push notification to owner
+        sendBorrowRequestNotification();
         onBackClick(view);
     }
 
+    /**
+     * Create hash map with notification info pass to Notification Handler process notification
+     */
+    private void sendBorrowRequestNotification()
+    {
+        /* Create notification for firestore collection */
+        String message = "New borrow request from: "
+                + UserCredentialAPI.getInstance().getUsername();
+        HashMap<String, String> inAppNotification = new HashMap<>();
+        inAppNotification.put(getString(R.string.firestore_user_notification_bookId_field), selectedBookId);
+        inAppNotification.put(getString(R.string.firestore_user_notification_message_field), message);
+        inAppNotification.put(getString(R.string.firestore_user_notification_timestamp_field), String.valueOf(Timestamp.now().getSeconds()));
+        /* Call notification handler to process notification */
+        NotificationHandler.sendNotification("Borrow Request", message, selectedBook.getOwner(), inAppNotification);
+    }
+
+    /**
+     * Start set location Activity to allow user to pick a location
+     *
+     * @param view
+     */
     private void btnSetLocation(View view)
     {
         Intent setLocationActivityIntent = new Intent(getActivity(), SetLocationActivity.class);

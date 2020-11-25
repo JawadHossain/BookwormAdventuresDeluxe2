@@ -50,6 +50,7 @@
     <!-- Firestore collections -->
     <string name="books_collection">Books</string>
     <string name="users_collection">Users</string>
+    <string name="notifications_collection">notifications</string>
     <!-- Firestore keywords -->
     <string name="owner">owner</string>
     <string name="status">status</string>
@@ -68,6 +69,12 @@
     <string name="firestore_email">email</string>
     <string name="firestore_phoneNumber">phoneNumber</string>
     <string name="firestore_userId">userId</string>
+    <!-- Firestore notification   -->
+    <string name="firestore_user_notification_count_field">notificationCount</string>
+    <string name="firestore_user_token_field">token</string>
+    <string name="firestore_user_notification_timestamp_field">timestamp</string>
+    <string name="firestore_user_notification_bookId_field">bookID</string>
+    <string name="firestore_user_notification_message_field">message</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

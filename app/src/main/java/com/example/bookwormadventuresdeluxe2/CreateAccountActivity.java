@@ -21,6 +21,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bookwormadventuresdeluxe2.NotificationUtility.NotificationHandler;
 import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -155,7 +156,7 @@ public class CreateAccountActivity extends AppCompatActivity
      * Checker for valid account creation parameters. Goes into CreateUser
      *
      * @param username Input username to be checked
-     * @param email Input email to be checked
+     * @param email    Input email to be checked
      * @param password Password of account to be created
      */
     private void checkUsernameEmailAvailability(String username, String email, String password)
@@ -254,7 +255,7 @@ public class CreateAccountActivity extends AppCompatActivity
      * ProgressBar visibility set to Invisible inside nested calls due to asynchronous firebase methods
      *
      * @param username Username to be created
-     * @param email Email to be created
+     * @param email    Email to be created
      * @param password Password to be created
      */
     private void createUser(String username, String email, String password)
@@ -276,6 +277,9 @@ public class CreateAccountActivity extends AppCompatActivity
                             UserCredentialAPI userCredentialAPI = UserCredentialAPI.getInstance();
                             userCredentialAPI.setUserId(currentUser.getUid());
                             userCredentialAPI.setUsername(username);
+
+                            /* Store user app token in database*/
+                            NotificationHandler.updateFCMToken(null, currentUser.getUid());
 
                             /* Create firebase database profile */
                             createFirebaseAccount(currentUser.getUid());
@@ -328,8 +332,8 @@ public class CreateAccountActivity extends AppCompatActivity
         newUser.put(getString(R.string.firestore_username), editTextUsername.getText().toString().trim());
         newUser.put(getString(R.string.firestore_phoneNumber), editTextPhoneNumber.getText().toString());
 
-        /* Save new user to Firestore */
-        collectionReference.add(newUser);
+        /* Save new user to Firestore. Set documentId as userId */
+        collectionReference.document(userId).set(newUser);
     }
 
     /**

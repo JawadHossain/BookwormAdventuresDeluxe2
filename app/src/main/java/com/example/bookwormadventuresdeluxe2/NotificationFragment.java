@@ -6,22 +6,35 @@ package com.example.bookwormadventuresdeluxe2;
  */
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
+import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 
+
 public class NotificationFragment extends Fragment
 {
+    public static final String TAG = "Notification Fragment";
     private RecyclerView notificationRecyclerView;
     private NotificationListAdapter notificationRecyclerAdapter;
     private RecyclerView.LayoutManager notificationRecyclerLayoutManager;
@@ -31,27 +44,20 @@ public class NotificationFragment extends Fragment
     private ImageButton backButton;
 
     /**
-     * Constructor for the fragment responsible for displaying notifications
+     * Required empty public constructor
      */
     public NotificationFragment()
     {
-        this.notificationList = new ArrayList<Notification>();
-        // TODO: replace this example with actual notifications from FireBase
-        notificationList.add(new Notification(new Book("Hudson", "1984", "George Orwell", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do" +
-                "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis", "9780141036144", Status.Available, ""), "message1"));
-        notificationList.add(new Notification(new Book("Hudson", "1984", "George Orwell", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do" +
-                "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis", "9780141036144", Status.Borrowed, ""), "message2"));
+//
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
+        this.notificationList = new ArrayList<Notification>();
         // Inflate the layout for this fragment
         View notificationView = inflater.inflate(R.layout.fragment_notification, container, false);
-
-        // Set visibility of desired custom header buttons
-        notificationView.findViewById(R.id.app_header_filter_button).setVisibility(View.VISIBLE);
 
         appHeaderText = notificationView.findViewById(R.id.app_header_title);
         appHeaderText.setText(R.string.notification_title);
@@ -66,6 +72,7 @@ public class NotificationFragment extends Fragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
+
         notificationRecyclerView = (RecyclerView) view.findViewById(R.id.notification_recycler_view);
         notificationRecyclerView.setHasFixedSize(true);
 
@@ -74,6 +81,63 @@ public class NotificationFragment extends Fragment
 
         notificationRecyclerAdapter = new NotificationListAdapter(notificationList, this.getContext());
         notificationRecyclerView.setAdapter(notificationRecyclerAdapter);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userID = UserCredentialAPI.getInstance().getUserId();
+        db
+                .collection(getString(R.string.users_collection) + "/"
+                        + userID + "/" + getString(R.string.notifications_collection))
+                .orderBy(getString(R.string.firestore_user_notification_timestamp_field), Query.Direction.DESCENDING)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+                {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task)
+                    {
+                        if (task.isSuccessful())
+                        {
+                            /* Get user notifications*/
+                            for (DocumentSnapshot document : task.getResult())
+                            {
+                                String bookID = document.getString(getString(R.string.firestore_user_notification_bookId_field));
+                                String message = document.getString(getString(R.string.firestore_user_notification_message_field));
+                                final Book[] book = new Book[1];
+
+                                /* Initialize as empty book */
+                                book[0] = new Book();
+
+                                /* Find Book information */
+                                db.collection(getString(R.string.books_collection))
+                                        .document(bookID)
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
+                                                               {
+                                                                   @Override
+                                                                   public void onComplete(@NonNull Task<DocumentSnapshot> task)
+                                                                   {
+                                                                       if (task.isSuccessful())
+                                                                       {
+                                                                           /* Create book associated with notification*/
+                                                                           DocumentSnapshot document = task.getResult();
+                                                                           book[0] = document.toObject(Book.class);
+                                                                           /* Create Notification */
+                                                                           Notification notification = new Notification(book[0], message);
+                                                                           notificationList.add(notification);
+                                                                           notificationRecyclerAdapter.notifyDataSetChanged();
+                                                                       }
+                                                                   }
+                                                               }
+                                        );
+                            }
+                        }
+                        else
+                        {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+
     }
 
     /**
@@ -83,8 +147,15 @@ public class NotificationFragment extends Fragment
      */
     public void onBackClick(View v)
     {
-        //TODO: remove notifications
-        Fragment myBooksFragment = getFragmentManager().findFragmentByTag(getString(R.string.my_books_fragment));
+        /* Remove notifications*/
+        Long notificationCount = UserCredentialAPI.getInstance().getNotificationCount();
+        if (notificationCount != null && notificationCount > 0)
+        {
+            FirebaseUserGetSet.resetNotifications(UserCredentialAPI.getInstance().getUserId());
+        }
+
+        MyBooksFragment myBooksFragment = (MyBooksFragment) getFragmentManager().findFragmentByTag(getString(R.string.my_books_fragment));
+        myBooksFragment.updateNotificationBadge(); // update notification badge
         getFragmentManager().beginTransaction().hide(this).show(ActiveFragmentTracker.activeFragment).commit();
     }
 }
