@@ -12,6 +12,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
@@ -65,12 +66,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage)
     {
         super.onMessageReceived(remoteMessage);
+        /* Get new notification title */
+        Context context = getAppContext();
+        String title = context.getString(R.string.new_notification_title);
         /* Check if notification is intended for logged in user */
         String currentUserId = getCurrentUserId();
         String receiverUserId = remoteMessage.getData().get("ReceiverUserId");
         if (currentUserId != null && currentUserId.equals(receiverUserId))
         {
-            showNotification(remoteMessage.getData().get("Title"), remoteMessage.getData().get("Message"));
+            showNotification(title, remoteMessage.getData().get("Message"));
         }
         else
         {
@@ -93,6 +97,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(title)
                 .setContentText(body)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.app_icon))
                 .setPriority(NotificationCompat.PRIORITY_HIGH) // for lower than api 26
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true) // removes notification on click

@@ -82,6 +82,8 @@ public class BorrowDetailViewFragment extends DetailView
         this.btn2 = this.bookDetailView.findViewById(R.id.borrowDetail_btn2);
         this.exchange = this.bookDetailView.findViewById(R.id.borrow_exchange_location);
 
+        String pickUpAddress = this.selectedBook.getPickUpAddress();
+
         switch (selectedBook.getStatus())
         {
             case Available:
@@ -99,7 +101,7 @@ public class BorrowDetailViewFragment extends DetailView
             case Accepted:
                 this.btn1.setText(getString(R.string.view_location));
 
-                if (this.selectedBook.getPickUpAddress().equals(""))
+                if (pickUpAddress == null || pickUpAddress.equals("")) // null.equals is invalid
                 {
                     this.btn1.setBackgroundTintList(resources.getColorStateList(R.color.tempPhotoBackground));
                     this.btn1.setTextColor(resources.getColorStateList(R.color.colorPrimary));
@@ -127,7 +129,7 @@ public class BorrowDetailViewFragment extends DetailView
                 this.btn1.setText(getString(R.string.set_location));
                 this.btn2.setText(getString(R.string.return_book));
 
-                if (this.selectedBook.getPickUpAddress().equals(""))
+                if (pickUpAddress == null || pickUpAddress.equals("")) // null.equals is invalid
                 {
                     setNotReadyToReturn();
                 }
@@ -175,24 +177,24 @@ public class BorrowDetailViewFragment extends DetailView
         this.bookDocument.update(getString(R.string.status), getString(R.string.requested));
 
         // Send In-app and Push notification to owner
-        sendBorrowRequestNotification();
+        sendNotification(getString(R.string.borrow_request_message));
         onBackClick(view);
     }
 
     /**
      * Create hash map with notification info pass to Notification Handler process notification
      */
-    private void sendBorrowRequestNotification()
+    private void sendNotification(String notificationMessage)
     {
         /* Create notification for firestore collection */
-        String message = "New borrow request from: "
+        String message = notificationMessage + " "
                 + UserCredentialAPI.getInstance().getUsername();
         HashMap<String, String> inAppNotification = new HashMap<>();
         inAppNotification.put(getString(R.string.firestore_user_notification_bookId_field), selectedBookId);
         inAppNotification.put(getString(R.string.firestore_user_notification_message_field), message);
         inAppNotification.put(getString(R.string.firestore_user_notification_timestamp_field), String.valueOf(Timestamp.now().getSeconds()));
         /* Call notification handler to process notification */
-        NotificationHandler.sendNotification("Borrow Request", message, selectedBook.getOwner(), inAppNotification);
+        NotificationHandler.sendNotification(message, selectedBook.getOwner(), inAppNotification);
     }
 
     /**
@@ -218,6 +220,8 @@ public class BorrowDetailViewFragment extends DetailView
         this.bookDocument.update(getString(R.string.status), getString(R.string.rPending));
         // notify owner
         onBackClick(view);
+        // Send In-app and Push notification to owner
+        sendNotification(getString(R.string.return_request_message));
     }
 
     /**

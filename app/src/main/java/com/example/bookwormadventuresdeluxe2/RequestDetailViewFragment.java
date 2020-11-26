@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,7 +106,8 @@ public class RequestDetailViewFragment extends DetailView
 
                 this.btn1.setOnClickListener(this::btnSetLocation);
 
-                if (this.selectedBook.getPickUpAddress().equals(""))
+                String pickUpAddress = this.selectedBook.getPickUpAddress();
+                if (pickUpAddress == null || pickUpAddress.equals("")) // null.equals is invalid
                 {
                     setNotReadyToLend();
                 }
@@ -187,6 +189,9 @@ public class RequestDetailViewFragment extends DetailView
         //TODO: launch scan
         this.bookDocument.update(getString(R.string.status), getString(R.string.bPending));
         onBackClick(view);
+
+        // Send In-app and Push notification to Borrower
+        sendNotification(selectedBook.getRequesters().get(0), getString(R.string.my_requests_book_confirm_lend_message));
     }
 
     private void btnSetLocation(View view)
@@ -233,25 +238,25 @@ public class RequestDetailViewFragment extends DetailView
 
         String borrowerUsername = borrower.get(0);
         // Send In-app and Push notification to Borrower
-        sendRequestAcceptedNotification(borrowerUsername);
+        sendNotification(borrowerUsername, getString(R.string.request_accepted_message));
         onBackClick(view);
     }
 
     /**
      * Create hash map with notification info and  pass to Notification Handler process notification
      */
-    private void sendRequestAcceptedNotification(String borrowerUsername)
+    private void sendNotification(String borrowerUsername, String notificationMessage)
     {
 
         /* Create notification for firestore collection */
-        String message = "Borrow request accepted by: "
+        String message = notificationMessage + " "
                 + selectedBook.getOwner();
         HashMap<String, String> inAppNotification = new HashMap<>();
         inAppNotification.put(getString(R.string.firestore_user_notification_bookId_field), selectedBookId);
         inAppNotification.put(getString(R.string.firestore_user_notification_message_field), message);
         inAppNotification.put(getString(R.string.firestore_user_notification_timestamp_field), String.valueOf(Timestamp.now().getSeconds())); // to sort by latest
         /* Call notification handler to process notification */
-        NotificationHandler.sendNotification("Request Accepted", message, borrowerUsername, inAppNotification);
+        NotificationHandler.sendNotification(message, borrowerUsername, inAppNotification);
     }
 
     /**

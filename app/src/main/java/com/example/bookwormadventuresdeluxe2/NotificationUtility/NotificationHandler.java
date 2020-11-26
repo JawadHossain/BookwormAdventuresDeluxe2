@@ -32,11 +32,10 @@ public class NotificationHandler
     /**
      * Get User FCM token, create raw notification with data passed in
      *
-     * @param title    The title of the notification
-     * @param message  The title of the message
+     * @param message  The message of the notification
      * @param username The username of the receiver
      */
-    public static void sendNotification(String title, String message, String username, HashMap<String, String> inAppNotification)
+    public static void sendNotification(String message, String username, HashMap<String, String> inAppNotification)
     {
         /* Find user FCM token and process notification */
         FirebaseUserGetSet.getUser(username, (user ->
@@ -45,7 +44,7 @@ public class NotificationHandler
             String token = user.getFCMtoken();
             if (token != null)
             {
-                Data data = new Data(title, message, user.getUserId());
+                Data data = new Data(message, user.getUserId());
                 NotificationSender notificationSender = new NotificationSender(data, token);
                 processNotification(notificationSender);
             }

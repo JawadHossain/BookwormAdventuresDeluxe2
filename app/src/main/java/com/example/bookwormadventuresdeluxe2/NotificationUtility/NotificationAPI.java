@@ -14,7 +14,6 @@ import static com.example.bookwormadventuresdeluxe2.NotificationUtility.CloudMes
 public interface NotificationAPI
 {
     /* Setup post request headers */
-    // Todo: Hide FCM server key in secrets.xml
     @Headers(
             {
                     cloudMessagingServerKey,

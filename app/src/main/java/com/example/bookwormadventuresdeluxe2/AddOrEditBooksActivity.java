@@ -336,9 +336,9 @@ public class AddOrEditBooksActivity extends AppCompatActivity
         {
             IntentResult scanResult = IntentIntegrator.parseActivityResult(
                     requestCode, resultCode, intent);
-            if (scanResult != null)
+            String isbn_scan_result = scanResult.getContents();
+            if (isbn_scan_result != null) // proceed if result present
             {
-                String isbn_scan_result = scanResult.getContents();
                 // Older versions had 9 digits but can be converted to 10 "by prefixing it with a zero"
                 // https://en.wikipedia.org/wiki/International_Standard_Book_Number
                 if (isbn_scan_result.length() == 9)

@@ -6,25 +6,13 @@ package com.example.bookwormadventuresdeluxe2.NotificationUtility;
 
 public class Data
 {
-    private String Title;
     private String Message;
     private String ReceiverUserId;
 
-    public Data(String title, String message, String receiverUserId)
+    public Data(String message, String receiverUserId)
     {
-        Title = title;
         Message = message;
         ReceiverUserId = receiverUserId;
-    }
-
-    public String getTitle()
-    {
-        return Title;
-    }
-
-    public void setTitle(String title)
-    {
-        Title = title;
     }
 
     public String getMessage()
