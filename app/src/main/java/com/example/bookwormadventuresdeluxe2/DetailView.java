@@ -6,17 +6,21 @@ package com.example.bookwormadventuresdeluxe2;
  * for updating the views and passing data between the caller and the detail view.
  */
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 /**
  * abstract class representing all the DetailView fragments
@@ -50,6 +54,32 @@ public abstract class DetailView extends Fragment
         }
 
         return bookDetailView;
+    }
+
+    /**
+     * Sets the colours to a disable colour
+     * nullyfies the click listener for the button
+     *
+     * @param button
+     */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    protected void disableButton(Button button)
+    {
+        button.setBackgroundTintList(getResources().getColorStateList(R.color.tempPhotoBackground));
+        button.setTextColor(getResources().getColorStateList(R.color.colorPrimary));
+        button.setOnClickListener(null);
+    }
+
+    /**
+     * Sets the colours to a valid colour
+     *
+     * @param button
+     */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    protected void enableButton(Button button)
+    {
+        button.setBackgroundTintList(getResources().getColorStateList(R.color.colorPrimaryDark));
+        button.setTextColor(getResources().getColorStateList(R.color.colorBackground));
     }
 
     /**
@@ -98,6 +128,18 @@ public abstract class DetailView extends Fragment
     abstract public void onBackClick(View v);
 
     /**
+     * Method is called when the user clicks on a action button to lend / receive
+     * a book
+     */
+    protected void onScanCall(int requestCode)
+    {
+        IntentIntegrator integrator = new IntentIntegrator(getActivity());
+        integrator.setBeepEnabled(false);
+        integrator.setRequestCode(requestCode);
+        integrator.initiateScan();
+    }
+
+    /*
      * Opens user profile on TextView click
      *
      * @param textView TextView in view

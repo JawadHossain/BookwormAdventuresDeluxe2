@@ -19,7 +19,6 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.zxing.integration.android.IntentIntegrator;
 
 public class MyBooksActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener
 {
@@ -176,7 +175,11 @@ public class MyBooksActivity extends AppCompatActivity implements BottomNavigati
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if (requestCode == IntentIntegrator.REQUEST_CODE)
+        if (requestCode == RequestDetailViewFragment.REQUEST_GIVE_SCAN ||
+                requestCode == RequestDetailViewFragment.REQUEST_RECEIVE_SCAN ||
+                requestCode == BorrowDetailViewFragment.BORROW_RETURN_SCAN ||
+                requestCode == BorrowDetailViewFragment.BORROW_RECIEVE_SCAN ||
+                requestCode == MyBooksFragment.MY_BOOK_FRAGMENT_SCAN)
         {
             // https://stackoverflow.com/questions/6147884/onactivityresult-is-not-being-called-in-fragment
             for (Fragment fragment : getSupportFragmentManager().getFragments())

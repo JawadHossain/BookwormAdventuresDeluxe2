@@ -120,10 +120,13 @@ public class NotificationFragment extends Fragment
                                                                            /* Create book associated with notification*/
                                                                            DocumentSnapshot document = task.getResult();
                                                                            book[0] = document.toObject(Book.class);
-                                                                           /* Create Notification */
-                                                                           Notification notification = new Notification(book[0], message);
-                                                                           notificationList.add(notification);
-                                                                           notificationRecyclerAdapter.notifyDataSetChanged();
+                                                                           if(book[0] != null) // check if book exists
+                                                                           {
+                                                                               /* Create Notification */
+                                                                               Notification notification = new Notification(book[0], message);
+                                                                               notificationList.add(notification);
+                                                                               notificationRecyclerAdapter.notifyDataSetChanged();
+                                                                           }
                                                                        }
                                                                    }
                                                                }

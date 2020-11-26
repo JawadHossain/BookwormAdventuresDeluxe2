@@ -53,7 +53,7 @@ public class MyBooksDetailViewFragment extends DetailView
 
         return bookDetailView;
     }
-
+    
     /**
      * Update the textfields for book detail view based on the given book
      *
