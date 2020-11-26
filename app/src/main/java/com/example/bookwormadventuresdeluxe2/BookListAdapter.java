@@ -28,6 +28,8 @@ public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdap
     private Context context;
     private int caller;
 
+    private static String search = "";
+
     // Reference to the views for each item
     public static class BookListViewHolder extends RecyclerView.ViewHolder
     {
@@ -130,7 +132,34 @@ public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdap
                 detailView.setArguments(source);
                 break;
             case R.id.search_books:
-                source.putString(context.getString(R.string.book_click_source_fragment), context.getString(R.string.search_title));
+
+                /* If book belongs to owner, OR not a search match while searching, hide it */
+                if (book.getOwner().equals(UserCredentialAPI.getInstance().getUsername())
+                    || (!this.search.equals("") && !searchMatch(book)))
+                {
+                    /* Hiding and setting the item margins to 0 */
+                    holder.itemView.setVisibility(View.GONE);
+                    holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
+                }
+
+                /* Else if not searching, OR searching and book is a search match, show book*/
+                else if (this.search.equals("") || (!search.equals("") && searchMatch(book)))
+                {
+                    /*
+                     * Resetting the item layout to original parameters
+                     *
+                     * Source: https://stackoverflow.com/questions/12728255/in-android-how-do-i-set-margins-in-dp-programmatically
+                     * */
+                    RecyclerView.LayoutParams searchLayoutParams =
+                            new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                                                            ViewGroup.LayoutParams.WRAP_CONTENT);
+                    /* Original margins */
+                    int margin = 32;
+                    searchLayoutParams.setMargins(margin, margin, margin, margin);
+                    holder.itemView.setVisibility(View.VISIBLE);
+                    holder.itemView.setLayoutParams(searchLayoutParams);
+                    source.putString(context.getString(R.string.book_click_source_fragment), context.getString(R.string.search_title));
+                }
                 detailView = new BorrowDetailViewFragment();
                 detailView.setArguments(source);
                 break;
@@ -139,5 +168,43 @@ public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdap
         }
 
         holder.itemView.setOnClickListener(launchDetailView(detailView, book, documentId));
+    }
+
+    /**
+     * Setter for search term of the adapter
+     *
+     * @param searchText Current search term
+     */
+    public void setSearch(String searchText)
+    {
+        this.search = searchText;
+    }
+
+    /**
+     * Getter for current search term of the adapter
+     *
+     * @return String result of this adapter's current search term
+     */
+    public String getSearch()
+    {
+        return this.search;
+    }
+
+    /**
+     * Checker for searching through books
+     *
+     * @param book Book to be searched for search string
+     * @return boolean result if book is a match
+     */
+    public boolean searchMatch(Book book)
+    {
+        if (book.getTitle().toLowerCase().contains(this.search.toLowerCase())
+            || book.getAuthor().toLowerCase().contains(this.search.toLowerCase())
+            || book.getDescription().toLowerCase().contains(this.search.toLowerCase())
+            || book.getIsbn().contains(this.search))
+        {
+            return true;
+        }
+        return false;
     }
 }
