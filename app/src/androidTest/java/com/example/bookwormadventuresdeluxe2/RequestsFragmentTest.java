@@ -8,13 +8,12 @@ package com.example.bookwormadventuresdeluxe2;
 import android.content.Context;
 import android.content.res.Resources;
 import android.view.View;
-import android.widget.EditText;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
-import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
+import com.example.bookwormadventuresdeluxe2.Activities.LoginActivity;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
@@ -25,8 +24,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static com.example.bookwormadventuresdeluxe2.TestUtils.SHORT_WAIT;
-import static com.example.bookwormadventuresdeluxe2.TestUtils.createTestBook;
-import static com.example.bookwormadventuresdeluxe2.TestUtils.deleteTestBook;
 import static com.example.bookwormadventuresdeluxe2.TestUtils.signIn;
 import static com.example.bookwormadventuresdeluxe2.TestUtils.signOut;
 

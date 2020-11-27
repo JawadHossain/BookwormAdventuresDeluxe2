@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:id="@+id/search_books"
-    tools:context=".SearchFragment">
+    tools:context=".Fragments.NavigatonBar.SearchFragment">
 
     <include
         android:id="@+id/include"

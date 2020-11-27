@@ -16,6 +16,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.bookwormadventuresdeluxe2.Activities.CreateAccountActivity;
+import com.example.bookwormadventuresdeluxe2.Activities.MyBooksActivity;
 import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

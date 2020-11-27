@@ -22,7 +22,7 @@ jobs:
       run: chmod +x ./encrypted_secret/decrypt.sh
 
     - name: Grant permission to fcm server key decryption script
-      run: chmod +x ./encrypted_secret/decrypt_fcm_server_key.sh
+      run: chmod +x ./encrypted_secret/decrypt_fcm_key.sh
 
     - name: Decrypt the secrets file
       run: ./encrypted_secret/decrypt.sh
@@ -30,7 +30,7 @@ jobs:
         ENCRYPTION_KEY_PASSWORD: ${{ secrets.ENCRYPTION_KEY_PASSWORD }}
 
     - name: Decrypt the CloudMessagingServerKeyConstant.java file
-      run: ./encrypted_secret/decrypt_fcm_server_key.sh
+      run: ./encrypted_secret/decrypt_fcm_key.sh
       env: 
         FCM_PASSPHRASE: ${{ secrets.FCM_PASSPHRASE }}
 

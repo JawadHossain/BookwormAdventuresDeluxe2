@@ -7,6 +7,10 @@ package com.example.bookwormadventuresdeluxe2;
 import android.content.res.Resources;
 import android.widget.EditText;
 
+import com.example.bookwormadventuresdeluxe2.Activities.AddOrEditBooksActivity;
+import com.example.bookwormadventuresdeluxe2.Activities.LoginActivity;
+import com.example.bookwormadventuresdeluxe2.Activities.MyBooksActivity;
+import com.example.bookwormadventuresdeluxe2.Models.Book;
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
