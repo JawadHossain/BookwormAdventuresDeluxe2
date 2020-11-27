@@ -27,6 +27,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.bookwormadventuresdeluxe2.Utilities.DownloadImageTask;
 import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
@@ -41,6 +48,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -64,6 +75,9 @@ public class AddOrEditBooksActivity extends AppCompatActivity
     public static int DELETE_BOOK = 2;
     public static int REQUEST_IMAGE_UPLOAD = 3;
 
+    /* Request queue for REST requests */
+    RequestQueue requestQueue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -78,6 +92,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
         deleteButton = findViewById(R.id.delete_button);
         deletePictureButton = findViewById(R.id.delete_picture);
         bookPicture = findViewById(R.id.book_photo);
+        requestQueue = Volley.newRequestQueue(this);
 
         /* If editing a book, prepopulate text fields with their old values */
         int requestCode = -1;
@@ -182,7 +197,7 @@ public class AddOrEditBooksActivity extends AppCompatActivity
 
         // Remove the association to the book object
         this.bookPhotoDownloadUrl = "";
-        // Delete image from firebase
+
         this.deletePhotoFromFirebase(imageUrl);
     }
 
@@ -336,23 +351,160 @@ public class AddOrEditBooksActivity extends AppCompatActivity
         {
             IntentResult scanResult = IntentIntegrator.parseActivityResult(
                     requestCode, resultCode, intent);
-            String isbn_scan_result = scanResult.getContents();
-            if (isbn_scan_result != null) // proceed if result present
+            if (scanResult != null)
             {
-                // Older versions had 9 digits but can be converted to 10 "by prefixing it with a zero"
-                // https://en.wikipedia.org/wiki/International_Standard_Book_Number
-                if (isbn_scan_result.length() == 9)
+                String isbn_scan_result = scanResult.getContents();
+                if (isbn_scan_result != null) // proceed if result present
                 {
-                    isbn_scan_result = "0" + isbn_scan_result;
+                    /* The scan picked up some invalid ISBN. */
+                    if (isbn_scan_result.length() < 9)
+                    {
+                        Toast.makeText(AddOrEditBooksActivity.this, "Unable to detect the ISBN. Please Retry.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // Older versions had 9 digits but can be converted to 10 "by prefixing it with a zero"
+                    // https://en.wikipedia.org/wiki/International_Standard_Book_Number
+                    if (isbn_scan_result.length() == 9)
+                    {
+                        isbn_scan_result = "0" + isbn_scan_result;
+                    }
+                    isbnView.setText(isbn_scan_result);
+
+                    String url = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn_scan_result;
+
+                    /* Request the book details from Google's API */
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                            (Request.Method.GET, url, null, new Response.Listener<JSONObject>()
+                            {
+
+                                @Override
+                                public void onResponse(JSONObject response)
+                                {
+                                    parseBookResult(response);
+                                }
+                            }, new Response.ErrorListener()
+                            {
+                                @Override
+                                public void onErrorResponse(VolleyError error)
+                                {
+                                /*
+                                   In this case, we simply won't add the additional book details
+                                */
+                                    Log.d("Volley Error: ", error.getMessage());
+                                }
+                            });
+                    requestQueue.add(jsonObjectRequest);
                 }
-                isbnView.setText(isbn_scan_result);
-            }
-            else
-            {
-                super.onActivityResult(requestCode, resultCode, intent);
+                else
+                {
+                    super.onActivityResult(requestCode, resultCode, intent);
+                }
             }
         }
 
+    }
+
+    /**
+     * Parse the result received from Google's book API after scanning an ISBN
+     */
+    private void parseBookResult(JSONObject result)
+    {
+        String title = "";
+        String subtitle = "";
+        String author = "";
+        String description = "";
+        String imageUrlString = "";
+
+        JSONObject volumeInfo;
+
+        /* Try to get the book's volume info (if there is even a match) */
+        try
+        {
+            /* If there are no matches, return */
+            if (result.getInt("totalItems") < 1)
+            {
+                return;
+            }
+            /* Multiple books may be returned by the books API, select the first one */
+            volumeInfo = result.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo");
+        } catch (JSONException e)
+        {
+            return;
+        }
+
+        /* Try to get the author from the endpoint */
+        try
+        {
+            JSONArray authors = volumeInfo.getJSONArray("authors");
+
+            /* Since there may be multiple authors, append them together separated by a comma */
+            for (int i = 0; i < authors.length(); i++)
+            {
+                if (i == 0)
+                {
+                    author += authors.getString(i);
+                }
+                else
+                {
+                    author += ", " + authors.getString(i);
+                }
+            }
+
+            authorView.setText(author);
+        } catch (JSONException e)
+        {
+            /* Do nothing, this is expected to happen sometimes */
+        }
+
+        /* Try to get the title from the endpoint */
+        try
+        {
+            /*
+               The subtitle may not exist. Catch it in here so that the exception doesn't bubble up
+               and cause no data to be set for the title.
+            */
+            try
+            {
+                subtitle = volumeInfo.getString("subtitle");
+            } catch (JSONException e)
+            {
+                /* Do nothing, this is expected to happen sometimes */
+            }
+            title = (subtitle == "") ? (volumeInfo.getString("title")) : (volumeInfo.getString("title") + ": " + subtitle);
+            titleView.setText(title);
+        } catch (JSONException e)
+        {
+            /* Do nothing, this is expected to happen sometimes */
+        }
+
+        /* Try to get the description from the endpoint */
+        try
+        {
+            description = volumeInfo.getString("description");
+            descriptionView.setText(description);
+        } catch (JSONException e)
+        {
+            /* Do nothing, this is expected to happen sometimes */
+        }
+
+        /* Try to get a thumbnail of the book from the endpoint */
+        try
+        {
+            imageUrlString = volumeInfo.getJSONObject("imageLinks").getString("thumbnail");
+            /* For some reason this API is stupid and returns an http URL not https. Convert it. */
+            if (imageUrlString.substring(0, 5) != "https")
+            {
+                imageUrlString = "https" + imageUrlString.substring(4);
+            }
+            /* Set the book photo to the photo stored at the url */
+            // https://stackoverflow.com/questions/11831188/how-to-get-bitmap-from-a-url-in-android
+            new DownloadImageTask(bookPicture).execute(imageUrlString);
+            bookPhotoDownloadUrl = imageUrlString;
+        } catch (JSONException e)
+        {
+            /* Do nothing, this is expected to happen sometimes */
+        }
     }
 
     /**
@@ -403,6 +555,11 @@ public class AddOrEditBooksActivity extends AppCompatActivity
      */
     private void deletePhotoFromFirebase(String imageUrl)
     {
+        /* Only delete the book image from firebase if it was originally stored there. */
+        if (!imageUrl.startsWith("https://firebasestorage"))
+        {
+            return;
+        }
         // https://stackoverflow.com/questions/45103085/deleting-file-from-firebase-storage-using-url
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference currentBookPhoto = storage.getReferenceFromUrl(imageUrl);
@@ -464,7 +621,6 @@ public class AddOrEditBooksActivity extends AppCompatActivity
                                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
                                 bookPicture.setImageBitmap(bitmap);
                                 bookPicture.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
                             } catch (IOException e)
                             {
                                 e.printStackTrace();
