@@ -17,13 +17,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bookwormadventuresdeluxe2.Controllers.NotificationListAdapter;
 import com.example.bookwormadventuresdeluxe2.Fragments.NavigatonBar.MyBooksFragment;
-import com.example.bookwormadventuresdeluxe2.Utilities.FirebaseUserGetSet;
 import com.example.bookwormadventuresdeluxe2.Models.Book;
 import com.example.bookwormadventuresdeluxe2.Models.Notification;
-import com.example.bookwormadventuresdeluxe2.Controllers.NotificationListAdapter;
 import com.example.bookwormadventuresdeluxe2.R;
 import com.example.bookwormadventuresdeluxe2.Utilities.ActiveFragmentTracker;
+import com.example.bookwormadventuresdeluxe2.Utilities.FirebaseUserGetSet;
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -59,6 +59,13 @@ public class NotificationFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
+        Fragment filterMenu = getFragmentManager().findFragmentByTag(getString(R.string.filter_menu_fragment));
+        /* If the filtermenu is visible, then hide it */
+        if ((filterMenu != null))
+        {
+            getFragmentManager().beginTransaction().remove(filterMenu).commit();
+        }
+
         this.notificationList = new ArrayList<Notification>();
         // Inflate the layout for this fragment
         View notificationView = inflater.inflate(R.layout.fragment_notification, container, false);
@@ -164,5 +171,18 @@ public class NotificationFragment extends Fragment
         MyBooksFragment myBooksFragment = (MyBooksFragment) getFragmentManager().findFragmentByTag(getString(R.string.my_books_fragment));
         myBooksFragment.updateNotificationBadge(); // update notification badge
         getFragmentManager().beginTransaction().hide(this).show(ActiveFragmentTracker.activeFragment).commit();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden)
+    {
+        super.onHiddenChanged(hidden);
+        Fragment filterMenu = getFragmentManager().findFragmentByTag(getString(R.string.filter_menu_fragment));
+
+        /* If we are not hidden, and the filtermenu is visible, then hide it */
+        if ((filterMenu != null) && (hidden == false))
+        {
+            getFragmentManager().beginTransaction().remove(filterMenu).commit();
+        }
     }
 }

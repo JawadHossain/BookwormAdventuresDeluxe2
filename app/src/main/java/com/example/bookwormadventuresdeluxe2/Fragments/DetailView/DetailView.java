@@ -94,6 +94,13 @@ public abstract class DetailView extends Fragment
      */
     public void updateView(Book book)
     {
+        /* If a FilterMenu is open, close it */
+        Fragment filterMenu = getFragmentManager().findFragmentByTag(getString(R.string.filter_menu_fragment));
+        if (filterMenu != null)
+        {
+            getFragmentManager().beginTransaction().remove(filterMenu).commit();
+        }
+
         // Set the content based on the book that was selected
         TextView title = bookDetailView.findViewById(R.id.book_details_title);
         title.setText(book.getTitle());

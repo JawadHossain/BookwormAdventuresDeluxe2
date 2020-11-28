@@ -174,5 +174,4 @@ public class MyBooksDetailViewFragment extends DetailView
              */
         }
     }
-
 }
