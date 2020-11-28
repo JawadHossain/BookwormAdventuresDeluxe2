@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.bookwormadventuresdeluxe2.Models.User;
 import com.example.bookwormadventuresdeluxe2.Utilities.FirebaseUserGetSet;
+import com.example.bookwormadventuresdeluxe2.Utilities.FirebaseUserGetSet.EditCallback;
 import com.example.bookwormadventuresdeluxe2.Activities.LoginActivity;
 import com.example.bookwormadventuresdeluxe2.R;
 import com.example.bookwormadventuresdeluxe2.Utilities.EditTextValidator;
@@ -185,9 +186,25 @@ public class ProfileFragment extends Fragment
                 }
 
                 /* Checks if phone number was empty and sets error*/
-                if (TextUtils.isEmpty(inputPhone.getText().toString().trim()))
+                if (TextUtils.isEmpty(inputPhone.getText().toString()))
                 {
                     EditTextValidator.isEmpty(inputPhone);
+                    hasValidationError = true;
+                }
+
+                /* Checks if phone number is valid */
+                if (!EditTextValidator.isPhoneNumberPattern(inputPhone.getText().toString())
+                        && !TextUtils.isEmpty(inputPhone.getText().toString()))
+                {
+                    EditTextValidator.invalidPhone(inputPhone);
+                    hasValidationError = true;
+                }
+
+                /* Checks if email is valid*/
+                if (!EditTextValidator.isEmailPattern(inputEmail.getText().toString().trim())
+                        && !TextUtils.isEmpty(inputEmail.getText().toString().trim()))
+                {
+                    EditTextValidator.invalidEmail(inputEmail);
                     hasValidationError = true;
                 }
 
@@ -197,33 +214,66 @@ public class ProfileFragment extends Fragment
                     return;
                 }
 
-                /* Attempts to edit FirebaseAuth account and Firebase info*/
+                /* Checks if only phone number was edited */
+                if (!profile.getPhoneNumber().equals(inputPhone.getText().toString())
+                        && profile.getEmail().equals(inputEmail.getText().toString().trim()))
+                {
+                    updatePhone(inputPhone);
+                    builder.dismiss();
+                }
+
+                /* Editing FirebaseAuth email */
                 progressBar.setVisibility(View.VISIBLE);
-                FirebaseUserGetSet.changeAuthInfo(inputEmail,
-                        inputPhone,
-                        profile.getDocumentId(),
-                        new FirebaseUserGetSet.EditCallback()
+                if (!profile.getEmail().equals(inputEmail.getText().toString().trim()))
+                {
+                    /* Checks if email exists */
+                    FirebaseUserGetSet.checkEmailExists(inputEmail,
+                            new FirebaseUserGetSet.EmailCheckCallBack()
+                    {
+                        @Override
+                        public void onCallback(Boolean result)
                         {
-                            @Override
-                            public void onCallback(Boolean result)
+                            if (result)
                             {
-                                /* After successful edit */
-                                if (inputEmail.getError() == null)
-                                {
-                                    /* Updating user object in Fragment*/
-                                    profile.setEmail(inputEmail.getText().toString().trim());
-                                    profile.setPhoneNumber(inputPhone.getText().toString().trim());
-
-                                    /* Updating TextView in fragment */
-                                    viewEmail.setText(inputEmail.getText().toString().trim());
-                                    viewPhoneNumber.setText(inputPhone.getText().toString().trim());
-
-                                    /* Closing dialog */
-                                    builder.dismiss();
-                                }
+                                /* Email exists, return error */
+                                EditTextValidator.emailTaken(inputEmail);
                                 progressBar.setVisibility(View.INVISIBLE);
+                                return;
                             }
-                        });
+
+                            /* Email does not exist, perform edit */
+                            else
+                            {
+                                FirebaseUserGetSet.changeEmail(inputEmail,
+                                        profile.getDocumentId(),
+                                        new EditCallback()
+                                {
+                                    @Override
+                                    public void onCallback(Boolean result)
+                                    {
+                                        if (result == true)
+                                        {
+                                            profile.setEmail(inputEmail.getText().toString().trim());
+                                            viewEmail.setText(inputEmail.getText().toString().trim());
+
+                                            /* If phone number and email are changed*/
+                                            if (!profile.getPhoneNumber().equals(inputPhone.getText().toString()))
+                                            {
+                                                updatePhone(inputPhone);
+                                            }
+                                            builder.dismiss();
+                                        }
+                                        else
+                                        {
+                                            return;
+                                        }
+                                    }
+                                });
+                            }
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    });
+                }
             }
         });
 
@@ -238,6 +288,18 @@ public class ProfileFragment extends Fragment
         });
 
         builder.show();
+    }
+
+    /**
+     * Updates phone number text on ProfileFragment and in database
+     *
+     * @param inputPhone New phone number
+     */
+    private void updatePhone(EditText inputPhone)
+    {
+        FirebaseUserGetSet.editPhone(profile.getDocumentId(), inputPhone.getText().toString());
+        profile.setPhoneNumber(inputPhone.getText().toString().trim());
+        viewPhoneNumber.setText(inputPhone.getText().toString().trim());
     }
 
     /**

@@ -8,6 +8,9 @@ package com.example.bookwormadventuresdeluxe2.Utilities;
 import android.text.TextUtils;
 import android.widget.EditText;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Validates EditTexts and sets error notication on EditTexts
  */
@@ -22,6 +25,8 @@ public class EditTextValidator
     public static String WEAKPASS = "Password must be 6 characters or longer!";
     public static String INVALIDEMAIL = "Invalid e-mail address!";
     public static String INVALIDISBN = "Invalid ISBN!";
+    public static String USERNAMETOOSHORT = "Username must be 3 characters or longer!";
+    public static String INVALIDPHONE = "Invalid phone number!";
 
     /**
      * Set empty field error notification
@@ -102,6 +107,17 @@ public class EditTextValidator
     }
 
     /**
+     * Set invalid phone number error notification
+     *
+     * @param editText editText on which error is set
+     */
+    public static void invalidPhone(EditText editText)
+    {
+        editText.setError(INVALIDPHONE);
+        editText.requestFocus();
+    }
+
+    /**
      * Set passwords don't match error if password1 and password2 don't match
      *
      * @param password1 password on which error is set
@@ -125,7 +141,7 @@ public class EditTextValidator
     }
 
     /**
-     * Set weak password error if password1 and password2 are have length < 6
+     * Set weak password error if password1 and password2 have length < 6
      *
      * @param password1 password on which error is set
      * @param password2 editText on which error is set
@@ -147,6 +163,55 @@ public class EditTextValidator
             password1.requestFocus();
             return true;
         }
+    }
+
+    /**
+     * Set username taken error notification
+     *
+     * @param editText editText on which error is set
+     */
+    public static boolean usernameTooShort(EditText editText)
+    {
+        if (editText.getText().toString().trim().length() < 3)
+        {
+            editText.setError(USERNAMETOOSHORT);
+            editText.requestFocus();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Method for checking valid phone number format
+     *
+     * @return boolean true for valid false for invalid
+     */
+    public static boolean isPhoneNumberPattern(String phone)
+    {
+        /*
+         * Source: https://stackoverflow.com/questions/6358380/phone-number-validation-android
+         * */
+        String expression = "^\\s*(?:\\+?(\\d{1}))?[-. (]*(\\d{3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(phone);
+        return matcher.matches();
+    }
+
+    /**
+     * Method for checking valid email format
+     *
+     * @param email Email string to be checked
+     * @return boolean true for valid false for invalid
+     */
+    public static boolean isEmailPattern(String email)
+    {
+        /*
+         * Source: https://stackoverflow.com/questions/6119722/how-to-check-edittexts-text-is-email-address-or-not
+         * */
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
     /**

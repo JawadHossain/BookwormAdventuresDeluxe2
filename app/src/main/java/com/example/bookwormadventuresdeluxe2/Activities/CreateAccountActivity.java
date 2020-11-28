@@ -39,8 +39,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CreateAccountActivity extends AppCompatActivity
 {
@@ -136,9 +134,28 @@ public class CreateAccountActivity extends AppCompatActivity
                 if (!EditTextValidator.createAccountEmpties(editTextUsername, editTextEmail, editTextPhoneNumber,
                         editTextPassword, confirmPassword))
                 {
-                    /* Check is passwords match and long enough, display error if not*/
-                    if (EditTextValidator.passwordsMatch(editTextPassword, confirmPassword)
-                            && !EditTextValidator.weakPass(editTextPassword, confirmPassword))
+                    /* Check if all input conditions met*/
+                    boolean hasValidationError = false;
+                    if (!EditTextValidator.passwordsMatch(editTextPassword, confirmPassword)
+                        || EditTextValidator.weakPass(editTextPassword, confirmPassword))
+                    {
+                        hasValidationError = true;
+                    }
+                    if (!EditTextValidator.isPhoneNumberPattern(editTextPhoneNumber.getText().toString()))
+                    {
+                        EditTextValidator.invalidPhone(editTextPhoneNumber);
+                        hasValidationError = true;
+                    }
+                    if (!EditTextValidator.isEmailPattern(editTextEmail.getText().toString().trim()))
+                    {
+                        EditTextValidator.invalidEmail(editTextEmail);
+                        hasValidationError = true;
+                    }
+                    if (EditTextValidator.usernameTooShort(editTextUsername))
+                    {
+                        hasValidationError = true;
+                    }
+                    if (!hasValidationError)
                     {
                         /* Show progress bar */
                         progressBar.setVisibility(View.VISIBLE);
@@ -209,7 +226,7 @@ public class CreateAccountActivity extends AppCompatActivity
                                     }
                                 }
                                 /* All valid input, create account */
-                                if (!isEmailInUse[0] && !isUsernameInUse[0] && isEmailValid(email))
+                                if (!isEmailInUse[0] && !isUsernameInUse[0])
                                 {
                                     createUser(username, email, password);
                                 }
@@ -219,10 +236,6 @@ public class CreateAccountActivity extends AppCompatActivity
                                     if (isEmailInUse[0])
                                     {
                                         EditTextValidator.emailTaken(editTextEmail);
-                                    }
-                                    if (!isEmailValid(email))
-                                    {
-                                        EditTextValidator.invalidEmail(editTextEmail);
                                     }
                                     if (isUsernameInUse[0])
                                     {
@@ -296,8 +309,7 @@ public class CreateAccountActivity extends AppCompatActivity
                             {
                                 /* Extract Firebase Error Code */
                                 String errorCode = "";
-                                errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-
+                                errorCode = ((FirebaseAuthException) task.getException()).getMessage();
                                 editTextUsername.setError(errorCode);
                                 editTextUsername.requestFocus();
                             } catch (Exception e)
@@ -335,21 +347,6 @@ public class CreateAccountActivity extends AppCompatActivity
 
         /* Save new user to Firestore. Set documentId as userId */
         collectionReference.document(userId).set(newUser);
-    }
-
-    /**
-     * Method for checking valid email format.
-     *
-     * @param email Email string to be checked
-     * @return boolean true for valid false for invalid
-     */
-    private boolean isEmailValid(String email)
-    {
-        /* Source: https://stackoverflow.com/questions/6119722/how-to-check-edittexts-text-is-email-address-or-not*/
-        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
     }
 
     /**

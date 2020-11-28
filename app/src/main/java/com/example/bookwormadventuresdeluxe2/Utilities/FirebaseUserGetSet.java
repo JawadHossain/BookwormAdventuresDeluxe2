@@ -13,12 +13,14 @@ import androidx.annotation.NonNull;
 
 import com.example.bookwormadventuresdeluxe2.Models.User;
 import com.example.bookwormadventuresdeluxe2.R;
+import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -108,18 +110,53 @@ public class FirebaseUserGetSet
     }
 
     /**
+     * Checks if email is currently in use
+     *
+     * @param email              Email to be checked
+     * @param emailCheckCallback Callback for timing return
+     */
+    public static void checkEmailExists(EditText email, EmailCheckCallBack emailCheckCallback)
+    {
+        usersRef.whereEqualTo(context.getString(R.string.firestore_email), email.getText().toString().trim())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+        {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task)
+            {
+                if (task.isSuccessful())
+                {
+                    /* Search for documents containing email */
+                    for (DocumentSnapshot document : task.getResult())
+                    {
+                        if (document.exists())
+                        {
+                            /* Set variable to true if email exists */
+                            emailCheckCallback.onCallback(true);
+                        }
+                    }
+                }
+                if (task.getResult().size() == 0)
+                {
+                    /* False if it does not exist */
+                    emailCheckCallback.onCallback(false);
+                }
+            }
+        });
+    }
+
+    /**
      * Edits FirebaseAuth email and Firebase database email/phone number of user
      *
      * @param inputEmail   New email to be written
-     * @param inputPhone   New phone number to be written
      * @param documentID   Document id of target user
      * @param editCallback Callback for waiting for result
      */
-    public static void changeAuthInfo(EditText inputEmail, EditText inputPhone, String documentID, EditCallback editCallback)
+    public static void changeEmail(EditText inputEmail, String documentID, EditCallback editCallback)
     {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        user.updateEmail(inputEmail.getText().toString())
+        user.updateEmail(inputEmail.getText().toString().trim())
                 .addOnCompleteListener(new OnCompleteListener<Void>()
                 {
                     @Override
@@ -130,41 +167,21 @@ public class FirebaseUserGetSet
                             /* Successful profile edit*/
                             editEmail(documentID,
                                     inputEmail.getText().toString().trim());
-                            editPhone(documentID,
-                                    inputPhone.getText().toString().trim());
-
                             editCallback.onCallback(true);
                             Log.d(TAG, "User info updated.");
                         }
                         else
                         {
-                            /* Failed edit */
                             try
                             {
-                                /* Tries to match errorCode to EditText error */
+                                /* Failed edit */
                                 String errorCode = "";
-                                errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-
-                                switch (errorCode)
-                                {
-                                    case "ERROR_INVALID_EMAIL":
-                                        /* Set Email EditText error code to check validity */
-                                        EditTextValidator.invalidEmail(inputEmail);
-                                        break;
-
-                                    case "ERROR_EMAIL_ALREADY_IN_USE":
-                                        /* Set Email EditText error code to email taken */
-                                        EditTextValidator.emailTaken(inputEmail);
-                                        break;
-
-                                    default:
-                                        /* Unexpected Error code*/
-                                        inputEmail.setError(task.getException().getMessage());
-                                        inputEmail.requestFocus();
-                                }
+                                errorCode = ((FirebaseAuthException) task.getException()).getMessage();
+                                inputEmail.setError(errorCode);
+                                inputEmail.requestFocus();
                             } catch (Exception e)
                             {
-                                /* Different type from errorCode, cannot be cast to the same object.
+                                /* Different type of error, cannot be cast to the same object.
                                  * Sets EditText error to new type.
                                  *
                                  * Log message to debug
@@ -173,12 +190,10 @@ public class FirebaseUserGetSet
                                 inputEmail.requestFocus();
                                 Log.d(TAG, e.getMessage());
                             }
-
                             editCallback.onCallback(false);
                             Log.d(TAG, "User info update failed.");
                         }
-                    }
-                });
+                    }});
     }
 
     /**
@@ -244,9 +259,9 @@ public class FirebaseUserGetSet
      * Callback for User
      */
     public interface UserCallback
-            /*
-             * Source: https://stackoverflow.com/questions/49514859/how-to-get-data-object-from-another-event-android-studio
-             * */
+    /*
+     * Source: https://stackoverflow.com/questions/49514859/how-to-get-data-object-from-another-event-android-studio
+     * */
     {
         void onCallback(User userObject);
     }
@@ -255,9 +270,20 @@ public class FirebaseUserGetSet
      * Callback for editing profile result
      */
     public interface EditCallback
-            /*
-             * Source: https://stackoverflow.com/questions/49514859/how-to-get-data-object-from-another-event-android-studio
-             * */
+    /*
+     * Source: https://stackoverflow.com/questions/49514859/how-to-get-data-object-from-another-event-android-studio
+     * */
+    {
+        void onCallback(Boolean result);
+    }
+
+    /**
+     * Callback for checking email existence
+     */
+    public interface EmailCheckCallBack
+    /*
+     * Source: https://stackoverflow.com/questions/49514859/how-to-get-data-object-from-another-event-android-studio
+     * */
     {
         void onCallback(Boolean result);
     }
