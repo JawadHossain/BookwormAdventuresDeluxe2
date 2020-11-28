@@ -263,6 +263,97 @@ public class CreateAccountActivityTest
     }
 
     /**
+     * Tests for username input string < 3 characters
+     */
+    @Test
+    public void shortUsernameTest()
+    {
+        solo.enterText(usernameText, resources.getString(R.string.short_username));
+
+        solo.enterText(emailText, resources.getString(R.string.test_create_account_email));
+        solo.enterText(phoneNumberText, resources.getString(R.string.test_account1_phone));
+        solo.enterText(password1Text, resources.getString(R.string.test_account1_password));
+        solo.enterText(password2Text, resources.getString(R.string.test_account1_password));
+
+        solo.clickOnButton(resources.getString(R.string.create_account));
+
+        Assert.assertTrue(solo.waitForText(EditTextValidator.USERNAMETOOSHORT, 1, SHORT_WAIT));
+        Assert.assertNotNull(usernameText.getError());
+
+        Assert.assertNull(emailText.getError());
+        Assert.assertNull(phoneNumberText.getError());
+        Assert.assertNull(password1Text.getError());
+        Assert.assertNull(password2Text.getError());
+    }
+
+    /**
+     * Tests for a non-email string
+     */
+    @Test
+    public void invalidEmailTest()
+    {
+        solo.enterText(emailText, resources.getString(R.string.wrong_email));
+
+        solo.enterText(usernameText, resources.getString(R.string.test_create_account_username));
+        solo.enterText(phoneNumberText, resources.getString(R.string.test_account1_phone));
+        solo.enterText(password1Text, resources.getString(R.string.test_account1_password));
+        solo.enterText(password2Text, resources.getString(R.string.test_account1_password));
+
+        solo.clickOnButton(resources.getString(R.string.create_account));
+
+        Assert.assertTrue(solo.waitForText(EditTextValidator.INVALIDEMAIL, 1, SHORT_WAIT));
+
+        Assert.assertNotNull(emailText.getError());
+
+        Assert.assertNull(usernameText.getError());
+        Assert.assertNull(phoneNumberText.getError());
+        Assert.assertNull(password1Text.getError());
+        Assert.assertNull(password2Text.getError());
+    }
+
+    /**
+     * Tests create account button for multiple invalid phone number strings
+     */
+    @Test
+    public void invalidPhoneNumbersTest()
+    {
+        createAccountInvalidPhoneNumberUtil(resources.getString(R.string.invalid_phone1));
+        createAccountInvalidPhoneNumberUtil(resources.getString(R.string.invalid_phone2));
+        createAccountInvalidPhoneNumberUtil(resources.getString(R.string.invalid_phone3));
+        createAccountInvalidPhoneNumberUtil(resources.getString(R.string.invalid_phone4));
+    }
+
+    /**
+     * Handles entering invalid phone numbers
+     */
+    public void createAccountInvalidPhoneNumberUtil(String phoneNumber)
+    {
+        solo.clearEditText(usernameText);
+        solo.clearEditText(emailText);
+        solo.clearEditText(phoneNumberText);
+        solo.clearEditText(password1Text);
+        solo.clearEditText(password2Text);
+
+        solo.enterText(phoneNumberText, phoneNumber);
+
+        solo.enterText(emailText, resources.getString(R.string.test_create_account_email));
+        solo.enterText(usernameText, resources.getString(R.string.test_create_account_username));
+        solo.enterText(password1Text, resources.getString(R.string.test_account1_password));
+        solo.enterText(password2Text, resources.getString(R.string.test_account1_password));
+
+        solo.clickOnButton(resources.getString(R.string.create_account));
+
+        Assert.assertTrue(solo.waitForText(EditTextValidator.INVALIDPHONE, 1, SHORT_WAIT));
+
+        Assert.assertNotNull(phoneNumberText.getError());
+
+        Assert.assertNull(emailText.getError());
+        Assert.assertNull(usernameText.getError());
+        Assert.assertNull(password1Text.getError());
+        Assert.assertNull(password2Text.getError());
+    }
+
+    /**
      * Tests create account button with a taken username
      */
     @Test
@@ -314,31 +405,6 @@ public class CreateAccountActivityTest
     }
 
     /**
-     * Tests create account button for a non-email string
-     */
-    @Test
-    public void invalidEmailTest()
-    {
-        solo.enterText(emailText, resources.getString(R.string.wrong_email));
-
-        solo.enterText(usernameText, resources.getString(R.string.test_create_account_username));
-        solo.enterText(phoneNumberText, resources.getString(R.string.test_account1_phone));
-        solo.enterText(password1Text, resources.getString(R.string.test_account1_password));
-        solo.enterText(password2Text, resources.getString(R.string.test_account1_password));
-
-        solo.clickOnButton(resources.getString(R.string.create_account));
-
-        Assert.assertTrue(solo.waitForText(EditTextValidator.INVALIDEMAIL, 1, SHORT_WAIT));
-
-        Assert.assertNotNull(emailText.getError());
-
-        Assert.assertNull(usernameText.getError());
-        Assert.assertNull(phoneNumberText.getError());
-        Assert.assertNull(password1Text.getError());
-        Assert.assertNull(password2Text.getError());
-    }
-
-    /**
      * Tests for taken username and taken email input at the same time
      */
     @Test
@@ -355,32 +421,6 @@ public class CreateAccountActivityTest
 
         Assert.assertTrue(solo.waitForText(EditTextValidator.USERNAMETAKEN, 1, SHORT_WAIT));
         Assert.assertTrue(solo.waitForText(EditTextValidator.EMAILTAKEN, 1, NO_WAIT));
-
-        Assert.assertNotNull(usernameText.getError());
-        Assert.assertNotNull(emailText.getError());
-
-        Assert.assertNull(phoneNumberText.getError());
-        Assert.assertNull(password1Text.getError());
-        Assert.assertNull(password2Text.getError());
-    }
-
-    /**
-     * Tests for taken username and non-email string input at the same time
-     */
-    @Test
-    public void takenUsernameAndInvalidEmailTest()
-    {
-        solo.enterText(usernameText, resources.getString(R.string.test_account1_username));
-        solo.enterText(emailText, resources.getString(R.string.wrong_email));
-
-        solo.enterText(phoneNumberText, resources.getString(R.string.test_account1_phone));
-        solo.enterText(password1Text, resources.getString(R.string.test_account1_password));
-        solo.enterText(password2Text, resources.getString(R.string.test_account1_password));
-
-        solo.clickOnButton(resources.getString(R.string.create_account));
-
-        Assert.assertTrue(solo.waitForText(EditTextValidator.USERNAMETAKEN, 1, SHORT_WAIT));
-        Assert.assertTrue(solo.waitForText(EditTextValidator.INVALIDEMAIL, 1, NO_WAIT));
 
         Assert.assertNotNull(usernameText.getError());
         Assert.assertNotNull(emailText.getError());

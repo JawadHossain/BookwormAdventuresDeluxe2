@@ -108,9 +108,16 @@
     <string name="wrong_email">wrongemail</string>
     <string name="wrong_pass">wrongpassword</string>
     <string name="short_pass">short</string>
+    <string name="short_username">aa</string>
+    <string name="invalid_phone1">1</string>
+    <string name="invalid_phone2">1-234-456-777</string>
+    <string name="invalid_phone3">234-456-777</string>
+    <string name="invalid_phone4">123-4567</string>
 
     <string name="test_create_account_username">createtest</string>
     <string name="test_create_account_email">createtest@gmail.com</string>
+    <string name="test_edit_email">testedit@gmail.com</string>
+    <string name="test_edit_phone">123-444-5555</string>
     <string name="test_book_title">Test Book</string>
     <string name="test_book_author">Test Author</string>
     <string name="test_book_isbn">1111111111</string>
