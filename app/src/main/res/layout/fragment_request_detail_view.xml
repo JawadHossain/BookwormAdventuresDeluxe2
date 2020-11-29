@@ -111,35 +111,6 @@
             app:layout_constraintStart_toEndOf="@+id/requestDetail_btn1" />
 
         <TextView
-            android:id="@+id/request_exchange"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:text="@string/exchange"
-            android:textAllCaps="true"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:visibility="invisible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/book_details_isbn_title" />
-
-        <TextView
-            android:id="@+id/request_exchange_location"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:textAllCaps="true"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/request_exchange"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/request_exchange"
-            app:layout_constraintTop_toTopOf="@+id/request_exchange" />
-
-        <TextView
             android:id="@+id/book_request_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -58,7 +58,7 @@ public class RequestDetailViewFragment extends DetailView
     {
         // Required empty public constructor
     }
-    
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -140,6 +140,15 @@ public class RequestDetailViewFragment extends DetailView
                 this.btn2.setText(getString(R.string.lend_book));
                 this.btn1.setOnClickListener(this::btnSetLocation);
 
+                TextView user;
+                user = bookDetailView.findViewById(R.id.book_request_user);
+                if (this.selectedBook.getRequesters().size() > 0)
+                {
+                    user.setText(this.selectedBook.getRequesters().get(0));
+                    /* Enables clicking of requester profile*/
+                    clickUsername(user, this.selectedBook.getRequesters().get(0), this.requestDetailViewFragment);
+                }
+                user.setVisibility(View.VISIBLE);
 
                 String pickUpAddress = this.selectedBook.getPickUpAddress();
                 if (pickUpAddress == null || pickUpAddress.equals(""))
