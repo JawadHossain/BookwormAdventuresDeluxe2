@@ -6,7 +6,6 @@ package com.example.bookwormadventuresdeluxe2.Activities;
  * if login session is still valid.
  */
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;

@@ -86,10 +86,10 @@ public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdap
      * view depends on the context from which screen it was clicked so the function takes the view
      * as a parameter as well as the details of the book which was clicked
      *
-     * @param bookDetailFragment
-     * @param book
-     * @param documentId
-     * @return
+     * @param bookDetailFragment detail view fragment based on the parent caller context
+     * @param book               book to shown in detail view
+     * @param documentId         firebase books collection document id of book
+     * @return on click listener for a book
      */
     private View.OnClickListener launchDetailView(DetailView bookDetailFragment, Book book, String documentId)
     {
@@ -143,7 +143,7 @@ public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdap
 
                 /* If book belongs to owner, OR not a search match while searching, hide it */
                 if (book.getOwner().equals(UserCredentialAPI.getInstance().getUsername())
-                    || (!this.search.equals("") && !searchMatch(book)))
+                        || (!this.search.equals("") && !searchMatch(book)))
                 {
                     /* Hiding and setting the item margins to 0 */
                     holder.itemView.setVisibility(View.GONE);
@@ -160,7 +160,7 @@ public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdap
                      * */
                     RecyclerView.LayoutParams searchLayoutParams =
                             new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                                                            ViewGroup.LayoutParams.WRAP_CONTENT);
+                                    ViewGroup.LayoutParams.WRAP_CONTENT);
                     /* Original margins */
                     int margin = 32;
                     searchLayoutParams.setMargins(margin, margin, margin, margin);
@@ -207,9 +207,9 @@ public class BookListAdapter extends FirestoreRecyclerAdapter<Book, BookListAdap
     public boolean searchMatch(Book book)
     {
         if (book.getTitle().toLowerCase().contains(this.search.toLowerCase())
-            || book.getAuthor().toLowerCase().contains(this.search.toLowerCase())
-            || book.getDescription().toLowerCase().contains(this.search.toLowerCase())
-            || book.getIsbn().contains(this.search))
+                || book.getAuthor().toLowerCase().contains(this.search.toLowerCase())
+                || book.getDescription().toLowerCase().contains(this.search.toLowerCase())
+                || book.getIsbn().contains(this.search))
         {
             return true;
         }

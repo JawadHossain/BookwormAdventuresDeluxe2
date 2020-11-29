@@ -169,7 +169,6 @@ public class FilterMenu extends Fragment implements View.OnClickListener
                 throw new InvalidParameterException("Unknown caller ID to FilterMenu");
         }
 
-
         /* Update the query in the recyclerView */
         FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(nextQuery, Book.class)

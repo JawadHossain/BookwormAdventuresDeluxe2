@@ -63,7 +63,7 @@ public abstract class DetailView extends Fragment
 
     /**
      * Sets the colours to a disable colour
-     * nullyfies the click listener for the button
+     * nullifies the click listener for the button
      *
      * @param button
      */
@@ -151,7 +151,7 @@ public abstract class DetailView extends Fragment
         integrator.initiateScan();
     }
 
-    /*
+    /**
      * Opens user profile on TextView click
      *
      * @param textView TextView in view

@@ -156,4 +156,10 @@
     <string name="return_request_message">Return requested by:</string>
     <string name="my_requests_book_confirm_lend_message">Book confirmed to lend by:</string>
 
+    <!--  Book HandOff Messages -->
+    <string name="hand_to_borrower">Hand book to borrower</string>
+    <string name="book_received">Book received.</string>
+    <string name="hand_to_owner">Hand book to owner</string>
+    <string name="unsuccessful_scan">Scan was unsuccessful</string>
+
 </resources>

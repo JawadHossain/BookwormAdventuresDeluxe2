@@ -247,7 +247,7 @@ public class CreateAccountActivity extends AppCompatActivity
                             }
                             else
                             {
-                                Log.d("CreateAccountActivity", "Error getting documents"
+                                Log.d(TAG, "Error getting documents"
                                         + "in checkUsernameAvailability: ", task.getException());
                             }
                         }
@@ -255,7 +255,7 @@ public class CreateAccountActivity extends AppCompatActivity
                 }
                 else
                 {
-                    Log.d("CreateAccountActivity", "Error getting documents"
+                    Log.d(TAG, "Error getting documents"
                             + "in checkUsernameAvailability: ", task.getException());
                 }
             }

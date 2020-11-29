@@ -189,7 +189,7 @@ public class MyBooksActivity extends AppCompatActivity implements BottomNavigati
         if (requestCode == RequestDetailViewFragment.REQUEST_GIVE_SCAN ||
                 requestCode == RequestDetailViewFragment.REQUEST_RECEIVE_SCAN ||
                 requestCode == BorrowDetailViewFragment.BORROW_RETURN_SCAN ||
-                requestCode == BorrowDetailViewFragment.BORROW_RECIEVE_SCAN ||
+                requestCode == BorrowDetailViewFragment.BORROW_RECEIVE_SCAN ||
                 requestCode == MyBooksFragment.MY_BOOK_FRAGMENT_SCAN)
         {
             // https://stackoverflow.com/questions/6147884/onactivityresult-is-not-being-called-in-fragment

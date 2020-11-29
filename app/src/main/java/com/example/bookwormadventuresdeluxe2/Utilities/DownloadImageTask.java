@@ -13,7 +13,7 @@ import android.widget.ImageView;
 
 import java.io.InputStream;
 
-// https://www.tutorialspoint.com/how-to-get-a-bitmap-from-url-in-android-app
+// source: https://www.tutorialspoint.com/how-to-get-a-bitmap-from-url-in-android-app
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap>
 {
     ImageView bmImage;

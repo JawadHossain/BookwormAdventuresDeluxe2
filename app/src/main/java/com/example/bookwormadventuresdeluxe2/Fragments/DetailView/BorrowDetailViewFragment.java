@@ -3,8 +3,6 @@ package com.example.bookwormadventuresdeluxe2.Fragments.DetailView;
 /**
  * Holds the view for seeing details on a book in the borrowed tab
  * The user will be able to interact with borrow options on the book
- * <p>
- * Outstanding Issues: Still requires ISBN scan for handoff
  */
 
 import android.app.Activity;
@@ -52,7 +50,7 @@ public class BorrowDetailViewFragment extends DetailView
     private static int SetLocationActivityResultCode = 7;
 
     private String source = "";
-    public static int BORROW_RECIEVE_SCAN = 8;
+    public static int BORROW_RECEIVE_SCAN = 8;
     public static int BORROW_RETURN_SCAN = 9;
 
     public BorrowDetailViewFragment()
@@ -273,7 +271,7 @@ public class BorrowDetailViewFragment extends DetailView
     private void btnScan(View view)
     {
         // Launch Scan ISBN
-        onScanCall(BORROW_RECIEVE_SCAN);
+        onScanCall(BORROW_RECEIVE_SCAN);
     }
 
     private void btnViewLocation(View view)
@@ -342,11 +340,11 @@ public class BorrowDetailViewFragment extends DetailView
                 this.selectedBook.getIsbn().equals(result.getContents()))
         {
             // scan successful
-            if (requestCode == BORROW_RECIEVE_SCAN)
+            if (requestCode == BORROW_RECEIVE_SCAN)
             {
                 this.bookDocument.update(getString(R.string.status), getString(R.string.borrowed));
                 this.selectedBook.setStatus(Status.Borrowed);
-                message = "Book received";
+                message = getString(R.string.book_received);
                 this.updateView(this.selectedBook);
                 this.disableButton(this.btn1);
                 this.disableButton(this.btn2);
@@ -355,12 +353,10 @@ public class BorrowDetailViewFragment extends DetailView
             {
                 this.bookDocument.update(getString(R.string.status), getString(R.string.rPending));
                 this.selectedBook.setStatus(Status.rPending);
-                message = "Give book to owner";
+                message = getString(R.string.hand_to_owner);
                 this.updateView(this.selectedBook);
-                // notify owner
                 // Send In-app and Push notification to owner
                 sendNotification(getString(R.string.return_request_message));
-
             }
             else
             {
@@ -370,7 +366,7 @@ public class BorrowDetailViewFragment extends DetailView
         }
         else
         {
-            Toast.makeText(getActivity(), "Scan was unsuccessful", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), getString(R.string.unsuccessful_scan), Toast.LENGTH_LONG).show();
         }
 
     }
@@ -395,7 +391,7 @@ public class BorrowDetailViewFragment extends DetailView
                 this.disableButton(this.btn2);
             }
         }
-        else if (requestCode == BORROW_RECIEVE_SCAN || requestCode == BORROW_RETURN_SCAN)
+        else if (requestCode == BORROW_RECEIVE_SCAN || requestCode == BORROW_RETURN_SCAN)
         {
             processBookHandOff(requestCode, resultCode, data);
         }

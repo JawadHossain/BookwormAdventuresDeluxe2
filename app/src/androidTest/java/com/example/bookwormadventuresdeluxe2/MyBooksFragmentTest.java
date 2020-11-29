@@ -43,7 +43,7 @@ public class MyBooksFragmentTest
     private Resources resources;
 
     private int BACK_BUTTON_INDEX = 0;
-    /* In the edit book fragment the index is different because android is stupid and picks
+    /* In the edit book fragment the index is different as android picks
      * arbitrary numbers
      */
     private int BACK_BUTTON_EDIT_BOOK_INDEX = 2;

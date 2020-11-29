@@ -35,7 +35,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-
 public class NotificationFragment extends Fragment
 {
     public static final String TAG = "Notification Fragment";
@@ -131,7 +130,7 @@ public class NotificationFragment extends Fragment
                                                                            /* Create book associated with notification*/
                                                                            DocumentSnapshot document = task.getResult();
                                                                            book[0] = document.toObject(Book.class);
-                                                                           if(book[0] != null) // check if book exists
+                                                                           if (book[0] != null) // check if book exists
                                                                            {
                                                                                /* Create Notification */
                                                                                Notification notification = new Notification(book[0], message);
@@ -150,8 +149,6 @@ public class NotificationFragment extends Fragment
                         }
                     }
                 });
-
-
     }
 
     /**
@@ -179,7 +176,7 @@ public class NotificationFragment extends Fragment
         super.onHiddenChanged(hidden);
         Fragment filterMenu = getFragmentManager().findFragmentByTag(getString(R.string.filter_menu_fragment));
 
-        /* If we are not hidden, and the filtermenu is visible, then hide it */
+        /* If notification fragment is not hidden, and the filter menu is visible, then hide it */
         if ((filterMenu != null) && (hidden == false))
         {
             getFragmentManager().beginTransaction().remove(filterMenu).commit();

@@ -1,7 +1,5 @@
 package com.example.bookwormadventuresdeluxe2.Models;
 
-import com.example.bookwormadventuresdeluxe2.Models.Book;
-
 /**
  * Class responsible for modelling a notification object.
  */

@@ -33,10 +33,9 @@ public class Book implements Serializable
     private String borrower;
     private String imageUrl = "";
 
-    /* BookListAdapter which is a FirestoreRecyclerAdapter requires empty constructor */
     public Book()
     {
-
+        // Required empty constructor
     }
 
     /**

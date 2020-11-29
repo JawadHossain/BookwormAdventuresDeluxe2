@@ -3,8 +3,6 @@ package com.example.bookwormadventuresdeluxe2.Fragments.DetailView;
 /**
  * Holds the view for seeing details on a book in the Requested tab
  * The user will be able to interact with status dependant request options on the book
- * <p>
- * Outstanding Issues: Still requires ISBN scan for handoff. Cannot view requester's profile
  */
 
 import android.app.Activity;
@@ -165,6 +163,7 @@ public class RequestDetailViewFragment extends DetailView
                 this.btn1.setVisibility(View.VISIBLE);
                 this.btn2.setVisibility(View.VISIBLE);
                 break;
+
             case bPending:
                 this.btn1.setText(getString(R.string.view_location));
                 this.btn2.setText(getString(R.string.wait_borrower));
@@ -188,7 +187,6 @@ public class RequestDetailViewFragment extends DetailView
                 this.btn1.setVisibility(View.VISIBLE);
                 this.btn2.setVisibility(View.VISIBLE);
                 break;
-
 
             case Available:
                 this.btn1.setVisibility(View.INVISIBLE);
@@ -405,12 +403,11 @@ public class RequestDetailViewFragment extends DetailView
             {
                 this.bookDocument.update(getString(R.string.status), getString(R.string.bPending));
                 this.selectedBook.setStatus(Status.bPending);
-                message = "Hand book to borrower";
+                message = getString(R.string.hand_to_borrower);
                 this.redraw();
                 // Send In-app and Push notification to Borrower
                 sendNotification(selectedBook.getRequesters().get(0), getString(R.string.my_requests_book_confirm_lend_message));
             }
-
             else if (requestCode == REQUEST_RECEIVE_SCAN)
             {
                 this.bookDocument.update(getString(R.string.status), getString(R.string.available));
@@ -418,7 +415,7 @@ public class RequestDetailViewFragment extends DetailView
                 this.bookDocument.update(getString(R.string.firestore_pick_up_address), "");
                 this.selectedBook.setStatus(Status.Available);
                 this.selectedBook.setRequesters(new ArrayList<String>());
-                message = "Book received.";
+                message = getString(R.string.book_received);
                 this.redraw();
             }
             else
@@ -429,7 +426,7 @@ public class RequestDetailViewFragment extends DetailView
         }
         else
         {
-            Toast.makeText(getActivity(), "Scan was unsuccessful", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), getString(R.string.unsuccessful_scan), Toast.LENGTH_LONG).show();
         }
     }
 

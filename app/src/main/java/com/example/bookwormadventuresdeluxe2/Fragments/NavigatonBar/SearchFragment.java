@@ -1,8 +1,7 @@
 package com.example.bookwormadventuresdeluxe2.Fragments.NavigatonBar;
 
 /**
- * A {@link Fragment} subclass for navbar menu search item. This fragment is responsible for
- * allowing the user to search for books.
+ * A {@link Fragment} subclass for navbar menu search item. Allows user to search for books.
  *
  */
 

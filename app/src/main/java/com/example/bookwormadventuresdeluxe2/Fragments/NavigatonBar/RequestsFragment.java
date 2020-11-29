@@ -198,10 +198,9 @@ public class RequestsFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    // User wants to change tab, swap the lists and labels
-
     /**
      * Listener for when the user presses the "My Requests" or "Borrow" tab
+     * Change tab, swap the lists and labels
      *
      * @param view
      */

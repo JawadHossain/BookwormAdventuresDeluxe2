@@ -38,7 +38,6 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
         public ImageView statusCircle;
         public ImageView bookPhoto;
 
-
         /**
          * A viewHolder for notifications
          *

@@ -41,7 +41,7 @@ public class GlobalApplication extends Application
                     NotificationManager.IMPORTANCE_HIGH
             );
 
-            /* Customize notificatoin channel*/
+            /* Customize notification channel*/
             notificationChannel.setDescription("This is the high priority channel");
             notificationChannel.enableLights(true);
             notificationChannel.enableVibration(true);
