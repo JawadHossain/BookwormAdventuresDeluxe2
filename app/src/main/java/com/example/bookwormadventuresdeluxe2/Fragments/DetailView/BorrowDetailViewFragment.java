@@ -136,6 +136,15 @@ public class BorrowDetailViewFragment extends DetailView
 
                     this.btn1.setVisibility(View.VISIBLE);
                 }
+                if ((selectedBook.getRequesters().contains(UserCredentialAPI.getInstance().getUsername())))
+                {
+                    this.enableButton(this.btn1);
+                    this.btn1.setText(getString(R.string.cancel_request));
+
+                    this.btn1.setOnClickListener(this::btnCancelRequest);
+
+                    this.btn1.setVisibility(View.VISIBLE);
+                }
                 this.btn2.setVisibility(View.GONE);
                 break;
 
@@ -206,6 +215,23 @@ public class BorrowDetailViewFragment extends DetailView
             default:
                 throw new InvalidParameterException("Bad status passed to BorrowDetailView");
         }
+    }
+
+    /**
+     * Cancels current request
+     *
+     * @param view The view that was clicked on
+     */
+    private void btnCancelRequest(View view)
+    {
+        this.bookDocument.update(getString(R.string.requesters),
+                FieldValue.arrayRemove(UserCredentialAPI.getInstance().getUsername()));
+        selectedBook.deleteRequester(UserCredentialAPI.getInstance().getUsername());
+        if (selectedBook.getRequesters().size() == 0)
+        {
+            this.bookDocument.update(getString(R.string.status), getString(R.string.available));
+        }
+        onBackClick(view);
     }
 
 

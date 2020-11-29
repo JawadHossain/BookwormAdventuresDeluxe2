@@ -6,6 +6,7 @@ package com.example.bookwormadventuresdeluxe2.Fragments.DetailView;
  * book and edit it from a button in the header.
  */
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.bookwormadventuresdeluxe2.Activities.AddOrEditBooksActivity;
@@ -22,13 +24,17 @@ import com.example.bookwormadventuresdeluxe2.R;
 import com.example.bookwormadventuresdeluxe2.Utilities.ActiveFragmentTracker;
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.security.InvalidParameterException;
 
 public class MyBooksDetailViewFragment extends DetailView
 {
     private ImageButton editButton;
+    private DocumentReference bookDocument;
 
     public MyBooksDetailViewFragment()
     {
@@ -55,7 +61,40 @@ public class MyBooksDetailViewFragment extends DetailView
         // setup back button
         super.onCreateView(inflater, container, savedInstanceState);
 
+        this.redraw();
+
+        this.bookDocument = FirebaseFirestore
+                .getInstance()
+                .collection(getString(R.string.books_collection))
+                .document(this.selectedBookId);
+
+        this.bookDocument.addSnapshotListener(new EventListener<DocumentSnapshot>()
+        {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e)
+            {
+                if (snapshot != null && snapshot.exists())
+                {
+                    selectedBook = snapshot.toObject(Book.class);
+                    Activity activity = getActivity();
+                    if (isAdded() && activity != null)
+                    {
+                        redraw();
+                    }
+                }
+            }
+        });
+
         return bookDetailView;
+    }
+
+    /**
+     * Redraws the screen to adjust for the book state and information
+     */
+    private void redraw()
+    {
+        this.updateView(this.selectedBook);
     }
     
     /**

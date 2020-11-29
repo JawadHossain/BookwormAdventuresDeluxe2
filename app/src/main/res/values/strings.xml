@@ -91,6 +91,7 @@
     <string name="wait_owner">Waiting for Owner</string>
     <string name="request_book">Request Book</string>
     <string name="view_profile">View Profile</string>
+    <string name="cancel_request">Cancel Request</string>
 
     <!-- Fragment tags -->
     <string name="requests_fragment">requestsFragment</string>

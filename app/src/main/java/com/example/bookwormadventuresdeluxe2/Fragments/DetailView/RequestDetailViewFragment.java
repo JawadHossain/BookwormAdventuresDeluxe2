@@ -34,7 +34,10 @@ import com.example.bookwormadventuresdeluxe2.Utilities.NotificationUtility.Notif
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -86,19 +89,23 @@ public class RequestDetailViewFragment extends DetailView
                 .collection(getString(R.string.books_collection))
                 .document(this.selectedBookId);
 
-        this.bookDocument.addSnapshotListener((snapshot, e) ->
+        this.bookDocument.addSnapshotListener(new EventListener<DocumentSnapshot>()
         {
-            if (snapshot != null && snapshot.exists())
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e)
             {
-                selectedBook = snapshot.toObject(Book.class);
-                Activity activity = getActivity();
-                if (isAdded() && activity != null)
+                if (snapshot != null && snapshot.exists())
                 {
-                    redraw();
+                    selectedBook = snapshot.toObject(Book.class);
+                    Activity activity = getActivity();
+                    if (isAdded() && activity != null)
+                    {
+                        redraw();
+                    }
                 }
             }
         });
-
         return bookDetailView;
     }
 
@@ -326,6 +333,9 @@ public class RequestDetailViewFragment extends DetailView
         switch (book.getStatus())
         {
             case Available:
+                user.setVisibility(View.GONE);
+                dropdownContainer.setVisibility(View.GONE);
+                status.setText(getString(R.string.available));
                 break;
             case Requested:
             case Accepted:
