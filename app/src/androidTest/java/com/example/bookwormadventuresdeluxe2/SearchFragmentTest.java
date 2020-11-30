@@ -7,6 +7,7 @@ package com.example.bookwormadventuresdeluxe2;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.widget.SearchView;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -37,6 +38,7 @@ public class SearchFragmentTest
 
     private Context appContext;
     private Resources resources;
+    private SearchView searchView;
 
     @Rule
     public ActivityTestRule<LoginActivity> rule =
@@ -71,21 +73,79 @@ public class SearchFragmentTest
     }
 
     /**
-     * Ensure the added book from secondary test account shows in search fragment for
-     * main test account
+     * Tests searching for a book using multiple inputs
      */
     @Test
-    public void bookAppearsInSearchTest()
+    public void searchTest()
+    {
+        /* Search for title */
+        enterSearchTextUtil(resources.getString(R.string.test_book_title));
+
+        /* Search for author */
+        enterSearchTextUtil(resources.getString(R.string.test_book_author));
+
+        /* Search for description */
+        enterSearchTextUtil(resources.getString(R.string.test_book_description));
+
+        /* Search for isbn */
+        enterSearchTextUtil(resources.getString(R.string.test_book_isbn));
+    }
+
+    /**
+     * Goes to SearchFragment
+     */
+    public void goToSearch()
     {
         /* Navigate to the search fragment */
         solo.clickOnView(solo.getView(R.id.search_menu_item));
 
         /* Wait until we enter the search fragment */
         solo.waitForFragmentById(R.layout.fragment_search, (int) SHORT_WAIT);
+    }
+
+    /**
+     * Ensure the added book from secondary test account shows in search fragment for
+     * main test account
+     */
+    public void bookAppearsInSearchUtil()
+    {
+        goToSearch();
 
         /* Check that all the text for the newly added book is found */
         Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_book_title), 1, SHORT_WAIT));
         Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_book_author), 1, NO_WAIT));
+        Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_book_isbn), 1, NO_WAIT));
+    }
+
+    /**
+     * Enters a search term into the search bar and clicks the result
+     *
+     * @param searchText Text to be searched
+     */
+    public void enterSearchTextUtil(String searchText)
+    {
+        bookAppearsInSearchUtil();
+
+        searchView = (SearchView) solo.getView(R.id.search_bar);
+        solo.clickOnView(searchView);
+        searchView.setQuery(searchText, false);
+        solo.sendKey(Solo.ENTER);
+        solo.clickOnText(resources.getString(R.string.test_book_title));
+        solo.waitForFragmentById(R.layout.fragment_borrow_detail_view, (int) SHORT_WAIT);
+
+        assertSearchBookClick();
+    }
+
+    /**
+     * Asserts that the searched book was clicked and properly displays
+     */
+    public void assertSearchBookClick()
+    {
+        /* Check that all the text for the newly added book is found */
+        Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_account1_username), 1, SHORT_WAIT));
+        Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_book_title), 1, NO_WAIT));
+        Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_book_author), 1, NO_WAIT));
+        Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_book_isbn), 1, NO_WAIT));
         Assert.assertTrue(solo.waitForText(resources.getString(R.string.test_book_isbn), 1, NO_WAIT));
     }
 
@@ -96,11 +156,7 @@ public class SearchFragmentTest
     @Test
     public void bookHasCorrectOwnerTest()
     {
-        /* Navigate to the search fragment */
-        solo.clickOnView(solo.getView(R.id.search_menu_item));
-
-        /* Wait until we enter the search fragment */
-        solo.waitForFragmentById(R.layout.fragment_search, (int) SHORT_WAIT);
+        goToSearch();
 
         /* Click on newly added book */
         solo.clickOnText(resources.getString(R.string.test_book_title));
@@ -111,22 +167,35 @@ public class SearchFragmentTest
     }
 
     /**
-     * Ensures that the detail view for the search book contains the button
-     * to request the book
+     * Ensures that the request and cancel request buttons works
      */
     @Test
-    public void requestsButtonVisibleTest()
+    public void requestAndCancelRequestButtonTest()
     {
-        /* Navigate to the search fragment */
-        solo.clickOnView(solo.getView(R.id.search_menu_item));
-
-        /* Wait until we enter the search fragment */
-        solo.waitForFragmentById(R.layout.fragment_search, (int) SHORT_WAIT);
+        goToSearch();
 
         /* Click on newly added book */
         solo.clickOnText(resources.getString(R.string.test_book_title));
 
         /* Ensure the requests button is visible */
+        Assert.assertTrue(solo.searchButton(resources.getString(R.string.request_book)));
+
+        /* Request book */
+        solo.clickOnText(resources.getString(R.string.request_book));
+
+        /* Click on book */
+        solo.clickOnText(resources.getString(R.string.test_book_title));
+
+        /* Ensure that the cancel request button is visible */
+        Assert.assertTrue(solo.searchButton(resources.getString(R.string.cancel_request)));
+
+        /* Cancel request*/
+        solo.clickOnText(resources.getString(R.string.cancel_request));
+
+        /* Click on book */
+        solo.clickOnText(resources.getString(R.string.test_book_title));
+
+        /* Ensure that the request button is visible */
         Assert.assertTrue(solo.searchButton(resources.getString(R.string.request_book)));
     }
 
@@ -137,11 +206,7 @@ public class SearchFragmentTest
     @Test
     public void viewOwnerProfileTest()
     {
-        /* Navigate to the search fragment */
-        solo.clickOnView(solo.getView(R.id.search_menu_item));
-
-        /* Wait until we enter the search fragment */
-        solo.waitForFragmentById(R.layout.fragment_search, (int) SHORT_WAIT);
+        goToSearch();
 
         /* Click on newly added book */
         solo.clickOnText(resources.getString(R.string.test_book_title));
