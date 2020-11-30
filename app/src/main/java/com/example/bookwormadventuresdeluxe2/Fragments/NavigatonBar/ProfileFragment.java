@@ -314,6 +314,7 @@ public class ProfileFragment extends Fragment
          * */
         if (firebaseAuth != null)
         {
+            resetUserCredentialAPI();
             firebaseAuth.signOut();
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
@@ -322,6 +323,18 @@ public class ProfileFragment extends Fragment
 
             /* Take User back to Login Page */
             startActivity(intent);
+        }
+    }
+
+    /**
+     * Resets UserCredential global API on sign out
+     */
+    public void resetUserCredentialAPI(){
+        UserCredentialAPI userCredentialAPI = UserCredentialAPI.getInstance();
+        if( userCredentialAPI != null ){
+            userCredentialAPI.setUserId(null);
+            userCredentialAPI.setUsername(null);
+            userCredentialAPI.setNotificationCount(null);
         }
     }
 

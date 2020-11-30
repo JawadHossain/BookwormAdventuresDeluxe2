@@ -167,5 +167,6 @@
     <string name="request_denied_message">Book request denied</string>
     <string name="request_cancelled_message">Book request cancelled</string>
     <string name="book_deleted_message">Book deleted by owner</string>
+    <string name="unavailable_for_edit">Unavailable for edit due to activity</string>
 
 </resources>

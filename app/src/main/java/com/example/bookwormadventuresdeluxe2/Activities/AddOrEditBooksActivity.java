@@ -16,8 +16,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -153,6 +155,14 @@ public class AddOrEditBooksActivity extends AppCompatActivity
                 saveButton.hide();
                 takePhoto.setVisibility(View.GONE);
                 scanIsbnButton.setVisibility(View.GONE);
+                /* Show Editing not available message */
+                Toast toast = Toast.makeText(this, getString(R.string.unavailable_for_edit), Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0,0);
+                ViewGroup group = (ViewGroup) toast.getView();
+                TextView messageTextView = (TextView) group.getChildAt(0);
+                messageTextView.setTextSize(18);
+                messageTextView.setTextColor(getResources().getColor(R.color.delete));
+                toast.show();
             }
             else
             {
