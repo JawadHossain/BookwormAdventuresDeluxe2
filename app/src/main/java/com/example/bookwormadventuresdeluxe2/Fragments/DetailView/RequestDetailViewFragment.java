@@ -97,15 +97,27 @@ public class RequestDetailViewFragment extends DetailView
             {
                 if (snapshot != null && snapshot.exists())
                 {
+                    /* Update book */
                     selectedBook = snapshot.toObject(Book.class);
-                    Activity activity = getActivity();
-                    if (isAdded() && activity != null)
+
+                    /* Close fragment if all requests are cancelled */
+                    if (selectedBook.getStatus().equals(Status.Available) && RequestDetailViewFragment.this.isVisible())
                     {
-                        redraw();
+                        closeFragment(RequestDetailViewFragment.this, getString(R.string.request_cancelled_message));
+                    }
+                    else
+                    {
+                        /* Draw new book */
+                        Activity activity = getActivity();
+                        if (isAdded() && activity != null)
+                        {
+                            redraw();
+                        }
                     }
                 }
             }
         });
+
         return bookDetailView;
     }
 
@@ -333,9 +345,7 @@ public class RequestDetailViewFragment extends DetailView
         switch (book.getStatus())
         {
             case Available:
-                user.setVisibility(View.GONE);
-                dropdownContainer.setVisibility(View.GONE);
-                status.setText(getString(R.string.available));
+                /* Never reached */
                 break;
             case Requested:
             case Accepted:

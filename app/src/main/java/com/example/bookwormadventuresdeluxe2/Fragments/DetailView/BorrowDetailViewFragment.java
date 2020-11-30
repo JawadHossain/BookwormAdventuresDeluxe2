@@ -20,13 +20,13 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.example.bookwormadventuresdeluxe2.Activities.Location.SetLocationActivity;
+import com.example.bookwormadventuresdeluxe2.Activities.Location.ViewLocationActivity;
 import com.example.bookwormadventuresdeluxe2.Models.Book;
 import com.example.bookwormadventuresdeluxe2.R;
-import com.example.bookwormadventuresdeluxe2.Activities.Location.SetLocationActivity;
 import com.example.bookwormadventuresdeluxe2.Utilities.NotificationUtility.NotificationHandler;
 import com.example.bookwormadventuresdeluxe2.Utilities.Status;
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
-import com.example.bookwormadventuresdeluxe2.Activities.Location.ViewLocationActivity;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -102,12 +102,28 @@ public class BorrowDetailViewFragment extends DetailView
             {
                 if (snapshot != null && snapshot.exists())
                 {
-                    selectedBook = snapshot.toObject(Book.class);
-                    Activity activity = getActivity();
-                    if (isAdded() && activity != null)
+                    /* Close fragment if request is denied by owner */
+                    if (BorrowDetailViewFragment.this.isVisible()
+                        && selectedBook.getRequesters().contains(UserCredentialAPI.getInstance().getUsername())
+                        && !snapshot.toObject(Book.class).getRequesters().contains(UserCredentialAPI.getInstance().getUsername()))
                     {
-                        redraw();
+                        closeFragment(BorrowDetailViewFragment.this, getString(R.string.request_denied_message));
                     }
+                    else
+                    {
+                        /* Update book */
+                        selectedBook = snapshot.toObject(Book.class);
+                        Activity activity = getActivity();
+                        if (isAdded() && activity != null)
+                        {
+                            redraw();
+                        }
+                    }
+                }
+                else if (BorrowDetailViewFragment.this.isVisible())
+                {
+                    /* Close fragment if book is deleted */
+                    closeFragment(BorrowDetailViewFragment.this, getString(R.string.book_deleted_message));
                 }
             }
         });

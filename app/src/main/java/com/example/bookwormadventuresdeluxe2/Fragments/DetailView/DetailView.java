@@ -8,6 +8,7 @@ package com.example.bookwormadventuresdeluxe2.Fragments.DetailView;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -23,6 +25,7 @@ import com.example.bookwormadventuresdeluxe2.Fragments.NavigatonBar.ProfileFragm
 import com.example.bookwormadventuresdeluxe2.Models.Book;
 import com.example.bookwormadventuresdeluxe2.Models.User;
 import com.example.bookwormadventuresdeluxe2.R;
+import com.example.bookwormadventuresdeluxe2.Utilities.ActiveFragmentTracker;
 import com.example.bookwormadventuresdeluxe2.Utilities.FirebaseUserGetSet;
 import com.example.bookwormadventuresdeluxe2.Utilities.UserCredentialAPI;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -184,5 +187,26 @@ public abstract class DetailView extends Fragment
                 });
             }
         });
+    }
+
+    /**
+     * Closes fragment
+     *
+     * @param fragment Fragment to be closed
+     * @param message  Reason for closing fragment
+     */
+    protected void closeFragment(Fragment fragment, String message)
+    {
+        /*
+         * Source: https://stackoverflow.com/questions/5274354/how-can-we-increase-the-font-size-in-toast
+         * */
+        Fragment activeFragment = ActiveFragmentTracker.activeFragment;
+        getFragmentManager().beginTransaction().remove(fragment).show(activeFragment).commit();
+        Toast toast = Toast.makeText(getActivity(), message, Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0,0);
+        ViewGroup group = (ViewGroup) toast.getView();
+        TextView messageTextView = (TextView) group.getChildAt(0);
+        messageTextView.setTextSize(18);
+        toast.show();
     }
 }
