@@ -10,8 +10,10 @@ Google Books API used to retrieve a book’s details by scanning the ISBN.
 Push notifications integrated with Cloud Messaging.
 ```
 
+## Demo Video
+[![App Demo Video](http://i3.ytimg.com/vi/df8Z_c_f1sU/maxresdefault.jpg)](https://youtu.be/df8Z_c_f1sU)
+
 ### Deliverables:
-- [Demo Video](https://drive.google.com/file/d/150PFqZhYIhpwM-ffT5sPvHTz5cR6CzyY/view?usp=sharing)
 - [Javadoc](https://github.com/CMPUT301F20T15/BookwormAdventuresDeluxe2-Javadocs)
 - [Product Backlog](https://github.com/CMPUT301F20T15/BookwormAdventuresDeluxe2/wiki/Product-Backlog)  
 - [Storyboard Sequences](https://github.com/CMPUT301F20T15/BookwormAdventuresDeluxe2/wiki/Storyboard-Sequences)
